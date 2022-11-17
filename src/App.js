@@ -67,14 +67,25 @@ function App() {
 
   const getCurrentPlanets = () => {
     axios.get('https://www.astro.com/h/awt/ppos2_e.htm?code=56a75c619fd8fa5f0f1ae183d1688780').then((response) => {
-      console.log('got response:')
-      console.log(response.data)
+      console.log('got PLANETS response:');
+      console.log(response.data);
       setCurrentPlanets(response.data);
       setData(parse(response.data));
-      console.log('mame data:')
-      console.log(data)
     });
   };
+
+  const getChart = () => {
+    axios.get('https://www.astro.com/cgi/chart.cgi?nhor=1&lang=e&act=chm&sdat=&ishkch=1').then((response) => {
+      console.log('got CHART response:');
+      console.log(response.data);
+      // const div = document.createElement('div');
+      // div.innerHTML = response.data;
+      document.getElementById('chartElement').innerHTML = response.data;
+      const image = document.getElementById('chartElement').children[1].children[0];
+      console.log(image);
+      image.src = 'http://astro.com' + image.src.substring(21);
+    });
+  }
 
   return (
     <div className="">
@@ -83,16 +94,24 @@ function App() {
           Astro1
         </p>
         <button onClick={getCurrentPlanets}>Get current planets</button>
+        <button onClick={getChart}>Get chart</button>
 
       </header>
-      <table className="MyTable">
-        {data.map(a => <tr>
-          <td>{a.name}</td>
-          <td>{a.sign}</td>
-          <td>{a.degrees}</td>
-          <td>{a.seconds}</td>
-          </tr>)}
-      </table>
+      <div width="100%" style={{display: 'flex', justifyContent: 'space-evenly', marginTop: '20px'}}>
+        <div>
+          <table className="MyTable">
+            {data.map(a => <tr>
+              <td>{a.name}</td>
+              <td>{a.sign}</td>
+              <td>{a.degrees}</td>
+              <td>{a.seconds}</td>
+              </tr>)}
+          </table>
+        </div>
+        <div id="chartElement">
+        </div>
+      </div>
+      
     </div>
   );
 }

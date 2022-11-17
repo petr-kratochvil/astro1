@@ -1,7 +1,9 @@
-import logo from './logo.svg';
+import axios from "axios";
+import React from "react";
+
 import './App.css';
 
-const currentPlanets = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+const currentPlanetsConst = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <!-- Note: Permission is granted to include this
@@ -43,7 +45,7 @@ UT/GMT</span></center></td></tr>
 </html>
 `
 
-const parse = () => {
+const parse = (currentPlanets) => {
   const parser = new DOMParser();
   const document = parser.parseFromString(currentPlanets, "text/html");
   const table = document.getElementsByTagName('table')[0].children[0].children;
@@ -60,18 +62,29 @@ const parse = () => {
 }
 
 function App() {
-  const data = parse();
-  console.log(data)
+  const [currentPlanets, setCurrentPlanets] = React.useState(null);
+  const [data, setData] = React.useState([]);
+
+  const getCurrentPlanets = () => {
+    axios.get('https://www.astro.com/h/awt/ppos2_e.htm?code=56a75c619fd8fa5f0f1ae183d1688780').then((response) => {
+      console.log('got response:')
+      console.log(response.data)
+      setCurrentPlanets(response.data);
+      setData(parse(response.data));
+      console.log('mame data:')
+      console.log(data)
+    });
+  };
 
   return (
     <div className="">
       <header className="App App-header">
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Astro1
         </p>
+        <button onClick={getCurrentPlanets}>Get current planets</button>
 
       </header>
-      <pre>{currentPlanets}</pre>
       <table className="MyTable">
         {data.map(a => <tr>
           <td>{a.name}</td>

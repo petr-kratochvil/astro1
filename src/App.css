@@ -31,9 +31,17 @@
 .MyTable {
   border-collapse: collapse;
   padding:2px;
+  font-size: small;
 }
 
 .MyTable td {
   border: 1px solid pink;
-  padding:10px;
+  padding:8px;
+}
+
+.MyTableHeading {
+  background-color: pink;
+  color: white;
+  font-weight: bold;
+  text-align: center;
 }

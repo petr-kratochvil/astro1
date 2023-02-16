@@ -2,48 +2,8 @@ import axios from "axios";
 import React from "react";
 
 import './App.css';
-
-const currentPlanetsConst = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<!-- Note: Permission is granted to include this
-html-code with current planetary positions into private homepages and
-non-commercial websites. The html fragment must be imbedded unchanged
-and must include the 'powered by' banner and the underlying links to the
-Astrodienst website.
-The permission can be withdrawn by Astrodienst at any time. -->
-<meta name=viewport content="width=device-width, initial-scale=1">
-<style type="text/css">
-<!--
-.copy { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 7.5pt; font-weight: bold; text-decoration: none; }
-.txt8p { font-size: 8pt; font-family: Arial, Helvetica, sans-serif}
-.txt9p { font-size: 9pt; font-family: Arial, Helvetica, sans-serif}
-td.padded {padding: 6px;}
--->
-</style>
-</head>
-<body>
-<div id="pla"><table bgcolor="#FFFFFF" width="180" border="0" cellspacing="0" cellpadding="0">
-<tr><td colspan="5" bgcolor="#FEEAC0"><center><span class="copy"><span class="tit">Current Planets<br/></span>17-Nov-2022,&nbsp;14:22 
-UT/GMT</span></center></td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_su.18.gif"></td><td align="left" class="txt8p">Sun</td><td align="right" class="txt8p">25</td><td align="center"><img src="//www.astro.com/im/sym/s_scocol.18.gif" height="14" width="19" alt="Scorpio" title="Scorpio"></td><td align="left" class="txt8p" title="decl  -19° 3'55">12'24"</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_mo.18.gif"></td><td align="left" class="txt8p">Moon</td><td align="right" class="txt8p">6</td><td align="center"><img src="//www.astro.com/im/sym/s_vircol.18.gif" height="14" width="19" alt="Virgo" title="Virgo"></td><td align="left" class="txt8p" title="decl   13°31'31">45'12"</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_me.18.gif"></td><td align="left" class="txt8p">Mercury</td><td align="right" class="txt8p">0</td><td align="center"><img src="//www.astro.com/im/sym/s_sagcol.18.gif" height="14" width="19" alt="Sagittarius" title="Sagittarius"></td><td align="left" class="txt8p" title="decl  -21° 5'18">22'11"</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_ve.18.gif"></td><td align="left" class="txt8p">Venus</td><td align="right" class="txt8p">1</td><td align="center"><img src="//www.astro.com/im/sym/s_sagcol.18.gif" height="14" width="19" alt="Sagittarius" title="Sagittarius"></td><td align="left" class="txt8p" title="decl  -20°20'25">41' 5"</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_ma.18.gif"></td><td align="left" class="txt8p">Mars</td><td align="right" class="txt8p">23</td><td align="center"><img src="//www.astro.com/im/sym/s_gemcol.18.gif" height="14" width="19" alt="Gemini" title="Gemini"></td><td align="left" class="txt8p" title="decl   24°35'53">15'31"r</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_ju.18.gif"></td><td align="left" class="txt8p">Jupiter</td><td align="right" class="txt8p">28</td><td align="center"><img src="//www.astro.com/im/sym/s_piscol.18.gif" height="14" width="19" alt="Pisces" title="Pisces"></td><td align="left" class="txt8p" title="decl   -1°48'51">52' 9"r</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_sa.18.gif"></td><td align="left" class="txt8p">Saturn</td><td align="right" class="txt8p">19</td><td align="center"><img src="//www.astro.com/im/sym/s_aqucol.18.gif" height="14" width="19" alt="Aquarius" title="Aquarius"></td><td align="left" class="txt8p" title="decl  -16°17'37">8'20"</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_ue.18.gif"></td><td align="left" class="txt8p">Uranus</td><td align="right" class="txt8p">16</td><td align="center"><img src="//www.astro.com/im/sym/s_taucol.18.gif" height="14" width="19" alt="Taurus" title="Taurus"></td><td align="left" class="txt8p" title="decl   16°26' 3">34'12"r</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_ne.18.gif"></td><td align="left" class="txt8p">Neptune</td><td align="right" class="txt8p">22</td><td align="center"><img src="//www.astro.com/im/sym/s_piscol.18.gif" height="14" width="19" alt="Pisces" title="Pisces"></td><td align="left" class="txt8p" title="decl   -4° 0' 3">43'16"r</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_pl.18.gif"></td><td align="left" class="txt8p">Pluto</td><td align="right" class="txt8p">26</td><td align="center"><img src="//www.astro.com/im/sym/s_capcol.18.gif" height="14" width="19" alt="Capricorn" title="Capricorn"></td><td align="left" class="txt8p" title="decl  -23° 1'52">29'45"</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_tn.18.gif"></td><td align="left" class="txt8p">TrueNode</td><td align="right" class="txt8p">13</td><td align="center"><img src="//www.astro.com/im/sym/s_taucol.18.gif" height="14" width="19" alt="Taurus" title="Taurus"></td><td align="left" class="txt8p" title="decl   15°50'13">19'19"</td></tr>
-<tr><td><img src="//www.astro.com/im/sym/s_ch.18.gif"></td><td align="left" class="txt8p">Chiron</td><td align="right" class="txt8p">12</td><td align="center"><img src="//www.astro.com/im/sym/s_aricol.18.gif" height="14" width="19" alt="Aries" title="Aries"></td><td align="left" class="txt8p" title="decl    6°40'24">30' 9"r</td></tr>
-<tr><td colspan="5" class="txt9p padded" bgcolor="#EBE6D3"><center><a href="//www.astro.com/info/in_signs_e.htm" target="astro">Explanations of the symbols</a></center></td></tr>
-<tr><td colspan="5" ><center><a href="//www.astro.com/h/index_e.htm" target="astro"><img src="//www.astro.com/im/astropower.gif" width="124" height="64" border="0" title="Data &copy; Astrodienst AG, Zollikon/Zürich, Switzerland"> </a></center></td></tr>
-</table></div>
-</body>
-</html>
-`
+import ChartTable from "./ChartTable";
+import constants from "./constants";
 
 const parse = (currentPlanets) => {
   const parser = new DOMParser();
@@ -55,27 +15,31 @@ const parse = (currentPlanets) => {
     const name = tr.children[1].innerHTML;
     const degrees = tr.children[2].innerHTML;
     const sign = tr.children[3].children[0].alt;
-    const seconds = tr.children[4].innerHTML;
-    result.push({name, degrees, sign, seconds});
+    const minutesSecondsRetrograde = tr.children[4].innerHTML;
+    const split1 = minutesSecondsRetrograde.split('\'');
+    const split2 = split1[1].split('"');
+    const minutes = split1[0];
+    const seconds = split2[0];
+    const retrograde = split2[1] === 'r';
+    result.push({name, degrees, sign, minutes, seconds, retrograde});
   }
   return result;
 }
 
 function App() {
-  const [currentPlanets, setCurrentPlanets] = React.useState(null);
   const [data, setData] = React.useState([]);
 
   const getCurrentPlanets = () => {
-    axios.get('https://www.astro.com/h/awt/ppos2_e.htm?code=56a75c619fd8fa5f0f1ae183d1688780').then((response) => {
-      console.log('got PLANETS response:');
-      console.log(response.data);
-      setCurrentPlanets(response.data);
-      setData(parse(response.data));
-    });
+    // axios.get(constants.getPlanetsUrl).then((response) => {
+    //   console.log('got PLANETS response:');
+    //   console.log(response.data);
+    //   setData(parse(response.data));
+    // });
+    setData(parse(constants.currentPlanetsConst));
   };
 
   const getChart = () => {
-    axios.get('https://www.astro.com/cgi/chart.cgi?nhor=1&lang=e&act=chm&sdat=&ishkch=1').then((response) => {
+    axios.get(constants.getChartUrl).then((response) => {
       console.log('got CHART response:');
       console.log(response.data);
       // const div = document.createElement('div');
@@ -98,20 +62,10 @@ function App() {
 
       </header>
       <div width="100%" style={{display: 'flex', justifyContent: 'space-evenly', marginTop: '20px'}}>
-        <div>
-          <table className="MyTable">
-            {data.map(a => <tr>
-              <td>{a.name}</td>
-              <td>{a.sign}</td>
-              <td>{a.degrees}</td>
-              <td>{a.seconds}</td>
-              </tr>)}
-          </table>
-        </div>
-        <div id="chartElement">
-        </div>
+        <ChartTable chart={data} title="Current planets" />
+        <ChartTable chart={constants.chartDataPetr} title="Petr Kratochvíl" />
       </div>
-      
+      <div id="chartElement" style={{margin: '20px'}}></div>
     </div>
   );
 }

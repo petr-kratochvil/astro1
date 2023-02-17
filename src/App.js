@@ -51,6 +51,29 @@ function App() {
     });
   }
 
+  const chartStyleP = {
+    useSignSymbols: true,
+    useSignText: false,
+    usePlanetSymbols: true,
+    degreesFirst: false,
+    showMinutes: true,
+    signSymbolFirst: false,
+  };
+
+  const chartStyleJ = {
+    useSignSymbols: false,
+    usePlanetSymbols: true,
+    degreesFirst: true,
+    showMinutes: false,
+  };
+
+  const currentChartStyle = {
+    degreesFirst: true,
+    useSignSymbols: true,
+    showMinutes: false,
+    useSignText: false,
+  };
+
   return (
     <div className="">
       <header className="App App-header">
@@ -62,8 +85,9 @@ function App() {
 
       </header>
       <div width="100%" style={{display: 'flex', justifyContent: 'space-evenly', marginTop: '20px'}}>
-        <ChartTable chart={data} title="Current planets" />
-        <ChartTable chart={constants.chartDataPetr} title="Petr Kratochvíl" />
+        <ChartTable chart={data} title="Current planets" style={currentChartStyle} />
+        <ChartTable chart={constants.chartDataPetr} title="Petr Kratochvíl" style={chartStyleP} />
+        <ChartTable chart={constants.chartDataJitka} title="Jitka Kratochvílová" style={chartStyleJ} />
       </div>
       <div id="chartElement" style={{margin: '20px'}}></div>
     </div>

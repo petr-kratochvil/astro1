@@ -45,33 +45,33 @@ export const getChartUrl = 'https://www.astro.com/cgi/chart.cgi?nhor=1&lang=e&ac
 export const getPlanetsUrl = 'https://www.astro.com/h/awt/ppos2_e.htm?code=56a75c619fd8fa5f0f1ae183d1688780';
 
 export const chartDataPetr = [
-  {"name":"Sun","degrees":"19","sign":"Cancer","minutes":"56","seconds":"43","retrograde":false},
-  {"name":"Moon","degrees":"28","sign":"Gemini","minutes":"52","seconds":"23","retrograde":false},
-  {"name":"Mercury","degrees":"29","sign":"Gemini","minutes":"44","seconds":"23","retrograde":false},
-  {"name":"Venus","degrees":"14","sign":"Gemini","minutes":"57","seconds":"43","retrograde":false},
-  {"name":"Mars","degrees":"29","sign":"Pisces","minutes":"10","seconds":"58","retrograde":false},
-  {"name":"Jupiter","degrees":"28","sign":"Taurus","minutes":"13","seconds":"5","retrograde":false},
-  {"name":"Saturn","degrees":"27","sign":"Sagittarius","minutes":"42","seconds":"52","retrograde":true},
-  {"name":"Uranus","degrees":"28","sign":"Sagittarius","minutes":"11","seconds":"26","retrograde":true},
-  {"name":"Neptune","degrees":"8","sign":"Capricorn","minutes":"30","seconds":"1","retrograde":true},
-  {"name":"Pluto","degrees":"9","sign":"Scorpio","minutes":"46","seconds":"39","retrograde":true},
-  {"name":"TrueNode","degrees":"15","sign":"Pisces","minutes":"37","seconds":"37","retrograde":false},
-  {"name":"Chiron","degrees":"1","sign":"Cancer","minutes":"54","seconds":"38","retrograde":false}
+  {"name":"Sun","degrees": 19,"sign":"Cancer","minutes": 56,"seconds": 43,"retrograde":false},
+  {"name":"Moon","degrees": 28,"sign":"Gemini","minutes": 52,"seconds": 23,"retrograde":false},
+  {"name":"Mercury","degrees": 29,"sign":"Gemini","minutes": 44,"seconds": 23,"retrograde":false},
+  {"name":"Venus","degrees": 14,"sign":"Gemini","minutes": 57,"seconds": 43,"retrograde":false},
+  {"name":"Mars","degrees": 29,"sign":"Pisces","minutes": 10,"seconds": 58,"retrograde":false},
+  {"name":"Jupiter","degrees": 28,"sign":"Taurus","minutes": 13,"seconds": 5,"retrograde":false},
+  {"name":"Saturn","degrees": 27,"sign":"Sagittarius","minutes": 42,"seconds": 52,"retrograde":true},
+  {"name":"Uranus","degrees": 28,"sign":"Sagittarius","minutes": 11,"seconds": 26,"retrograde":true},
+  {"name":"Neptune","degrees": 8,"sign":"Capricorn","minutes": 30,"seconds": 1,"retrograde":true},
+  {"name":"Pluto","degrees": 9,"sign":"Scorpio","minutes": 46,"seconds": 39,"retrograde":true},
+  {"name":"TrueNode","degrees": 15,"sign":"Pisces","minutes": 37,"seconds": 37,"retrograde":false},
+  {"name":"Chiron","degrees": 1,"sign":"Cancer","minutes": 54,"seconds": 38,"retrograde":false}
 ];
 
 export const chartDataJitka = [
-  {"name":"Sun","degrees":"5","sign":"Aries","minutes":"17","seconds":"22","retrograde":false},
-  {"name":"Moon","degrees":"25","sign":"Sagittarius","minutes":"33","seconds":"47","retrograde":false},
-  {"name":"Mercury","degrees":"15","sign":"Pisces","minutes":"5","seconds":"21","retrograde":true},
-  {"name":"Venus","degrees":"1","sign":"Aries","minutes":"32","seconds":"15","retrograde":false},
-  {"name":"Mars","degrees":"29","sign":"Capricorn","minutes":"26","seconds":"47","retrograde":false},
-  {"name":"Jupiter","degrees":"5","sign":"Aquarius","minutes":"57","seconds":"15","retrograde":false},
-  {"name":"Saturn","degrees":"15","sign":"Gemini","minutes":"7","seconds":"31","retrograde":false},
-  {"name":"Uranus","degrees":"21","sign":"Libra","minutes":"42","seconds":"26","retrograde":true},
-  {"name":"Neptune","degrees":"7","sign":"Sagittarius","minutes":"21","seconds":"48","retrograde":true},
-  {"name":"Pluto","degrees":"3","sign":"Libra","minutes":"0","seconds":"57","retrograde":true},
-  {"name":"TrueNode","degrees":"12","sign":"Capricorn","minutes":"48","seconds":"21","retrograde":false},
-  {"name":"Chiron","degrees":"16","sign":"Aries","minutes":"6","seconds":"39","retrograde":false}
+  {"name":"Sun","degrees": 5,"sign":"Aries","minutes": 17,"seconds": 22,"retrograde":false},
+  {"name":"Moon","degrees": 25,"sign":"Sagittarius","minutes": 33,"seconds": 47,"retrograde":false},
+  {"name":"Mercury","degrees": 15,"sign":"Pisces","minutes": 5,"seconds": 21,"retrograde":true},
+  {"name":"Venus","degrees": 1,"sign":"Aries","minutes": 32,"seconds": 15,"retrograde":false},
+  {"name":"Mars","degrees": 29,"sign":"Capricorn","minutes": 26,"seconds": 47,"retrograde":false},
+  {"name":"Jupiter","degrees": 5,"sign":"Aquarius","minutes": 57,"seconds": 15,"retrograde":false},
+  {"name":"Saturn","degrees": 15,"sign":"Gemini","minutes": 7,"seconds": 31,"retrograde":false},
+  {"name":"Uranus","degrees": 21,"sign":"Libra","minutes": 42,"seconds": 26,"retrograde":true},
+  {"name":"Neptune","degrees": 7,"sign":"Sagittarius","minutes": 21,"seconds": 48,"retrograde":true},
+  {"name":"Pluto","degrees": 3,"sign":"Libra","minutes": 0,"seconds": 57,"retrograde":true},
+  {"name":"TrueNode","degrees": 12,"sign":"Capricorn","minutes": 48,"seconds": 21,"retrograde":false},
+  {"name":"Chiron","degrees": 16,"sign":"Aries","minutes": 6,"seconds": 39 ,"retrograde":false}
 ];
 
 export const signSymbols = {

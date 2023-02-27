@@ -2,6 +2,8 @@ import axios from "axios";
 import React from "react";
 
 import './App.css';
+import { getAspects } from "./aspects";
+import AspectTable from "./AspectTable";
 import ChartTable from "./ChartTable";
 import constants from "./constants";
 
@@ -51,6 +53,8 @@ function App() {
     });
   }
 
+  const aspects = getAspects(constants.chartDataPetr, constants.chartDataJitka);
+
   const chartStyleP = {
     useSignSymbols: true,
     useSignText: false,
@@ -89,6 +93,7 @@ function App() {
         <ChartTable chart={constants.chartDataPetr} title="Petr Kratochvíl" style={chartStyleP} />
         <ChartTable chart={constants.chartDataJitka} title="Jitka Kratochvílová" style={chartStyleJ} />
       </div>
+      <AspectTable aspectChart={aspects} title="Petr & Jitka - Synastry" name1="Petr" name2="Jitka" />
       <div id="chartElement" style={{margin: '20px'}}></div>
     </div>
   );

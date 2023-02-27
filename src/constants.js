@@ -89,5 +89,9 @@ export const signPositions = {
   "Libra": 180, "Scorpio": 210, "Sagittarius": 240, "Capricorn": 270, "Aquarius": 300, "Pisces": 330,
 }
 
+export const aspectSymbols = {
+  "Conjunction": "☌", "Opposition": "☍", "Square": "□", "Trine": "△", "Sextile": "✶"
+}
+
 const constants = {currentPlanetsConst, getChartUrl, getPlanetsUrl, chartDataPetr, chartDataJitka, signSymbols};
 export default constants;

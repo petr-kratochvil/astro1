@@ -1,3 +1,4 @@
+import BasicTable from "./BasicTable";
 import { planetSymbols, signSymbols } from "./constants";
 
 const defaultStyle = {
@@ -29,30 +30,16 @@ export default function ChartTable({ chart, title, style = {} }) {
 
   const sign = (a) => formatSign(a.sign);
   const degrees = (a) => a.degrees + "°";
-  const secondField = usedStyle.degreesFirst ? degrees : sign;
-  const thirdField = usedStyle.degreesFirst ? sign : degrees;
 
-  return (
-    <div>
-      <table className="MyTable">
-        <tbody>
-          <tr>
-            <td className="MyTableHeading" colSpan="6">
-              {title}
-            </td>
-          </tr>
-          {chart.map((a) => (
-            <tr key={a.name}>
-              <td>{formatPlanet(a.name)}</td>
-              <td>{secondField(a)}</td>
-              <td>{thirdField(a)}</td>
-              {usedStyle.showMinutes ? <td>{a.minutes}'</td> : ""}
-              {usedStyle.showSeconds ? <td>{a.seconds}'</td> : ""}
-              <td>{a.retrograde ? "r" : ""}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+  const columns = [
+    (row) => formatPlanet(row.name),
+    usedStyle.degreesFirst ? degrees : sign,
+    usedStyle.degreesFirst ? sign : degrees,
+  ];
+
+  if (usedStyle.showMinutes) columns.push((row) => `${row.minutes}'`);
+  if (usedStyle.showSeconds) columns.push((row) => `${row.seconds}''`);
+  columns.push((row) => (row.retrograde ? "r" : ""));
+
+  return <BasicTable title={title} columns={columns} data={chart} />;
 }

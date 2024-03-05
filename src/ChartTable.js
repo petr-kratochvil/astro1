@@ -7,6 +7,7 @@ const defaultStyle = {
   signSymbolFirst: true,
   degreesFirst: false,
   showMinutes: true,
+  showSeconds: false,
 };
 
 export default function ChartTable({chart, title, style={}}) {
@@ -37,13 +38,14 @@ export default function ChartTable({chart, title, style={}}) {
           <table className="MyTable">
             <tbody>
               <tr>
-                <td className="MyTableHeading" colSpan="5">{title}</td>
+                <td className="MyTableHeading" colSpan="6">{title}</td>
               </tr>
               {chart.map(a => <tr key={a.name}>
                 <td>{formatPlanet(a.name)}</td>
                 <td>{secondField(a)}</td>
                 <td>{thirdField(a)}</td>
                 {usedStyle.showMinutes? <td>{a.minutes}'</td> : ''}
+                {usedStyle.showSeconds? <td>{a.seconds}'</td> : ''}
                 <td>{a.retrograde ? 'r' : ''}</td>
                 </tr>)}
             </tbody>

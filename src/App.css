@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: pink;
+  background-color: deeppink;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
@@ -24,6 +24,12 @@
   color: white;
 }
 
+.App-header button {
+  cursor: pointer;
+  margin: 0px 5px 5px 5px;
+  padding: 5px;
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -31,16 +37,18 @@
 .MyTable {
   border-collapse: collapse;
   padding:2px;
+  margin: 5px;
   font-size: small;
+  /* font-family: monospace; */
 }
 
 .MyTable td {
-  border: 1px solid pink;
+  border: 1px solid DodgerBlue;
   padding:8px;
 }
 
 .MyTableHeading {
-  background-color: pink;
+  background-color: DodgerBlue;
   color: white;
   font-weight: bold;
   text-align: center;

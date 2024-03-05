@@ -34,11 +34,23 @@ export default function AspectTable({aspectChart, title, style={}, name1='chart 
   const aspectColor = (aspect) => {
     let color = {r: 255, g: 255, b: 255};
     switch (aspect.aspect) {
-      case 'Conjunction': color = {r: 255, g: 255, b: 0}; break;
-      case 'Opposition': color = {r: 0, g: 255, b: 0}; break;
-      case 'Trine': color = {r: 0, g: 170, b: 255}; break;
-      case 'Square': color = {r: 255, g: 60, b: 80}; break;
-      case 'Sextile': color = {r: 90, g: 150, b: 255}; break;
+      case "Conjunction":
+        color = { r: 255, g: 255, b: 0 };
+        break;
+      case "Opposition":
+        color = { r: 0, g: 255, b: 0 };
+        break;
+      case "Trine":
+        color = { r: 0, g: 170, b: 255 };
+        break;
+      case "Square":
+        color = { r: 255, g: 60, b: 80 };
+        break;
+      case "Sextile":
+        color = { r: 90, g: 150, b: 255 };
+        break;
+      default:
+        color = { r: 0, g: 0, b: 0 };
     }
     const lighten = (Math.min(aspect.orb, 8) / 8) * 225;
     color = {
@@ -55,32 +67,40 @@ export default function AspectTable({aspectChart, title, style={}, name1='chart 
   const thirdField = usedStyle.degreesFirst? sign: degrees;
 
   return (
-    
-        <div>
-          <table className="MyTable">
-            <tbody>
-              <tr>
-                <td className="MyTableHeading" colSpan="8">{title}</td>
-              </tr>
-              <tr>
-                <td colSpan="2"></td>
-                <td className="MyTableSubHeading" colSpan="3">{name1}</td>
-                <td className="MyTableSubHeading" colSpan="3">{name2}</td>
-              </tr>
-              {aspectChart.map(a =>
-                <tr key={a.aspect + a.planet1.name + a.planet2.name} style={{backgroundColor: aspectColor(a)}}>
-                  <td className="AspectTable-Aspect">{formatAspect(a.aspect)}</td>
-                  <td>{a.orb.toFixed(1)}°</td>
-                  <td>{formatPlanet(a.planet1.name)}</td>
-                  <td>{secondField(a.planet1)}</td>
-                  <td>{thirdField(a.planet1)}</td>
-                  <td>{formatPlanet(a.planet2.name)}</td>
-                  <td>{secondField(a.planet2)}</td>
-                  <td>{thirdField(a.planet2)}</td>
-                </tr>)}
-            </tbody>
-          </table>
-        </div>
-        
+    <div>
+      <table className="MyTable">
+        <tbody>
+          <tr>
+            <td className="MyTableHeading" colSpan="8">
+              {title}
+            </td>
+          </tr>
+          <tr>
+            <td colSpan="2">aspect/orb</td>
+            <td className="MyTableSubHeading" colSpan="3">
+              {name1}
+            </td>
+            <td className="MyTableSubHeading" colSpan="3">
+              {name2}
+            </td>
+          </tr>
+          {aspectChart.map((a) => (
+            <tr
+              key={a.aspect + a.planet1.name + a.planet2.name}
+              style={{ backgroundColor: aspectColor(a) }}
+            >
+              <td className="AspectTable-Aspect">{formatAspect(a.aspect)}</td>
+              <td>{a.orb.toFixed(1)}°</td>
+              <td>{formatPlanet(a.planet1.name)}</td>
+              <td>{secondField(a.planet1)}</td>
+              <td>{thirdField(a.planet1)}</td>
+              <td>{formatPlanet(a.planet2.name)}</td>
+              <td>{secondField(a.planet2)}</td>
+              <td>{thirdField(a.planet2)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

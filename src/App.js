@@ -32,12 +32,31 @@ function App() {
   const [data, setData] = React.useState([]);
 
   const getCurrentPlanets = () => {
+    // Call astro.com:
     // axios.get(constants.getPlanetsUrl).then((response) => {
     //   console.log('got PLANETS response:');
     //   console.log(response.data);
     //   setData(parse(response.data));
     // });
-    setData(parse(constants.currentPlanetsConst));
+
+    // Use constant data
+    // setData(parse(constants.currentPlanetsConst));
+
+    // Call Ephemerides API:
+    const date = new Date();
+    const body = {
+      "year": date.getUTCFullYear(), 
+      "month": date.getUTCMonth() + 1,
+      "day": date.getUTCDate(),
+      "hour": date.getUTCHours() + date.getUTCMinutes() / 60,
+    };
+    console.log(body);
+    axios.post(`${constants.ephemeridesApiBase}/position`, body)
+    .then((response) => {
+      console.log('got PLANETS response:');
+      console.log(response.data);
+      setData(response.data.map(planet => ({...planet, sign: constants.signList[planet.sign-1]})));
+    });
   };
 
   const getChart = () => {
@@ -74,7 +93,8 @@ function App() {
   const currentChartStyle = {
     degreesFirst: true,
     useSignSymbols: true,
-    showMinutes: false,
+    showMinutes: true,
+    showSeconds: true,
     useSignText: false,
   };
 
@@ -84,8 +104,10 @@ function App() {
         <p>
           Astro1
         </p>
+        <div style={{display: 'flex', 'flexDirection': 'row'}}>
         <button onClick={getCurrentPlanets}>Get current planets</button>
         <button onClick={getChart}>Get chart</button>
+        </div>
 
       </header>
       <div width="100%" style={{display: 'flex', justifyContent: 'space-evenly', marginTop: '20px'}}>

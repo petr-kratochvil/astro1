@@ -10,13 +10,19 @@ const defaultStyle = {
   showMinutes: true,
 };
 
-export default function AspectTable({aspectChart, title, style={}, name1='chart 1', name2='chart 2'}) {
-  const usedStyle = {...defaultStyle, ...style};
+export default function AspectTable({
+  aspectChart,
+  title,
+  style = {},
+  name1 = "chart 1",
+  name2 = "chart 2",
+}) {
+  const usedStyle = { ...defaultStyle, ...style };
 
   const formatSign = (sign) => {
-    const symbol = usedStyle.useSignSymbols? signSymbols[sign] : '';
-    const text = usedStyle.useSignText ? sign: '';
-    const space = usedStyle.useSignSymbols && usedStyle.useSignText ? ' ' : '';
+    const symbol = usedStyle.useSignSymbols ? signSymbols[sign] : "";
+    const text = usedStyle.useSignText ? sign : "";
+    const space = usedStyle.useSignSymbols && usedStyle.useSignText ? " " : "";
     if (usedStyle.signSymbolFirst) {
       return symbol + space + text;
     }
@@ -24,15 +30,15 @@ export default function AspectTable({aspectChart, title, style={}, name1='chart 
   };
 
   const formatPlanet = (planet) => {
-    return usedStyle.usePlanetSymbols? planetSymbols[planet] : planet;
-  }
+    return usedStyle.usePlanetSymbols ? planetSymbols[planet] : planet;
+  };
 
   const formatAspect = (aspect) => {
-    return usedStyle.useAspectSymbols? aspectSymbols[aspect] : aspect;
-  }
+    return usedStyle.useAspectSymbols ? aspectSymbols[aspect] : aspect;
+  };
 
   const aspectColor = (aspect) => {
-    let color = {r: 255, g: 255, b: 255};
+    let color = { r: 255, g: 255, b: 255 };
     switch (aspect.aspect) {
       case "Conjunction":
         color = { r: 255, g: 255, b: 0 };
@@ -56,15 +62,15 @@ export default function AspectTable({aspectChart, title, style={}, name1='chart 
     color = {
       r: Math.min(255, color.r + lighten),
       g: Math.min(255, color.g + lighten),
-      b: Math.min(color.b + lighten)
+      b: Math.min(color.b + lighten),
     };
-    return 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
-  }
+    return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
+  };
 
   const sign = (a) => formatSign(a.sign);
-  const degrees = (a) => a.degrees + '°';
-  const secondField = usedStyle.degreesFirst? degrees: sign;
-  const thirdField = usedStyle.degreesFirst? sign: degrees;
+  const degrees = (a) => a.degrees + "°";
+  const secondField = usedStyle.degreesFirst ? degrees : sign;
+  const thirdField = usedStyle.degreesFirst ? sign : degrees;
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-import './App.css';
+import "./App.css";
 import { getAspects } from "./aspects";
 import AspectTable from "./AspectTable";
 import ChartTable from "./ChartTable";
@@ -10,23 +10,23 @@ import constants from "./constants";
 const parse = (currentPlanets) => {
   const parser = new DOMParser();
   const document = parser.parseFromString(currentPlanets, "text/html");
-  const table = document.getElementsByTagName('table')[0].children[0].children;
+  const table = document.getElementsByTagName("table")[0].children[0].children;
   const result = [];
   for (let i = 1; i <= 12; i++) {
-    const tr = table[i]
+    const tr = table[i];
     const name = tr.children[1].innerHTML;
     const degrees = tr.children[2].innerHTML;
     const sign = tr.children[3].children[0].alt;
     const minutesSecondsRetrograde = tr.children[4].innerHTML;
-    const split1 = minutesSecondsRetrograde.split('\'');
+    const split1 = minutesSecondsRetrograde.split("'");
     const split2 = split1[1].split('"');
     const minutes = split1[0];
     const seconds = split2[0];
-    const retrograde = split2[1] === 'r';
-    result.push({name, degrees, sign, minutes, seconds, retrograde});
+    const retrograde = split2[1] === "r";
+    result.push({ name, degrees, sign, minutes, seconds, retrograde });
   }
   return result;
-}
+};
 
 function App() {
   const [data, setData] = React.useState([]);
@@ -45,32 +45,39 @@ function App() {
     // Call Ephemerides API:
     const date = new Date();
     const body = {
-      "year": date.getUTCFullYear(), 
-      "month": date.getUTCMonth() + 1,
-      "day": date.getUTCDate(),
-      "hour": date.getUTCHours() + date.getUTCMinutes() / 60,
+      year: date.getUTCFullYear(),
+      month: date.getUTCMonth() + 1,
+      day: date.getUTCDate(),
+      hour: date.getUTCHours() + date.getUTCMinutes() / 60,
     };
     console.log(body);
-    axios.post(`${constants.ephemeridesApiBase}/position`, body)
-    .then((response) => {
-      console.log('got PLANETS response:');
-      console.log(response.data);
-      setData(response.data.map(planet => ({...planet, sign: constants.signList[planet.sign-1]})));
-    });
+    axios
+      .post(`${constants.ephemeridesApiBase}/position`, body)
+      .then((response) => {
+        console.log("got PLANETS response:");
+        console.log(response.data);
+        setData(
+          response.data.map((planet) => ({
+            ...planet,
+            sign: constants.signList[planet.sign - 1],
+          }))
+        );
+      });
   };
 
   const getChart = () => {
     axios.get(constants.getChartUrl).then((response) => {
-      console.log('got CHART response:');
+      console.log("got CHART response:");
       console.log(response.data);
       // const div = document.createElement('div');
       // div.innerHTML = response.data;
-      document.getElementById('chartElement').innerHTML = response.data;
-      const image = document.getElementById('chartElement').children[1].children[0];
+      document.getElementById("chartElement").innerHTML = response.data;
+      const image =
+        document.getElementById("chartElement").children[1].children[0];
       console.log(image);
-      image.src = 'http://astro.com' + image.src.substring(21);
+      image.src = "http://astro.com" + image.src.substring(21);
     });
-  }
+  };
 
   const aspects = getAspects(constants.chartDataPetr, constants.chartDataJitka);
 
@@ -101,22 +108,43 @@ function App() {
   return (
     <div className="">
       <header className="App App-header">
-        <p>
-          Astro1
-        </p>
-        <div style={{display: 'flex', 'flexDirection': 'row'}}>
-        <button onClick={getCurrentPlanets}>Get current planets</button>
-        <button onClick={getChart}>Get chart</button>
+        <p>Astro1</p>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <button onClick={getCurrentPlanets}>Get current planets</button>
+          <button onClick={getChart}>Get chart</button>
         </div>
-
       </header>
-      <div width="100%" style={{display: 'flex', justifyContent: 'space-evenly', marginTop: '20px'}}>
-        <ChartTable chart={data} title="Current planets" style={currentChartStyle} />
-        <ChartTable chart={constants.chartDataPetr} title="Petr Kratochvíl" style={chartStyleP} />
-        <ChartTable chart={constants.chartDataJitka} title="Jitka Kratochvílová" style={chartStyleJ} />
+      <div
+        width="100%"
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginTop: "20px",
+        }}
+      >
+        <ChartTable
+          chart={data}
+          title="Current planets"
+          style={currentChartStyle}
+        />
+        <ChartTable
+          chart={constants.chartDataPetr}
+          title="Petr Kratochvíl"
+          style={chartStyleP}
+        />
+        <ChartTable
+          chart={constants.chartDataJitka}
+          title="Jitka Kratochvílová"
+          style={chartStyleJ}
+        />
       </div>
-      <AspectTable aspectChart={aspects} title="Petr & Jitka - Synastry" name1="Petr" name2="Jitka" />
-      <div id="chartElement" style={{margin: '20px'}}></div>
+      <AspectTable
+        aspectChart={aspects}
+        title="Petr & Jitka - Synastry"
+        name1="Petr"
+        name2="Jitka"
+      />
+      <div id="chartElement" style={{ margin: "20px" }}></div>
     </div>
   );
 }

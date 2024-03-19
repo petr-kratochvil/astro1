@@ -79,7 +79,17 @@ function App() {
     });
   };
 
+  React.useEffect(getCurrentPlanets, []);
+
   const aspects = getAspects(constants.chartDataPetr, constants.chartDataJitka);
+
+  const moonFilter = (aspect) => aspect.planet1.name !== "Moon";
+  const transitsPetr = getAspects(data, constants.chartDataPetr).filter(
+    moonFilter
+  );
+  const transitsJitka = getAspects(data, constants.chartDataJitka).filter(
+    moonFilter
+  );
 
   const chartStyleP = {
     useSignSymbols: true,
@@ -110,8 +120,8 @@ function App() {
       <header className="App App-header">
         <p>Astro1</p>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <button onClick={getCurrentPlanets}>Get current planets</button>
-          <button onClick={getChart}>Get chart</button>
+          {/* <button onClick={getCurrentPlanets}>Get current planets</button>
+          <button onClick={getChart}>Get chart</button> */}
         </div>
       </header>
       <div
@@ -138,12 +148,33 @@ function App() {
           style={chartStyleJ}
         />
       </div>
-      <AspectTable
-        aspectChart={aspects}
-        title="Petr & Jitka - Synastry"
-        name1="Petr"
-        name2="Jitka"
-      />
+      <div
+        width="100%"
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginTop: "20px",
+        }}
+      >
+        <AspectTable
+          aspectChart={aspects}
+          title="Petr & Jitka - Synastry"
+          name1="Petr"
+          name2="Jitka"
+        />
+        <AspectTable
+          aspectChart={transitsPetr}
+          title="Petr's Transits"
+          name1="Current planets"
+          name2="Petr"
+        />
+        <AspectTable
+          aspectChart={transitsJitka}
+          title="Jitka's Transits"
+          name1="Current planets"
+          name2="Jitka"
+        />
+      </div>
       <div id="chartElement" style={{ margin: "20px" }}></div>
     </div>
   );

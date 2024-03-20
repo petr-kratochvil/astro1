@@ -2,9 +2,9 @@ import axios from "axios";
 import React from "react";
 
 import "./App.css";
-import { getAspects } from "./aspects";
-import AspectTable from "./AspectTable";
-import ChartTable from "./ChartTable";
+import { getAspects } from "./localComputation/aspects";
+import AspectTable from "./components/AspectTable";
+import ChartTable from "./components/ChartTable";
 import constants from "./constants";
 
 const parse = (currentPlanets) => {

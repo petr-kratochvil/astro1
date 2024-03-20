@@ -1,5 +1,5 @@
 import BasicTable from "./BasicTable";
-import { planetSymbols, signSymbols } from "./constants";
+import { planetSymbols, signSymbols } from "../constants";
 
 const defaultStyle = {
   useSignSymbols: false,

@@ -1,4 +1,4 @@
-import { signPositions } from "./constants";
+import { signPositions } from "../constants";
 
 const degPosition = (planet) => {
   return (

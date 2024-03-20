@@ -1,4 +1,4 @@
-import { aspectSymbols, planetSymbols, signSymbols } from "./constants";
+import { aspectSymbols, planetSymbols, signSymbols } from "../constants";
 
 const defaultStyle = {
   useSignSymbols: false,

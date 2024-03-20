@@ -1,11 +1,10 @@
 import axios from "axios";
 import React from "react";
 
-import "./App.css";
-import { getAspects } from "./localComputation/aspects";
-import AspectTable from "./components/AspectTable";
-import ChartTable from "./components/ChartTable";
-import constants from "./constants";
+import { getAspects } from "../localComputation/aspects";
+import AspectTable from "../components/AspectTable";
+import ChartTable from "../components/ChartTable";
+import constants from "../constants";
 
 const parse = (currentPlanets) => {
   const parser = new DOMParser();
@@ -28,7 +27,7 @@ const parse = (currentPlanets) => {
   return result;
 };
 
-function App() {
+function Page1() {
   const [data, setData] = React.useState([]);
 
   const getCurrentPlanets = () => {
@@ -116,14 +115,7 @@ function App() {
   };
 
   return (
-    <div className="">
-      <header className="App App-header">
-        <p>Astro1</p>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          {/* <button onClick={getCurrentPlanets}>Get current planets</button>
-          <button onClick={getChart}>Get chart</button> */}
-        </div>
-      </header>
+    <>
       <div
         width="100%"
         style={{
@@ -176,8 +168,8 @@ function App() {
         />
       </div>
       <div id="chartElement" style={{ margin: "20px" }}></div>
-    </div>
+    </>
   );
 }
 
-export default App;
+export default Page1;

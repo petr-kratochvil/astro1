@@ -24,7 +24,7 @@
   height: 50px;
 }
 
-.App-header button {
+button {
   cursor: pointer;
   margin: 0px 5px 5px 5px;
   padding: 5px;

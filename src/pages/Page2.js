@@ -126,8 +126,29 @@ export default function Page2() {
     [baseDateJson, transitDate]
   );
 
+  function handleKeyDown(event) {
+    switch (event.key) {
+      case "ArrowLeft":
+        setTransitDate(addDays(transitDate, -1));
+        break;
+      case "ArrowRight":
+        setTransitDate(addDays(transitDate, +1));
+        break;
+      default:
+        break;
+    }
+  }
+
+  React.useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
   return (
-    <>
+    <div>
       <h1>Transits {person}</h1>
       <div
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
@@ -168,6 +189,6 @@ export default function Page2() {
           </pre>
         ))}
       </div>
-    </>
+    </div>
   );
 }

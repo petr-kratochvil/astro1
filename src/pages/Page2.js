@@ -78,16 +78,29 @@ export default function Page2() {
       Mars: 3,
       Jupiter: 4,
       Saturn: 4,
-      Uranus: 4,
-      Neptune: 4,
-      Pluto: 4,
+      Uranus: 5,
+      Neptune: 5,
+      Pluto: 6,
     };
     return w[planet] || 0;
   }
 
+  function aspectColor(aspect) {
+    const c = {
+      conjunction: "gold",
+      opposition: "gold",
+      square: "DeepPink",
+      trine: "DodgerBlue	",
+      sextile: "DodgerBlue	",
+      semiSextile: "DodgerBlue	",
+      quincunx: "yellowgreen",
+    };
+    return c[aspect] || "black";
+  }
+
   function formatTransits() {
     let result = [];
-    let currentResult = "";
+    let currentResult = { aspects: [] };
     let i = 0;
     let currentName = null;
     while (i < data.length) {
@@ -95,18 +108,24 @@ export default function Page2() {
       if (newName !== currentName) {
         if (currentName !== null) {
           result.push(currentResult);
-          currentResult = "";
+          currentResult = {};
         }
-        currentResult += translatePlanet(newName) + "\n\n";
+        currentResult.name = translatePlanet(newName) + "\n\n";
+        currentResult.aspects = [];
         currentName = newName;
       }
-      currentResult +=
-        translateAspect(data[i].name) +
-        " " +
-        translatePlanet(data[i].pos2.name) +
-        " " +
-        data[i].orb.toFixed(1) +
-        "\n";
+      currentResult.aspects.push({
+        aspect: data[i].name,
+        name: translateAspect(data[i].name),
+        planet: translatePlanet(data[i].pos2.name),
+        orb: data[i].orb.toFixed(1),
+        strengthening: data[i].orbSpeed < 0,
+        strong:
+          planetWeight(data[i].pos1.name) >= planetWeight(data[i].pos2.name) &&
+          ["conjunction", "opposition", "square", "trine"].includes(
+            data[i].name
+          ),
+      });
       i++;
     }
     if (currentResult !== "") {
@@ -147,6 +166,11 @@ export default function Page2() {
     };
   });
 
+  const strongStyle = {
+    backgroundColor: "#AAFFFF",
+    padding: "1px 2.5px",
+  };
+
   return (
     <div>
       <h1>Transits {person}</h1>
@@ -185,7 +209,28 @@ export default function Page2() {
               margin: "10px",
             }}
           >
-            {result}
+            {result.name}
+            {result.aspects.map(
+              (a) => (
+                <>
+                  {"\n" + a.name + " "}
+                  <span style={a.strong ? strongStyle : {}}>
+                    {a.planet}
+                  </span>{" "}
+                  {a.orb}{" "}
+                  <span
+                    style={{
+                      color: a.strengthening
+                        ? aspectColor(a.aspect)
+                        : "lightgrey",
+                    }}
+                  >
+                    {a.strengthening ? "⬆" : "⬇"}
+                  </span>
+                </>
+              ),
+              ""
+            )}
           </pre>
         ))}
       </div>

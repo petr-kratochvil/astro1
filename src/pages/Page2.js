@@ -6,34 +6,34 @@ export default function Page2() {
   const [data, setData] = React.useState([]);
   const baseDatePetr = { year: 1988, month: 7, day: 12, hour: 2 };
   const baseDateJitka = { year: 1973, month: 3, day: 26, hour: 2.25 };
-  let [baseDate, setBaseDate] = React.useState(baseDatePetr);
-  let [person, setPerson] = React.useState("Petr");
+  const [baseDateJson, setBaseDateJson] = React.useState(baseDatePetr);
+  const [person, setPerson] = React.useState("Petr");
+  const [transitDate, setTransitDate] = React.useState(new Date());
 
-  const getTransits = (baseDate) => {
+  function getTransits(baseDate, transitDate) {
     // Call Ephemerides API:
-    const date = new Date();
-    const transitDate = {
-      year: date.getUTCFullYear(),
-      month: date.getUTCMonth() + 1,
-      day: date.getUTCDate(),
-      hour: date.getUTCHours() + date.getUTCMinutes() / 60,
+    const transitDateJson = {
+      year: transitDate.getUTCFullYear(),
+      month: transitDate.getUTCMonth() + 1,
+      day: transitDate.getUTCDate(),
+      hour: transitDate.getUTCHours() + transitDate.getUTCMinutes() / 60,
     };
     axios
       .post(`${constants.ephemeridesApiBase}/transits`, {
         baseDate,
-        transitDate,
+        transitDate: transitDateJson,
       })
       .then((response) => {
         setData(
           response.data.filter(
             (d) =>
               !["Moon", "Mercury"].includes(d.pos1.name) &&
-              !["vertex"].includes(d.pos2.name) &&
-              planetWeight(d.pos1.name) >= planetWeight(d.pos2.name)
+              !["vertex"].includes(d.pos2.name)
+            // && planetWeight(d.pos1.name) >= planetWeight(d.pos2.name)
           )
         );
       });
-  };
+  }
 
   function translateAspect(aspect) {
     switch (aspect) {
@@ -90,7 +90,7 @@ export default function Page2() {
     let currentResult = "";
     let i = 0;
     let currentName = null;
-    while (i < data.length - 1) {
+    while (i < data.length) {
       const newName = data[i]?.pos1.name;
       if (newName !== currentName) {
         if (currentName !== null) {
@@ -115,23 +115,48 @@ export default function Page2() {
     return result;
   }
 
-  React.useEffect(() => getTransits(baseDate), [baseDate]);
+  function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
+  React.useEffect(
+    () => getTransits(baseDateJson, transitDate),
+    [baseDateJson, transitDate]
+  );
 
   return (
     <>
       <h1>Transits {person}</h1>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <button onClick={() => setBaseDate(baseDatePetr) + setPerson("Petr")}>
+      <div
+        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      >
+        <button
+          onClick={() => setBaseDateJson(baseDatePetr) + setPerson("Petr")}
+        >
           Petr
         </button>
-        <button onClick={() => setBaseDate(baseDateJitka) + setPerson("Jitka")}>
+        <button
+          onClick={() => setBaseDateJson(baseDateJitka) + setPerson("Jitka")}
+        >
           Jitka
+        </button>
+        <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
+          &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
+        </button>
+        <div>
+          {transitDate.getUTCDate()}. {transitDate.getUTCMonth() + 1}.{" "}
+          {transitDate.getUTCFullYear()}
+        </div>
+        <button onClick={() => setTransitDate(addDays(transitDate, +1))}>
+          &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;
         </button>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {formatTransits().map((result, index) => (
           <pre
-          key={index}
+            key={index}
             style={{
               border: "1px solid deeppink",
               padding: "10px",

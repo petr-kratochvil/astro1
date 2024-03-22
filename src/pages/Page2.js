@@ -110,22 +110,38 @@ export default function Page2() {
           result.push(currentResult);
           currentResult = {};
         }
-        currentResult.name = translatePlanet(newName) + "\n\n";
+        currentResult.name = translatePlanet(newName);
         currentResult.aspects = [];
         currentName = newName;
       }
+      let days = data[i].orb / Math.abs(data[i].orbSpeed);
+      let m, t;
+      if (days > 30) {
+        m = days / 30;
+      } else if (days > 7) {
+        t = days / 7;
+      }
+      const fixedFormat = (x, precision) =>
+        x.toFixed(x < 10 && Math.abs(x - Math.round(x)) > precision ? 1 : 0);
+      const daysFormat = m
+        ? `${fixedFormat(m, 0.3)} měs`
+        : t
+        ? `${fixedFormat(t, 0.2)} týd `
+        : `${fixedFormat(days, 0.1)}`;
       currentResult.aspects.push({
         aspect: data[i].name,
         name: translateAspect(data[i].name),
         planet: translatePlanet(data[i].pos2.name),
         orb: data[i].orb.toFixed(1),
         strengthening: data[i].orbSpeed < 0,
+        days: daysFormat,
         strong:
           planetWeight(data[i].pos1.name) >= planetWeight(data[i].pos2.name) &&
           ["conjunction", "opposition", "square", "trine"].includes(
             data[i].name
           ),
       });
+      currentResult.speed = data[i].pos1.speed.toFixed(2);
       i++;
     }
     if (currentResult !== "") {
@@ -205,11 +221,15 @@ export default function Page2() {
             style={{
               border: "1px solid deeppink",
               padding: "10px",
-              width: "200px",
+              width: "220px",
               margin: "10px",
             }}
           >
-            {result.name}
+            {result.name}{" "}
+            <span style={{ color: "LightSeaGreen", fontSize: 12 }}>
+              {result.speed}
+            </span>
+            {"\n\n"}
             {result.aspects.map(
               (a) => (
                 <>
@@ -226,6 +246,14 @@ export default function Page2() {
                     }}
                   >
                     {a.strengthening ? "⬆" : "⬇"}
+                  </span>{" "}
+                  <span
+                    style={{
+                      color: a.strengthening ? "LightSeaGreen" : "lightgray",
+                      fontSize: 11,
+                    }}
+                  >
+                    {a.days}
                   </span>
                 </>
               ),

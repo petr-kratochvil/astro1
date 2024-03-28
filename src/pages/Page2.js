@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import constants from "../constants";
+import constants, { signList, signSymbols } from "../constants";
 
 export default function Page2() {
   const [data, setData] = React.useState([]);
@@ -28,7 +28,8 @@ export default function Page2() {
           response.data.filter(
             (d) =>
               !["Moon", "Mercury"].includes(d.pos1.name) &&
-              !["vertex"].includes(d.pos2.name)
+              !["vertex"].includes(d.pos2.name) &&
+              ![ "quincunx"].includes(d.name)
             // && planetWeight(d.pos1.name) >= planetWeight(d.pos2.name)
           )
         );
@@ -142,6 +143,8 @@ export default function Page2() {
           ),
       });
       currentResult.speed = data[i].pos1.speed.toFixed(2);
+      currentResult.pos = data[i].pos1.degrees;
+      currentResult.sign = signSymbols[signList[data[i].pos1.sign-1]];
       i++;
     }
     if (currentResult !== "") {
@@ -153,6 +156,12 @@ export default function Page2() {
   function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
+    return result;
+  }
+
+  function addMonths(date, months) {
+    var result = new Date(date);
+    result.setMonth(result.getMonth() + months);
     return result;
   }
 
@@ -203,6 +212,12 @@ export default function Page2() {
         >
           Jitka
         </button>
+        <button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
+          &nbsp;&nbsp;&lt;&lt;&nbsp;rok
+        </button>
+        <button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
+          &nbsp;&nbsp;&lt;&lt;&nbsp;měs.
+        </button>
         <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
           &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
         </button>
@@ -212,6 +227,15 @@ export default function Page2() {
         </div>
         <button onClick={() => setTransitDate(addDays(transitDate, +1))}>
           &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;
+        </button>
+        <button onClick={() => setTransitDate(addMonths(transitDate, +1))}>
+          měs.&nbsp;&gt;&gt;&nbsp;&nbsp;
+        </button>
+        <button onClick={() => setTransitDate(addMonths(transitDate, +12))}>
+          rok&nbsp;&gt;&gt;&nbsp;&nbsp;
+        </button>
+        <button onClick={() => setTransitDate(new Date())}>
+          &nbsp;&nbsp;dnes&nbsp;&nbsp;
         </button>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
@@ -228,6 +252,10 @@ export default function Page2() {
             {result.name}{" "}
             <span style={{ color: "LightSeaGreen", fontSize: 12 }}>
               {result.speed}
+            </span>
+            {' '}
+            <span style={{ color: "Blue", fontSize: 15 }}>
+              <span style={{ fontSize: 11 }}>{result.pos}°</span>{''}{result.sign} 
             </span>
             {"\n\n"}
             {result.aspects.map(

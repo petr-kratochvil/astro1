@@ -43,7 +43,7 @@ UT/GMT</span></center></td></tr>
 
 export const getChartUrl = 'https://www.astro.com/cgi/chart.cgi?nhor=1&lang=e&act=chm&sdat=&ishkch=1';
 export const getPlanetsUrl = 'https://www.astro.com/h/awt/ppos2_e.htm?code=56a75c619fd8fa5f0f1ae183d1688780';
-export const ephemeridesApiBase = 'http://localhost:3601';
+export const ephemeridesApiBase = process.env.REACT_APP_EPHEMERIDES_API_BASE;
 
 export const chartDataPetr = [
   {"name":"Sun","degrees": 19,"sign":"Cancer","minutes": 56,"seconds": 43,"retrograde":false},

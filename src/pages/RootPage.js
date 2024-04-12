@@ -9,15 +9,12 @@ export default function RootPage() {
       <div className="App-layout">
         <div style={{ display: "flex", flexDirection: "column" }}>
           <header className="App App-header">
-            <p>Astro1</p>
+            <p>Astro Transits</p>
           </header>
           <div className="App-bar">
-            <Link className="Router-link" to={"page1"}>
-              Page 1
-            </Link>
-            <Link className="Router-link" to={"page2"}>
+            {/* <Link className="Router-link" to={"/"}>
               Transits
-            </Link>
+            </Link> */}
           </div>
         </div>
         <Outlet />

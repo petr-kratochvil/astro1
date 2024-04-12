@@ -196,12 +196,12 @@ export default function Page2() {
     padding: "1px 2.5px",
   };
 
+  const buttonsMenuStyle = { display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", marginBottom: "10px" }
+
   return (
     <div>
       <h1>Transits {person}</h1>
-      <div
-        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-      >
+      <div style={buttonsMenuStyle}>
         <button
           onClick={() => setBaseDateJson(baseDatePetr) + setPerson("Petr")}
         >
@@ -212,12 +212,9 @@ export default function Page2() {
         >
           Jitka
         </button>
-        <button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
-          &nbsp;&nbsp;&lt;&lt;&nbsp;rok
-        </button>
-        <button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
-          &nbsp;&nbsp;&lt;&lt;&nbsp;měs.
-        </button>
+      </div>
+      <div style={buttonsMenuStyle}>
+        
         <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
           &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
         </button>
@@ -228,14 +225,22 @@ export default function Page2() {
         <button onClick={() => setTransitDate(addDays(transitDate, +1))}>
           &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;
         </button>
+      </div>
+      <div style={buttonsMenuStyle}>
+        <button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
+          &nbsp;&nbsp;&lt;&lt;&nbsp;rok
+        </button>
+        <button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
+          &nbsp;&nbsp;&lt;&lt;&nbsp;měs.
+        </button>
+        <button onClick={() => setTransitDate(new Date())}>
+          &nbsp;&nbsp;dnes&nbsp;&nbsp;
+        </button>
         <button onClick={() => setTransitDate(addMonths(transitDate, +1))}>
           měs.&nbsp;&gt;&gt;&nbsp;&nbsp;
         </button>
         <button onClick={() => setTransitDate(addMonths(transitDate, +12))}>
           rok&nbsp;&gt;&gt;&nbsp;&nbsp;
-        </button>
-        <button onClick={() => setTransitDate(new Date())}>
-          &nbsp;&nbsp;dnes&nbsp;&nbsp;
         </button>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap" }}>

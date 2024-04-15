@@ -200,7 +200,7 @@ export default function Page2() {
 
   return (
     <div>
-      <h1>Transits {person}</h1>
+      <h1 style={{color: 'slateblue', textAlign: 'center'}}>{person}'s transits</h1>
       <div style={buttonsMenuStyle}>
         <button
           onClick={() => setBaseDateJson(baseDatePetr) + setPerson("Petr")}
@@ -247,12 +247,7 @@ export default function Page2() {
         {formatTransits().map((result, index) => (
           <pre
             key={index}
-            style={{
-              border: "1px solid deeppink",
-              padding: "10px",
-              width: "220px",
-              margin: "10px",
-            }}
+            class="PlanetBox"
           >
             {result.name}{" "}
             <span style={{ color: "LightSeaGreen", fontSize: 12 }}>

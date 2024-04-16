@@ -61,12 +61,11 @@ button {
 }
 
 .Router-link {
-  padding: 5px;
-  color: white;
+  padding: 5px 25px;
   text-decoration: none;
-  background-color: deeppink;
-  border-radius: 5px;
-  margin: 5px;
+  color: slateblue;
+  margin: 0px 1px;
+  width: 100%;
 }
 
 .PlanetBox {

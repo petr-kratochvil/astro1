@@ -3,9 +3,10 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./index.css";
-import Page1 from "./pages/Page1";
 import RootPage from "./pages/RootPage";
-import Page2 from "./pages/Page2";
+import TransitsPage from "./pages/TransitsPage";
+import PlanetsPage from "./pages/PlanetsPage";
+import TransitsAndSynastryPage from "./pages/TransitsAndSynastryPage";
 
 const router = createBrowserRouter([
   {
@@ -14,12 +15,16 @@ const router = createBrowserRouter([
 
     children: [
       {
+        path: "/planets",
+        element: <PlanetsPage />,
+      },
+      {
         path: "/tables",
-        element: <Page1 />,
+        element: <TransitsAndSynastryPage />,
       },
       {
         path: "/",
-        element: <Page2 />,
+        element: <TransitsPage />,
       },
     ],
   },

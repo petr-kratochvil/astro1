@@ -1,0 +1,44 @@
+const parse = (currentPlanets) => {
+  const parser = new DOMParser();
+  const document = parser.parseFromString(currentPlanets, "text/html");
+  const table = document.getElementsByTagName("table")[0].children[0].children;
+  const result = [];
+  for (let i = 1; i <= 12; i++) {
+    const tr = table[i];
+    const name = tr.children[1].innerHTML;
+    const degrees = tr.children[2].innerHTML;
+    const sign = tr.children[3].children[0].alt;
+    const minutesSecondsRetrograde = tr.children[4].innerHTML;
+    const split1 = minutesSecondsRetrograde.split("'");
+    const split2 = split1[1].split('"');
+    const minutes = split1[0];
+    const seconds = split2[0];
+    const retrograde = split2[1] === "r";
+    result.push({ name, degrees, sign, minutes, seconds, retrograde });
+  }
+  return result;
+};
+
+  // Call astro.com:
+  // axios.get(constants.getPlanetsUrl).then((response) => {
+  //   console.log('got PLANETS response:');
+  //   console.log(response.data);
+  //   setData(parse(response.data));
+  // });
+
+  // Use constant data
+  // setData(parse(constants.currentPlanetsConst));
+
+  const getChart = () => {
+    axios.get(constants.getChartUrl).then((response) => {
+      console.log("got CHART response:");
+      console.log(response.data);
+      // const div = document.createElement('div');
+      // div.innerHTML = response.data;
+      document.getElementById("chartElement").innerHTML = response.data;
+      const image =
+        document.getElementById("chartElement").children[1].children[0];
+      console.log(image);
+      image.src = "http://astro.com" + image.src.substring(21);
+    });
+  };

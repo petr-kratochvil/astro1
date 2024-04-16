@@ -42,6 +42,10 @@ button {
   /* font-family: monospace; */
 }
 
+.smallFont .MyTable td:not(.MyTableHeading, .MyTableSubHeading) {
+  font-size: 12px;
+}
+
 .MyTable td {
   border: 1px solid DodgerBlue;
   padding:8px;

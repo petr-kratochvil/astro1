@@ -34,6 +34,11 @@ export default function RootPage() {
             <Link className="Router-link" to={"/"}>
               Transits
             </Link></MenuItem>
+            <MenuItem onClick={handleClose}>
+            <Link className="Router-link" to={"/planets"}>
+              Planets
+            </Link>
+          </MenuItem>
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/tables"}>
               Tables
@@ -41,6 +46,7 @@ export default function RootPage() {
           </MenuItem>
         </Menu>
         <Outlet />
+        <div id="chartElement" style={{ margin: "20px" }}></div>
       </div>
     </>
   );

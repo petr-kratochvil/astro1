@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import constants, { signList, signSymbols } from "../constants";
 
-export default function Page2() {
+export default function TransitsPage() {
   const [data, setData] = React.useState([]);
   const baseDatePetr = { year: 1988, month: 7, day: 12, hour: 2 };
   const baseDateJitka = { year: 1973, month: 3, day: 26, hour: 2.25 };
@@ -247,7 +247,7 @@ export default function Page2() {
         {formatTransits().map((result, index) => (
           <pre
             key={index}
-            class="PlanetBox"
+            className="PlanetBox"
           >
             {result.name}{" "}
             <span style={{ color: "LightSeaGreen", fontSize: 12 }}>

@@ -122,6 +122,7 @@ function Page1() {
           display: "flex",
           justifyContent: "space-evenly",
           marginTop: "20px",
+          flexWrap: "wrap",
         }}
       >
         <ChartTable
@@ -146,6 +147,7 @@ function Page1() {
           display: "flex",
           justifyContent: "space-evenly",
           marginTop: "20px",
+          flexWrap: "wrap",
         }}
       >
         <AspectTable

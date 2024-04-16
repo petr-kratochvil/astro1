@@ -1,36 +1,12 @@
-import axios from "axios";
 import React from "react";
 
 import { getAspects } from "../localComputation/aspects";
 import AspectTable from "../components/AspectTable";
 import constants from "../constants";
+import useCurrentPosition from "../apiCalls/usePosition";
 
 function TransitsAndSynastryPage() {
-  const [data, setData] = React.useState([]);
-
-  const getCurrentPlanets = () => {
-
-    // Call Ephemerides API for current planets:
-    const date = new Date();
-    const body = {
-      year: date.getUTCFullYear(),
-      month: date.getUTCMonth() + 1,
-      day: date.getUTCDate(),
-      hour: date.getUTCHours() + date.getUTCMinutes() / 60,
-    };
-    axios
-      .post(`${constants.ephemeridesApiBase}/position`, body)
-      .then((response) => {
-        setData(
-          response.data.map((planet) => ({
-            ...planet,
-            sign: constants.signList[planet.sign - 1],
-          }))
-        );
-      });
-  };
-
-  React.useEffect(getCurrentPlanets, []);
+  const data = useCurrentPosition();
 
   const aspects = getAspects(constants.chartDataPetr, constants.chartDataJitka);
 
@@ -42,6 +18,7 @@ function TransitsAndSynastryPage() {
     moonFilter
   );
 
+  const style = { useSignSymbols: true, useSignText: false };
 
   return (
     <>
@@ -61,18 +38,21 @@ function TransitsAndSynastryPage() {
           title="Petr & Jitka - Synastry"
           name1="Petr"
           name2="Jitka"
+          style={style}
         />
         <AspectTable
           aspectChart={transitsPetr}
           title="Petr's Transits"
           name1="Current planets"
           name2="Petr"
+          style={style}
         />
         <AspectTable
           aspectChart={transitsJitka}
           title="Jitka's Transits"
           name1="Current planets"
           name2="Jitka"
+          style={style}
         />
       </div>
       

@@ -6,7 +6,8 @@ import "./index.css";
 import RootPage from "./pages/RootPage";
 import TransitsPage from "./pages/TransitsPage";
 import PlanetsPage from "./pages/PlanetsPage";
-import TransitsAndSynastryPage from "./pages/TransitsAndSynastryPage";
+import TransitsTablePage from "./pages/TransitsTablePage";
+import SynastryTablePage from "./pages/SynastryTablePage";
 
 const router = createBrowserRouter([
   {
@@ -19,8 +20,12 @@ const router = createBrowserRouter([
         element: <PlanetsPage />,
       },
       {
-        path: "/tables",
-        element: <TransitsAndSynastryPage />,
+        path: "/transit-tables",
+        element: <TransitsTablePage />,
+      },
+      {
+        path: "/synastry-tables",
+        element: <SynastryTablePage />,
       },
       {
         path: "/",

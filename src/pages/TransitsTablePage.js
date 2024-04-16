@@ -5,10 +5,8 @@ import AspectTable from "../components/AspectTable";
 import constants from "../constants";
 import useCurrentPosition from "../apiCalls/usePosition";
 
-function TransitsAndSynastryPage() {
+function TransitsTablePage() {
   const data = useCurrentPosition();
-
-  const aspects = getAspects(constants.chartDataPetr, constants.chartDataJitka);
 
   const moonFilter = (aspect) => aspect.planet1.name !== "Moon";
   const transitsPetr = getAspects(data, constants.chartDataPetr).filter(
@@ -34,13 +32,6 @@ function TransitsAndSynastryPage() {
         className="smallFont"
       >
         <AspectTable
-          aspectChart={aspects}
-          title="Petr & Jitka - Synastry"
-          name1="Petr"
-          name2="Jitka"
-          style={style}
-        />
-        <AspectTable
           aspectChart={transitsPetr}
           title="Petr's Transits"
           name1="Current planets"
@@ -60,4 +51,4 @@ function TransitsAndSynastryPage() {
   );
 }
 
-export default TransitsAndSynastryPage;
+export default TransitsTablePage;

@@ -40,8 +40,13 @@ export default function RootPage() {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <Link className="Router-link" to={"/tables"}>
-              Tables
+            <Link className="Router-link" to={"/transit-tables"}>
+              Transit Tables
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <Link className="Router-link" to={"/synastry-tables"}>
+              Synastry Tables
             </Link>
           </MenuItem>
         </Menu>

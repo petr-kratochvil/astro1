@@ -8,6 +8,7 @@ import TransitsPage from "./pages/TransitsPage";
 import PlanetsPage from "./pages/PlanetsPage";
 import TransitsTablePage from "./pages/TransitsTablePage";
 import SynastryTablePage from "./pages/SynastryTablePage";
+import PageNotFound from "./pages/PageNotFound";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <TransitsPage />,
+      },
+      {
+        path: "*",
+        element: <PageNotFound />,
       },
     ],
   },

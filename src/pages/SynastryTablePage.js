@@ -1,10 +1,12 @@
 import React from "react";
 
+import { useTitle } from "../utils/utils";
 import { getAspects } from "../localComputation/aspects";
 import AspectTable from "../components/AspectTable";
 import constants from "../constants";
 
 function SynastryTablePage() {
+  useTitle("Synastry");
   const aspects = getAspects(constants.chartDataPetr, constants.chartDataJitka);
 
   const style = { useSignSymbols: true, useSignText: false };

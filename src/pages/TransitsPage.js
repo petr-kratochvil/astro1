@@ -1,8 +1,10 @@
 import axios from "axios";
 import React from "react";
 import constants, { signList, signSymbols } from "../constants";
+import { useTitle } from "../utils/utils";
 
 export default function TransitsPage() {
+  useTitle();
   const [data, setData] = React.useState([]);
   const baseDatePetr = { year: 1988, month: 7, day: 12, hour: 2 };
   const baseDateJitka = { year: 1973, month: 3, day: 26, hour: 2.25 };

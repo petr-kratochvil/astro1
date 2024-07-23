@@ -3,7 +3,7 @@ import React from "react";
 import { useTitle } from "../utils/utils";
 import ChartTable from "../components/ChartTable";
 import constants from "../constants";
-import useCurrentPosition from "../apiCalls/usePosition";
+import { useCurrentPosition } from "../apiCalls/usePosition";
 
 function PlanetsPage() {
   useTitle("Planets");

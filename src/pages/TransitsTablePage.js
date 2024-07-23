@@ -4,7 +4,7 @@ import { useTitle } from "../utils/utils";
 import { getAspects } from "../localComputation/aspects";
 import AspectTable from "../components/AspectTable";
 import constants from "../constants";
-import useCurrentPosition from "../apiCalls/usePosition";
+import { useCurrentPosition } from "../apiCalls/usePosition";
 
 function TransitsTablePage() {
   useTitle("Transit tables");

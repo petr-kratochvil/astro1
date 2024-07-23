@@ -69,7 +69,10 @@ export default function TransitsPage() {
       Uranus: "Uran",
       Neptune: "Neptun",
     };
-    return t[planet] || planet;
+    if (planet.type === 'house') {
+      return `${planet.houseNumber}. dům`;
+    }
+    return t[planet.name] || planet.name;
   }
 
   function planetWeight(planet) {
@@ -113,7 +116,7 @@ export default function TransitsPage() {
           result.push(currentResult);
           currentResult = {};
         }
-        currentResult.name = translatePlanet(newName);
+        currentResult.name = translatePlanet({name: newName});
         currentResult.aspects = [];
         currentName = newName;
       }
@@ -134,7 +137,7 @@ export default function TransitsPage() {
       currentResult.aspects.push({
         aspect: data[i].name,
         name: translateAspect(data[i].name),
-        planet: translatePlanet(data[i].pos2.name),
+        planet: translatePlanet(data[i].pos2),
         orb: data[i].orb.toFixed(1),
         strengthening: data[i].orbSpeed < 0,
         days: daysFormat,

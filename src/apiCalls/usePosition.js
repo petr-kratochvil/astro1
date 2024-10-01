@@ -32,6 +32,6 @@ export function usePosition(ephDate) {
 
   React.useEffect(() => {
     getPlanets(ephDate, setData);
-  }, [ephDate]);
+  }, [JSON.stringify(ephDate)]);
   return data;
 }

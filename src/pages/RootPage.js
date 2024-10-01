@@ -49,6 +49,11 @@ export default function RootPage() {
               Synastry Tables
             </Link>
           </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <Link className="Router-link" to={"/saved-data"}>
+              Saved data
+            </Link>
+          </MenuItem>
         </Menu>
         <Outlet />
         <div id="chartElement" style={{ margin: "20px" }}></div>

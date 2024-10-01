@@ -9,6 +9,7 @@ import PlanetsPage from "./pages/PlanetsPage";
 import TransitsTablePage from "./pages/TransitsTablePage";
 import SynastryTablePage from "./pages/SynastryTablePage";
 import PageNotFound from "./pages/PageNotFound";
+import SetBaseDate from "./components/SetBaseDate";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/synastry-tables",
         element: <SynastryTablePage />,
+      },
+      {
+        path: "/saved-data",
+        element: <SetBaseDate />,
       },
       {
         path: "/",

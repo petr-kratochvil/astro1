@@ -1,8 +1,8 @@
-import axios from "axios";
 import React from "react";
 import { useTitle } from "../utils/utils";
 import TransitsBoxes from "../components/TrasitsBoxes";
 import { getTransits } from "../apiCalls/getTransits";
+import { getBaseDateJson } from "../utils/LocalStorage";
 
 export default function TransitsPage() {
   useTitle();
@@ -70,6 +70,11 @@ export default function TransitsPage() {
           onClick={() => setBaseDateJson(baseDateJitka) + setPerson("Jitka")}
         >
           Jitka
+        </button>
+        <button
+          onClick={() => setBaseDateJson(getBaseDateJson()) + setPerson("Saved date")}
+        >
+          Saved date
         </button>
       </div>
       <div style={buttonsMenuStyle}>

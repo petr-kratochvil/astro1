@@ -108,8 +108,8 @@ export default function TransitsBoxes({data}) {
             </span>
             {"\n\n"}
             {result.aspects.map(
-              (a) => (
-                <>
+              (a, index) => (
+                <React.Fragment key={index}>
                   {"\n" + a.name + " "}
                   <span style={a.strong ? strongStyle : {}}>
                     {a.planet}
@@ -132,7 +132,7 @@ export default function TransitsBoxes({data}) {
                   >
                     {a.days}
                   </span>
-                </>
+                </React.Fragment>
               ),
               ""
             )}

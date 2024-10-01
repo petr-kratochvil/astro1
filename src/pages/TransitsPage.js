@@ -1,8 +1,8 @@
 import axios from "axios";
 import React from "react";
-import constants from "../constants";
 import { useTitle } from "../utils/utils";
 import TransitsBoxes from "../components/TrasitsBoxes";
+import { getTransits } from "../apiCalls/getTransits";
 
 export default function TransitsPage() {
   useTitle();
@@ -13,30 +13,8 @@ export default function TransitsPage() {
   const [person, setPerson] = React.useState("Petr");
   const [transitDate, setTransitDate] = React.useState(new Date());
 
-  function getTransits(baseDate, transitDate) {
-    // Call Ephemerides API:
-    const transitDateJson = {
-      year: transitDate.getUTCFullYear(),
-      month: transitDate.getUTCMonth() + 1,
-      day: transitDate.getUTCDate(),
-      hour: transitDate.getUTCHours() + transitDate.getUTCMinutes() / 60,
-    };
-    axios
-      .post(`${constants.ephemeridesApiBase}/transits`, {
-        baseDate,
-        transitDate: transitDateJson,
-      })
-      .then((response) => {
-        setData(
-          response.data.filter(
-            (d) =>
-              !["Moon", "Mercury"].includes(d.pos1.name) &&
-              !["vertex"].includes(d.pos2.name) &&
-              ![ "quincunx"].includes(d.name)
-            // && planetWeight(d.pos1.name) >= planetWeight(d.pos2.name)
-          )
-        );
-      });
+  function callGetTransits(baseDate, transitDate) {
+    getTransits(baseDate, transitDate).then(data => setData(data));
   }
 
   function addDays(date, days) {
@@ -52,7 +30,7 @@ export default function TransitsPage() {
   }
 
   React.useEffect(
-    () => getTransits(baseDateJson, transitDate),
+    () => callGetTransits(baseDateJson, transitDate),
     [baseDateJson, transitDate]
   );
 

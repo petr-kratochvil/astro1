@@ -49,7 +49,7 @@ export default function SetBaseDate() {
             min="1"
             max="31"
             name="day"
-            defaultValue={baseDate.day}
+            defaultValue={baseDate?.day}
           />
         </label>
         <label style={labelStyle}>
@@ -61,7 +61,7 @@ export default function SetBaseDate() {
             min="1"
             max="12"
             name="month"
-            defaultValue={baseDate.month}
+            defaultValue={baseDate?.month}
           />
         </label>
         <label style={labelStyle}>
@@ -73,7 +73,7 @@ export default function SetBaseDate() {
             min="1900"
             max="2100"
             name="year"
-            defaultValue={baseDate.year}
+            defaultValue={baseDate?.year}
           />
         </label>
         <label style={labelStyle}>
@@ -85,7 +85,7 @@ export default function SetBaseDate() {
             min="0"
             max="23"
             name="hour"
-            defaultValue={Math.floor(baseDate.hour)}
+            defaultValue={Math.floor(baseDate?.hour)}
           />
         </label>
         <label style={labelStyle}>
@@ -97,7 +97,7 @@ export default function SetBaseDate() {
             min="0"
             max="59"
             name="minutes"
-            defaultValue={Math.round((baseDate.hour - Math.floor(baseDate.hour)) * 60)}
+            defaultValue={Math.round((baseDate?.hour - Math.floor(baseDate?.hour)) * 60)}
           />
         </label>
         <hr style={{ margin: "10px 0px", borderColor: "slateblue", borderBottomStyle: "none" }} />

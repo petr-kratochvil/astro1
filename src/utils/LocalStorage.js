@@ -2,7 +2,7 @@ const USER_OBJECT_KEY = "ASTRO_USER_OBJECT";
 
 export function getUserObject() {
   try {
-    return JSON.parse(localStorage.getItem(USER_OBJECT_KEY));
+    return JSON.parse(localStorage.getItem(USER_OBJECT_KEY)) || {};
   } catch (e) {
     return {};
   }

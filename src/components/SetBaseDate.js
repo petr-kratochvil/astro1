@@ -6,13 +6,22 @@ export default function SetBaseDate() {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    const baseDate = {
-      year: parseInt(data.year),
-      month: parseInt(data.month),
-      day: parseInt(data.day),
-      hour: parseInt(data.hour) + parseInt(data.minutes) / 60,
+    const baseDate = new Date(
+      parseInt(data.year),
+      parseInt(data.month) - 1,
+      parseInt(data.day),
+      parseInt(data.hour),
+      parseInt(data.minutes)
+    );
+    // convert baseDate to UTC - the API currently needs UTC time
+    // TODO: use proper time zone based on geolocation
+    const baseDateJson = {
+      year: baseDate.getUTCFullYear(),
+      month: baseDate.getUTCMonth() + 1,
+      day: baseDate.getUTCDate(),
+      hour: baseDate.getUTCHours() + baseDate.getUTCMinutes() / 60,
     };
-    setBaseDateJson(baseDate);
+    setBaseDateJson(baseDateJson);
   }
 
   const baseDate = getBaseDateJson();
@@ -30,7 +39,7 @@ export default function SetBaseDate() {
 
   return (
     <>
-    <h1 style={{color: 'slateblue', textAlign: 'center'}}>Saved data</h1>
+      <h1 style={{ color: "slateblue", textAlign: "center" }}>Saved data</h1>
       <form
         onSubmit={handleSubmit}
         style={{
@@ -97,10 +106,18 @@ export default function SetBaseDate() {
             min="0"
             max="59"
             name="minutes"
-            defaultValue={Math.round((baseDate?.hour - Math.floor(baseDate?.hour)) * 60)}
+            defaultValue={Math.round(
+              (baseDate?.hour - Math.floor(baseDate?.hour)) * 60
+            )}
           />
         </label>
-        <hr style={{ margin: "10px 0px", borderColor: "slateblue", borderBottomStyle: "none" }} />
+        <hr
+          style={{
+            margin: "10px 0px",
+            borderColor: "slateblue",
+            borderBottomStyle: "none",
+          }}
+        />
         {/* <label style={labelStyle}>
           Latitude:{" "}
           <input
@@ -119,7 +136,12 @@ export default function SetBaseDate() {
             name="longitude"
           />
         </label> */}
-        <button type="submit" style={{marginLeft: '100px', marginBottom: '11px', width: '100px'}}>Save</button>
+        <button
+          type="submit"
+          style={{ marginLeft: "100px", marginBottom: "11px", width: "100px" }}
+        >
+          Save
+        </button>
       </form>
     </>
   );

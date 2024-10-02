@@ -24,7 +24,20 @@ export default function SetBaseDate() {
     setBaseDateJson(baseDateJson);
   }
 
-  const baseDate = getBaseDateJson();
+  let baseDate = null;
+  const baseDateUTC = getBaseDateJson();
+  if (baseDateUTC) {
+    const baseDateTimestamp = Date.UTC(
+      parseInt(baseDateUTC.year),
+      parseInt(baseDateUTC.month) - 1,
+      parseInt(baseDateUTC.day),
+      Math.floor(parseFloat(baseDateUTC.hour)),
+      (parseFloat(baseDateUTC.hour) - Math.floor(parseFloat(baseDateUTC.hour))) * 60
+    );
+    if (!isNaN(baseDateTimestamp)) {
+      baseDate = new Date(baseDateTimestamp);
+    }
+  }
 
   const labelStyle = {
     display: "block",
@@ -58,7 +71,7 @@ export default function SetBaseDate() {
             min="1"
             max="31"
             name="day"
-            defaultValue={baseDate?.day}
+            defaultValue={baseDate?.getDate()}
           />
         </label>
         <label style={labelStyle}>
@@ -70,7 +83,7 @@ export default function SetBaseDate() {
             min="1"
             max="12"
             name="month"
-            defaultValue={baseDate?.month}
+            defaultValue={baseDate?.getMonth() + 1 || ''}
           />
         </label>
         <label style={labelStyle}>
@@ -82,7 +95,7 @@ export default function SetBaseDate() {
             min="1900"
             max="2100"
             name="year"
-            defaultValue={baseDate?.year}
+            defaultValue={baseDate?.getFullYear()}
           />
         </label>
         <label style={labelStyle}>
@@ -94,7 +107,7 @@ export default function SetBaseDate() {
             min="0"
             max="23"
             name="hour"
-            defaultValue={Math.floor(baseDate?.hour)}
+            defaultValue={baseDate?.getHours()}
           />
         </label>
         <label style={labelStyle}>
@@ -106,9 +119,7 @@ export default function SetBaseDate() {
             min="0"
             max="59"
             name="minutes"
-            defaultValue={Math.round(
-              (baseDate?.hour - Math.floor(baseDate?.hour)) * 60
-            )}
+            defaultValue={baseDate?.getMinutes()}
           />
         </label>
         <hr

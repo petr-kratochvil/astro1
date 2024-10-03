@@ -2,7 +2,7 @@ import React from "react";
 import { useTitle } from "../utils/utils";
 import TransitsBoxes from "../components/TrasitsBoxes";
 import { getTransits } from "../apiCalls/getTransits";
-import { getBaseDateJson } from "../utils/LocalStorage";
+import { getBaseDateJson, getSavedData } from "../utils/LocalStorage";
 
 export default function TransitsPage() {
   useTitle();
@@ -55,6 +55,8 @@ export default function TransitsPage() {
     };
   });
 
+  const savedDataList = getSavedData();
+
   const buttonsMenuStyle = { display: "flex", flexDirection: "row", alignItems: "center", flexWrap: "wrap", marginBottom: "10px" }
 
   return (
@@ -71,11 +73,14 @@ export default function TransitsPage() {
         >
           Jitka
         </button>
-        <button
-          onClick={() => setBaseDateJson(getBaseDateJson()) + setPerson("Saved date")}
-        >
-          Saved date
-        </button>
+        {savedDataList.map((item, index) => item &&(
+          <button
+            key={index}
+            onClick={() => setBaseDateJson(getBaseDateJson(index)) + setPerson(item.name || 'Saved date '+index)}
+          >
+            {item.name || 'Saved date '+index}
+          </button>
+        ))}
       </div>
       <div style={buttonsMenuStyle}>
         

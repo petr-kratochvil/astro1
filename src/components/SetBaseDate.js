@@ -1,7 +1,10 @@
 import React from "react";
 import { getBaseDateJson, setBaseDateJson } from "../utils/LocalStorage";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function SetBaseDate() {
+  const navigate = useNavigate();
+
   function handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -16,23 +19,28 @@ export default function SetBaseDate() {
     // convert baseDate to UTC - the API currently needs UTC time
     // TODO: use proper time zone based on geolocation
     const baseDateJson = {
+      name: data.name,
       year: baseDate.getUTCFullYear(),
       month: baseDate.getUTCMonth() + 1,
       day: baseDate.getUTCDate(),
       hour: baseDate.getUTCHours() + baseDate.getUTCMinutes() / 60,
     };
-    setBaseDateJson(baseDateJson);
+    setBaseDateJson(index, baseDateJson);
+    navigate('/saved-data');
   }
 
+  const { index } = useParams();
+
   let baseDate = null;
-  const baseDateUTC = getBaseDateJson();
-  if (baseDateUTC) {
+  // baseDateJson is in UTC
+  const baseDateJson = getBaseDateJson(index);
+  if (baseDateJson) {
     const baseDateTimestamp = Date.UTC(
-      parseInt(baseDateUTC.year),
-      parseInt(baseDateUTC.month) - 1,
-      parseInt(baseDateUTC.day),
-      Math.floor(parseFloat(baseDateUTC.hour)),
-      (parseFloat(baseDateUTC.hour) - Math.floor(parseFloat(baseDateUTC.hour))) * 60
+      parseInt(baseDateJson.year),
+      parseInt(baseDateJson.month) - 1,
+      parseInt(baseDateJson.day),
+      Math.floor(parseFloat(baseDateJson.hour)),
+      (parseFloat(baseDateJson.hour) - Math.floor(parseFloat(baseDateJson.hour))) * 60
     );
     if (!isNaN(baseDateTimestamp)) {
       baseDate = new Date(baseDateTimestamp);
@@ -62,6 +70,22 @@ export default function SetBaseDate() {
           border: "1px solid slateblue",
         }}
       >
+        <label style={labelStyle}>
+          Name:{" "}
+          <input
+            style={{...inputStyle, width: '150px', left: '100px'}}
+            type="text"
+            name="name"
+            defaultValue={baseDateJson?.name}
+          />
+        </label>
+        <div
+          style={{
+            margin: "10px 0px",
+            borderTop: "1px solid slateblue",
+            borderBottomStyle: "none",
+          }}
+        />
         <label style={labelStyle}>
           Day:{" "}
           <input
@@ -122,10 +146,10 @@ export default function SetBaseDate() {
             defaultValue={baseDate?.getMinutes()}
           />
         </label>
-        <hr
+        <div
           style={{
             margin: "10px 0px",
-            borderColor: "slateblue",
+            borderTop: "1px solid slateblue",
             borderBottomStyle: "none",
           }}
         />
@@ -149,9 +173,15 @@ export default function SetBaseDate() {
         </label> */}
         <button
           type="submit"
-          style={{ marginLeft: "100px", marginBottom: "11px", width: "100px" }}
+          style={{ marginLeft: "90px", marginBottom: "20px", marginTop: "10px", width: "120px" }}
         >
           Save
+        </button>
+        <button
+          onClick={() => navigate('/saved-data')}
+          style={{ marginLeft: "90px", marginBottom: "20px", width: "120px" }}
+        >
+          Cancel
         </button>
       </form>
     </>

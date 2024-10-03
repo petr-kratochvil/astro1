@@ -10,6 +10,7 @@ import TransitsTablePage from "./pages/TransitsTablePage";
 import SynastryTablePage from "./pages/SynastryTablePage";
 import PageNotFound from "./pages/PageNotFound";
 import SetBaseDate from "./components/SetBaseDate";
+import SavedDataList from "./components/SavedDataList";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/saved-data",
+        element: <SavedDataList />,
+      },
+      {
+        path: "/saved-data/:index",
         element: <SetBaseDate />,
       },
       {

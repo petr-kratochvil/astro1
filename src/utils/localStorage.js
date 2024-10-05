@@ -13,7 +13,9 @@ export function setUserObject(userObject) {
 }
 
 export function getSavedData() {
-  return getUserObject().savedData || [];
+  return (getUserObject().savedData || []).filter(
+    (item) => item !== null && item !== undefined
+  );
 }
 
 export function getNextNameNumber() {

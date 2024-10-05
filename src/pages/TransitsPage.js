@@ -2,7 +2,7 @@ import React from "react";
 import { useTitle } from "../utils/utils";
 import TransitsBoxes from "../components/TrasitsBoxes";
 import { getTransits } from "../apiCalls/getTransits";
-import { getBaseDateJson, getSavedData } from "../utils/LocalStorage";
+import { getBaseDateJson, getSavedData } from "../utils/localStorage";
 
 export default function TransitsPage() {
   useTitle();

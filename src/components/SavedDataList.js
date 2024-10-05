@@ -1,29 +1,76 @@
 import React from "react";
-import { deleteBaseDate, getSavedData } from "../utils/LocalStorage";
+import { deleteBaseDate, getSavedData } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import { useForceUpdate } from "../utils/useForceUpdate";
+import { fromUTC } from "../utils/timeZones";
 
 export default function SavedDataList() {
   const navigate = useNavigate();
-  const savedDataList = getSavedData();
+  const savedDataList = getSavedData().map((item) => {
+    if (!item) {
+      return undefined;
+    }
+    let baseDate = fromUTC(item);
+    return {
+      name: item?.name,
+      day: baseDate?.getDate(),
+      month: baseDate?.getMonth() + 1 || undefined,
+      year: baseDate?.getFullYear(),
+      hour: baseDate?.getHours().toString().padStart(2, "0"),
+      minutes: baseDate?.getMinutes().toString().padStart(2, "0"),
+    };
+  });
   const forceUpdate = useForceUpdate();
 
+  const itemStyle = {
+    border: "1px solid slateblue",
+    padding: "15px",
+    margin: "20px",
+    marginTop: "0px",
+    borderRadius: "8px",
+    display: "flex",
+    justifyContent: "space-between",
+  };
   // TODO: convert saved date (UTC) to current zone to display it properly
-   // TODO: use proper time zone based on geolocation
+  // TODO: use proper time zone based on geolocation
   return (
     <>
-      <button style={{ padding: '10px', margin: '10px' }} onClick={() => navigate(`${savedDataList.length}`)}>
-        Add new
-      </button>
-      {savedDataList.map((item, index) => item && (
-        <div key={index} style={{ border: "1px solid blue", padding: '10px', margin: '10px' }}>
-          <b>{item.name}</b>
-          <br />
-          <i>{item.day}. {item.month} .{item.year}</i>
-          <button onClick={() => navigate(`${index}`)}>Edit</button>
-          <button onClick={() => {deleteBaseDate(index); forceUpdate()}}>Delete</button>
-        </div>
-      ))}
+      <h1 style={{ color: "slateblue", textAlign: "center" }}>
+        Uložené záznamy
+      </h1>
+      <div style={{ margin: "0px auto", maxWidth: "500px" }}>
+        <button
+          style={{ padding: "10px", margin: "20px" }}
+          onClick={() => navigate(`${savedDataList.length}`)}
+        >
+          + Přidat záznam
+        </button>
+        {savedDataList.map(
+          (item, index) =>
+            item && (
+              <div key={index} style={itemStyle}>
+                <div>
+                  <div>{item.name}</div>
+                  <div style={{fontSize: 'small', marginTop: '10px'}}>
+                      {item.day}. {item.month} .{item.year} {item.hour}:
+                      {item.minutes}
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <button onClick={() => navigate(`${index}`)}>Upravit</button>
+                  <button
+                    onClick={() => {
+                      deleteBaseDate(index);
+                      forceUpdate();
+                    }}
+                  >
+                    Smazat
+                  </button>
+                </div>
+              </div>
+            )
+        )}
+      </div>
     </>
   );
 }

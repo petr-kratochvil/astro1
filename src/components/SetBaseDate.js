@@ -1,5 +1,5 @@
 import React from "react";
-import { getBaseDateJson, setBaseDateJson } from "../utils/localStorage";
+import { getBaseDateJson, getNextNameNumber, setBaseDateJson, setlastNameNumber } from "../utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
 import { fromUTC } from "../utils/timeZones";
 
@@ -14,18 +14,21 @@ export default function SetBaseDate() {
       parseInt(data.year),
       parseInt(data.month) - 1,
       parseInt(data.day),
-      parseInt(data.hour),
-      parseInt(data.minutes)
+      parseInt(data.hour) || 0,
+      parseInt(data.minutes) || 0
     );
     // convert baseDate to UTC - the API currently needs UTC time
     // TODO: use proper time zone based on geolocation
     const baseDateJson = {
-      name: data.name,
+      name: data.name || `[Datum ${getNextNameNumber()}]`,
       year: baseDate.getUTCFullYear(),
       month: baseDate.getUTCMonth() + 1,
       day: baseDate.getUTCDate(),
       hour: baseDate.getUTCHours() + baseDate.getUTCMinutes() / 60,
     };
+    if (!data.name) {
+      setlastNameNumber(getNextNameNumber());
+    }
     setBaseDateJson(index, baseDateJson);
     navigate("/saved-data");
   }
@@ -84,6 +87,7 @@ export default function SetBaseDate() {
             inputMode="numeric"
             min="1"
             max="31"
+            required
             name="day"
             defaultValue={baseDate?.getDate()}
           />
@@ -96,6 +100,7 @@ export default function SetBaseDate() {
             inputMode="numeric"
             min="1"
             max="12"
+            required
             name="month"
             defaultValue={baseDate?.getMonth() + 1 || ""}
           />
@@ -108,6 +113,7 @@ export default function SetBaseDate() {
             inputMode="numeric"
             min="1900"
             max="2100"
+            required
             name="year"
             defaultValue={baseDate?.getFullYear()}
           />
@@ -163,15 +169,23 @@ export default function SetBaseDate() {
             width: "120px",
           }}
         >
-          Save
+          Uložit
         </button>
         <button
           onClick={() => navigate("/saved-data")}
           style={{ marginLeft: "90px", marginBottom: "20px", width: "120px" }}
         >
-          Cancel
+          Zrušit
         </button>
       </form>
+      <div style={{margin: "0 auto", width: "300px"}}>
+        <p>
+        V tuto chvíli je předpokládané místo narození v České Republice.
+        V budoucnu plánujeme odstranit toto omezení.
+        </p><p>
+        Čas zadávejte místní v ČR (letní nebo zimní).
+        </p>
+      </div>
     </>
   );
 }

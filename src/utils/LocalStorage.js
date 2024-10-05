@@ -16,11 +16,25 @@ export function getSavedData() {
   return getUserObject().savedData || [];
 }
 
+export function getNextNameNumber() {
+  return (getUserObject().lastNameNumber || 0) + 1;
+}
+
+export function setlastNameNumber(nameNumber) {
+  const userObject = getUserObject();
+  setUserObject({ ...userObject, lastNameNumber: nameNumber });
+}
+
 export function setBaseDateJson(index, baseDateJson) {
   const userObject = getUserObject();
   const savedData = getSavedData();
   savedData[index] = baseDateJson;
-  setUserObject({...userObject, savedData});
+  // Condense the sparse array on save
+  const filtered = savedData.filter(
+    (item) => item !== undefined && item !== null
+  );
+  console.log(filtered);
+  setUserObject({ ...userObject, savedData: filtered });
 }
 
 export function getBaseDateJson(index) {
@@ -29,5 +43,8 @@ export function getBaseDateJson(index) {
 
 // TODO: deal with sparse arrays - avoid growing index for new data
 export function deleteBaseDate(index) {
-  setBaseDateJson(index, undefined);
+  const userObject = getUserObject();
+  const savedData = getSavedData();
+  savedData.splice(index, 1);
+  setUserObject({ ...userObject, savedData });
 }

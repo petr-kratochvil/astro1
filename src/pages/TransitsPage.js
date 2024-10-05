@@ -2,12 +2,22 @@ import React from "react";
 import { useTitle } from "../utils/utils";
 import TransitsBoxes from "../components/TrasitsBoxes";
 import { getTransits } from "../apiCalls/getTransits";
-import { getBaseDateJson, getSavedData } from "../utils/localStorage";
+import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
+import { useNavigate } from "react-router-dom";
 
 export default function TransitsPage() {
   useTitle();
+  const navigate = useNavigate();
 
   const savedDataList = getSavedData();
+
+  React.useEffect(() => {
+    if (savedDataList.length === 0) {
+      setRefererOfEditPage('/');
+      navigate('/saved-data/0');
+    }
+  }, []);
+
   const [selectedBaseDate, setSelectedBaseDate] = React.useState(
     savedDataList.length > 0 ? 0 : null
   );
@@ -79,19 +89,16 @@ export default function TransitsPage() {
 
   return (
     <div>
-      <h1 style={{ color: "slateblue", textAlign: "center" }}>
-        Tranzity
-      </h1>
-      <div style={{margin: '10px'}}>
+      <h1 style={{ color: "slateblue", textAlign: "center" }}>Tranzity</h1>
+      <div style={{ margin: "10px" }}>
         Vyberte záznam: &nbsp;
         <select
-          style={{minWidth: '150px', minHeight: '30px'}}
+          style={{ minWidth: "150px", minHeight: "30px" }}
           value={selectedBaseDate}
           onChange={(e) => {
             setSelectedBaseDate(e.target.value);
             setBaseDateJson(savedDataList[e.target.value]);
             setPerson(savedDataList[e.target.value].name);
-            console.log('tady tady 1')
           }}
         >
           {options.map((option) => (

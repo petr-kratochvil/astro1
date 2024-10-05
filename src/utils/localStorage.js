@@ -27,6 +27,16 @@ export function setlastNameNumber(nameNumber) {
   setUserObject({ ...userObject, lastNameNumber: nameNumber });
 }
 
+export function getRefererOfEditPage() {
+  return getUserObject().refererOfEditPage || '/saved-data';
+}
+
+export function setRefererOfEditPage(page) {
+  const userObject = getUserObject();
+  setUserObject({ ...userObject, refererOfEditPage: page });
+}
+
+
 export function setBaseDateJson(index, baseDateJson) {
   const userObject = getUserObject();
   const savedData = getSavedData();

@@ -32,6 +32,9 @@ function aspectColor(aspect) {
 }
 
 function formatTransits(data) {
+  if (data.length === 0) {
+    return [];
+  }
   let result = [];
   let currentResult = { aspects: [] };
   let i = 0;

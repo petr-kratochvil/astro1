@@ -1,5 +1,11 @@
 import React from "react";
-import { getBaseDateJson, getNextNameNumber, setBaseDateJson, setlastNameNumber } from "../utils/localStorage";
+import {
+  getBaseDateJson,
+  getNextNameNumber,
+  getRefererOfEditPage,
+  setBaseDateJson,
+  setlastNameNumber,
+} from "../utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
 import { fromUTC } from "../utils/timeZones";
 
@@ -14,7 +20,7 @@ export default function SetBaseDate() {
       parseInt(data.year),
       parseInt(data.month) - 1,
       parseInt(data.day),
-      parseInt(data.hour) || 0,
+      parseInt(data.hour) || 12,
       parseInt(data.minutes) || 0
     );
     // convert baseDate to UTC - the API currently needs UTC time
@@ -30,7 +36,7 @@ export default function SetBaseDate() {
       setlastNameNumber(getNextNameNumber());
     }
     setBaseDateJson(index, baseDateJson);
-    navigate("/saved-data");
+    navigate(getRefererOfEditPage());
   }
 
   const { index } = useParams();
@@ -172,19 +178,18 @@ export default function SetBaseDate() {
           Uložit
         </button>
         <button
-          onClick={() => navigate("/saved-data")}
+          onClick={() => navigate(getRefererOfEditPage())}
           style={{ marginLeft: "90px", marginBottom: "20px", width: "120px" }}
         >
           Zrušit
         </button>
       </form>
-      <div style={{margin: "0 auto", width: "300px"}}>
+      <div style={{ margin: "0 auto", width: "300px" }}>
         <p>
-        V tuto chvíli je předpokládané místo narození v České Republice.
-        V budoucnu plánujeme odstranit toto omezení.
-        </p><p>
-        Čas zadávejte místní v ČR (letní nebo zimní).
+          V tuto chvíli je předpokládané místo narození v České Republice. V
+          budoucnu plánujeme odstranit toto omezení.
         </p>
+        <p>Čas zadávejte místní v ČR (letní nebo zimní).</p>
       </div>
     </>
   );

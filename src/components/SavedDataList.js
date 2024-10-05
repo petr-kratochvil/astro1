@@ -1,5 +1,9 @@
 import React from "react";
-import { deleteBaseDate, getSavedData } from "../utils/localStorage";
+import {
+  deleteBaseDate,
+  getSavedData,
+  setRefererOfEditPage,
+} from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import { useForceUpdate } from "../utils/useForceUpdate";
 import { fromUTC } from "../utils/timeZones";
@@ -7,9 +11,6 @@ import { fromUTC } from "../utils/timeZones";
 export default function SavedDataList() {
   const navigate = useNavigate();
   const savedDataList = getSavedData().map((item) => {
-    if (!item) {
-      return undefined;
-    }
     let baseDate = fromUTC(item);
     return {
       name: item?.name,
@@ -20,6 +21,7 @@ export default function SavedDataList() {
       minutes: baseDate?.getMinutes().toString().padStart(2, "0"),
     };
   });
+
   const forceUpdate = useForceUpdate();
 
   const itemStyle = {
@@ -41,7 +43,10 @@ export default function SavedDataList() {
       <div style={{ margin: "0px auto", maxWidth: "500px" }}>
         <button
           style={{ padding: "10px", margin: "20px" }}
-          onClick={() => navigate(`${savedDataList.length}`)}
+          onClick={() => {
+            setRefererOfEditPage("/saved-data");
+            navigate(`${savedDataList.length}`);
+          }}
         >
           + Přidat záznam
         </button>
@@ -51,13 +56,20 @@ export default function SavedDataList() {
               <div key={index} style={itemStyle}>
                 <div>
                   <div>{item.name}</div>
-                  <div style={{fontSize: 'small', marginTop: '10px'}}>
-                      {item.day}. {item.month} .{item.year} {item.hour}:
-                      {item.minutes}
+                  <div style={{ fontSize: "small", marginTop: "10px" }}>
+                    {item.day}. {item.month} .{item.year}, {item.hour}:
+                    {item.minutes}
                   </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "row" }}>
-                  <button onClick={() => navigate(`${index}`)}>Upravit</button>
+                  <button
+                    onClick={() => {
+                      setRefererOfEditPage("/saved-data");
+                      navigate(`${index}`);
+                    }}
+                  >
+                    Upravit
+                  </button>
                   <button
                     onClick={() => {
                       deleteBaseDate(index);

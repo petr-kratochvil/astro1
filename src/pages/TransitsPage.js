@@ -82,18 +82,19 @@ export default function TransitsPage() {
   const buttonsMenuStyle = {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
     flexWrap: "wrap",
-    marginBottom: "10px",
+    margin: "10px 0px",
   };
 
   return (
     <div>
       <h1 style={{ color: "slateblue", textAlign: "center" }}>Tranzity</h1>
-      <div style={{ margin: "10px" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
         Vyberte záznam: &nbsp;
         <select
-          style={{ minWidth: "150px", minHeight: "30px" }}
+          style={{ minWidth: "150px", minHeight: "30px"}}
           value={selectedBaseDate}
           onChange={(e) => {
             setSelectedBaseDate(e.target.value);

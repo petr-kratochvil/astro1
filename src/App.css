@@ -80,6 +80,10 @@ button {
   margin: 10px;
 }
 
+.main-menu-text {
+  visibility: visible;
+}
+
 @media only screen and (max-width: 500px) {
   .PlanetBox {
     border: 1px solid slateblue;
@@ -87,3 +91,10 @@ button {
     width: 160px;
   }
 }
+
+@media only screen and (max-width: 800px) {
+  .main-menu-text {
+    visibility: hidden;
+  }
+}
+

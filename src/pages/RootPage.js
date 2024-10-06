@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 import "../App.css";
 
@@ -20,7 +20,18 @@ export default function RootPage() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <header className="App App-header">
             <div>Astro Transits</div>
-            <div onClick={handleClick} style={{position: 'absolute', right: '10px', paddingRight: '10px', cursor: 'pointer'}}>☰</div>
+            <div
+              onClick={handleClick}
+              style={{
+                position: "absolute",
+                right: "10px",
+                paddingRight: "10px",
+                cursor: "pointer",
+              }}
+            >
+              <span class="main-menu-text">Menu&nbsp;&nbsp;</span>
+              ☰
+            </div>
           </header>
         </div>
         <Menu
@@ -32,26 +43,27 @@ export default function RootPage() {
         >
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/"}>
-              Transits
-            </Link></MenuItem>
-            <MenuItem onClick={handleClose}>
-            <Link className="Router-link" to={"/planets"}>
-              Planets
+              Tranzity
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
+            <Link className="Router-link" to={"/planets"}>
+              Aktuální planety
+            </Link>
+          </MenuItem>
+          {/* <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/transit-tables"}>
               Transit Tables
             </Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
+          </MenuItem> */}
+          {/* <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/synastry-tables"}>
               Synastry Tables
             </Link>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/saved-data"}>
-              Saved data
+              Uložené záznamy
             </Link>
           </MenuItem>
         </Menu>

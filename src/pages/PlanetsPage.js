@@ -2,28 +2,28 @@ import React from "react";
 
 import { useTitle } from "../utils/utils";
 import ChartTable from "../components/ChartTable";
-import constants from "../constants";
 import { useCurrentPosition } from "../apiCalls/usePosition";
+import { translatePlanet } from "../utils/translations";
 
 function PlanetsPage() {
   useTitle("Planets");
-  const data = useCurrentPosition();
+  const data = useCurrentPosition().map(item => ({...item, name: translatePlanet(item)}));
 
-  const chartStyleP = {
-    useSignSymbols: true,
-    useSignText: false,
-    usePlanetSymbols: true,
-    degreesFirst: false,
-    showMinutes: true,
-    signSymbolFirst: false,
-  };
+  // const chartStyleP = {
+  //   useSignSymbols: true,
+  //   useSignText: false,
+  //   usePlanetSymbols: true,
+  //   degreesFirst: false,
+  //   showMinutes: true,
+  //   signSymbolFirst: false,
+  // };
 
-  const chartStyleJ = {
-    useSignSymbols: false,
-    usePlanetSymbols: true,
-    degreesFirst: true,
-    showMinutes: false,
-  };
+  // const chartStyleJ = {
+  //   useSignSymbols: false,
+  //   usePlanetSymbols: true,
+  //   degreesFirst: true,
+  //   showMinutes: false,
+  // };
 
   const currentChartStyle = {
     degreesFirst: true,
@@ -46,19 +46,10 @@ function PlanetsPage() {
       >
         <ChartTable
           chart={data}
-          title="Current planets"
+          title="Aktuální planety"
           style={currentChartStyle}
         />
-        <ChartTable
-          chart={constants.chartDataPetr}
-          title="Petr Kratochvíl"
-          style={chartStyleP}
-        />
-        <ChartTable
-          chart={constants.chartDataJitka}
-          title="Jitka Kratochvílová"
-          style={chartStyleJ}
-        />
+
       </div>
       
     </>

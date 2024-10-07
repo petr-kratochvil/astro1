@@ -102,7 +102,7 @@ export default function TransitsPage() {
         }
       `}
       </style>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "10px 0px"}}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "15px 0px 10px 0px"}}>
         Vyberte záznam: &nbsp;
         <select
           style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer"}}

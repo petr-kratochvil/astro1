@@ -6,11 +6,10 @@ import "./index.css";
 import RootPage from "./pages/RootPage";
 import TransitsPage from "./pages/TransitsPage";
 import PlanetsPage from "./pages/PlanetsPage";
-import TransitsTablePage from "./pages/TransitsTablePage";
-import SynastryTablePage from "./pages/SynastryTablePage";
 import PageNotFound from "./pages/PageNotFound";
 import SetBaseDate from "./components/SetBaseDate";
 import SavedDataList from "./components/SavedDataList";
+import NatalPage from "./pages/NatalPage";
 
 const router = createBrowserRouter([
   {
@@ -19,17 +18,21 @@ const router = createBrowserRouter([
 
     children: [
       {
-        path: "/planets",
+        path: "/current-planets",
         element: <PlanetsPage />,
       },
       {
-        path: "/transit-tables",
-        element: <TransitsTablePage />,
+        path: "/natal-planets",
+        element: <NatalPage />,
       },
-      {
-        path: "/synastry-tables",
-        element: <SynastryTablePage />,
-      },
+      // {
+      //   path: "/transit-tables",
+      //   element: <TransitsTablePage />,
+      // },
+      // {
+      //   path: "/synastry-tables",
+      //   element: <SynastryTablePage />,
+      // },
       {
         path: "/saved-data",
         element: <SavedDataList />,

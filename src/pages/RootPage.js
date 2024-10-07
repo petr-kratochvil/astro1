@@ -47,8 +47,13 @@ export default function RootPage() {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <Link className="Router-link" to={"/planets"}>
+            <Link className="Router-link" to={"/current-planets"}>
               Aktuální planety
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <Link className="Router-link" to={"/natal-planets"}>
+              Nativní planety
             </Link>
           </MenuItem>
           {/* <MenuItem onClick={handleClose}>

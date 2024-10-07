@@ -46,20 +46,24 @@ button {
   font-size: 12px;
 }
 
+.myCoolColor {
+  color: DodgerBlue;
+}
+
 .MyTable td {
-  border: 1px solid DodgerBlue;
+  border: 1px solid slateblue;
   padding:8px;
 }
 
 .MyTableHeading {
-  background-color: DodgerBlue;
+  background-color: slateblue;
   color: white;
   font-weight: bold;
   text-align: center;
 }
 
 .MyTableSubHeading {
-  color: DodgerBlue;
+  color: slateblue;
   font-weight: bold;
   text-align: center;
 }

@@ -63,7 +63,7 @@ function formatTransits(data) {
       ? `${fixedFormat(m, 0.3)} měs`
       : t
       ? `${fixedFormat(t, 0.2)} týd `
-      : `${fixedFormat(days, 0.1)}`;
+      : `${fixedFormat(days, 0.1)} dní`;
     currentResult.aspects.push({
       aspect: data[i].name,
       name: translateAspect(data[i].name),

@@ -36,7 +36,7 @@ button {
 
 .MyTable {
   border-collapse: collapse;
-  padding:2px;
+  padding: 2px;
   margin: 5px;
   font-size: small;
   /* font-family: monospace; */
@@ -52,7 +52,7 @@ button {
 
 .MyTable td {
   border: 1px solid slateblue;
-  padding:8px;
+  padding: 10px 10px;
 }
 
 .MyTableHeading {
@@ -60,6 +60,7 @@ button {
   color: white;
   font-weight: bold;
   text-align: center;
+  font-size: medium
 }
 
 .MyTableSubHeading {
@@ -101,4 +102,3 @@ button {
     visibility: hidden;
   }
 }
-

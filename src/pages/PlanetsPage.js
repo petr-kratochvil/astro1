@@ -40,7 +40,7 @@ function PlanetsPage() {
         style={{
           display: "flex",
           justifyContent: "space-evenly",
-          marginTop: "20px",
+          marginTop: "40px",
           flexWrap: "wrap",
         }}
       >

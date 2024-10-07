@@ -76,7 +76,7 @@ export default function SetBaseDate() {
         }}
       >
         <label style={labelStyle}>
-          Name:{" "}
+          Jméno:{" "}
           <input
             style={{ ...inputStyle, width: "150px", left: "100px" }}
             type="text"
@@ -86,7 +86,7 @@ export default function SetBaseDate() {
         </label>
 
         <label style={labelStyle}>
-          Day:{" "}
+          Den:{" "}
           <input
             style={inputStyle}
             type="number"
@@ -99,7 +99,7 @@ export default function SetBaseDate() {
           />
         </label>
         <label style={labelStyle}>
-          Month:{" "}
+          Měsíc:{" "}
           <input
             style={inputStyle}
             type="number"
@@ -112,7 +112,7 @@ export default function SetBaseDate() {
           />
         </label>
         <label style={labelStyle}>
-          Year:{" "}
+          Rok:{" "}
           <input
             style={inputStyle}
             type="number"
@@ -125,7 +125,7 @@ export default function SetBaseDate() {
           />
         </label>
         <label style={labelStyle}>
-          Hour <small>(24h format)</small>:{" "}
+          Hodina <small>(24h formát)</small>:{" "}
           <input
             style={inputStyle}
             type="number"
@@ -137,7 +137,7 @@ export default function SetBaseDate() {
           />
         </label>
         <label style={labelStyle}>
-          Minutes:{" "}
+          Minuta:{" "}
           <input
             style={inputStyle}
             type="number"
@@ -189,7 +189,7 @@ export default function SetBaseDate() {
           V tuto chvíli je předpokládané místo narození v České Republice. V
           budoucnu plánujeme odstranit toto omezení.
         </p>
-        <p>Čas zadávejte místní v ČR (letní nebo zimní).</p>
+        <p>Čas zadávejte místní v ČR (letní nebo zimní, jaký byl aktuální v době narození).</p>
       </div>
     </>
   );

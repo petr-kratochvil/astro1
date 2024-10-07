@@ -90,11 +90,22 @@ export default function TransitsPage() {
 
   return (
     <div>
-      <h1 style={{ color: "slateblue", textAlign: "center" }}>Tranzity</h1>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
+      <style>
+      {`
+        .transits-page-buttons-1 button {
+          padding: 7px 15px;
+          margin: 10px 15px;
+        }
+        .transits-page-buttons-2 button {
+          padding: 7px 5px;
+          margin-bottom: 5px
+        }
+      `}
+      </style>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "10px 0px"}}>
         Vyberte záznam: &nbsp;
         <select
-          style={{ minWidth: "150px", minHeight: "30px"}}
+          style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer"}}
           value={selectedBaseDate}
           onChange={(e) => {
             setSelectedBaseDate(e.target.value);
@@ -109,11 +120,11 @@ export default function TransitsPage() {
           ))}
         </select>
       </div>
-      <div style={buttonsMenuStyle}>
+      <div style={buttonsMenuStyle} class="transits-page-buttons-1">
         <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
           &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
         </button>
-        <div>
+        <div style={{fontSize: 'large'}}>
           {transitDate.getUTCDate()}. {transitDate.getUTCMonth() + 1}.{" "}
           {transitDate.getUTCFullYear()}
         </div>
@@ -121,7 +132,7 @@ export default function TransitsPage() {
           &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;
         </button>
       </div>
-      <div style={buttonsMenuStyle}>
+      <div style={buttonsMenuStyle}  class="transits-page-buttons-2">
         <button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
           &nbsp;&nbsp;&lt;&lt;&nbsp;rok
         </button>

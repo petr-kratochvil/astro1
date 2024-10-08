@@ -29,7 +29,7 @@ export default function RootPage() {
                 cursor: "pointer",
               }}
             >
-              <span class="main-menu-text">Menu&nbsp;&nbsp;</span>
+              <span className="main-menu-text">Menu&nbsp;&nbsp;</span>
               ☰
             </div>
           </header>

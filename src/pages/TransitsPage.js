@@ -4,6 +4,7 @@ import TransitsBoxes from "../components/TrasitsBoxes";
 import { getTransits } from "../apiCalls/getTransits";
 import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
+import Hammer from "react-hammerjs-18";
 
 export default function TransitsPage() {
   useTitle();
@@ -88,10 +89,22 @@ export default function TransitsPage() {
     margin: "10px 0px",
   };
 
+  function handleSwipe(param) {
+    switch (param.direction) {
+      case 2:
+        setTransitDate((prevDate) => addDays(prevDate, +1));
+        break;
+      case 4:
+        setTransitDate((prevDate) => addDays(prevDate, -1));
+        break;
+    }
+  }
+
   return (
-    <div>
-      <style>
-      {`
+    <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
+      <div>
+        <style>
+          {`
         .transits-page-buttons-1 button {
           padding: 7px 15px;
           margin: 10px 15px;
@@ -101,55 +114,63 @@ export default function TransitsPage() {
           margin-bottom: 5px
         }
       `}
-      </style>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "15px 0px 10px 0px"}}>
-        Vyberte záznam: &nbsp;
-        <select
-          style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer"}}
-          value={selectedBaseDate}
-          onChange={(e) => {
-            setSelectedBaseDate(e.target.value);
-            setBaseDateJson(savedDataList[e.target.value]);
-            setPerson(savedDataList[e.target.value].name);
+        </style>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "15px 0px 10px 0px",
           }}
         >
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div style={buttonsMenuStyle} class="transits-page-buttons-1">
-        <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
-          &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
-        </button>
-        <div style={{fontSize: 'large'}}>
-          {transitDate.getUTCDate()}. {transitDate.getUTCMonth() + 1}.{" "}
-          {transitDate.getUTCFullYear()}
+          Vyberte záznam: &nbsp;
+          <select
+            style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer" }}
+            value={selectedBaseDate}
+            onChange={(e) => {
+              setSelectedBaseDate(e.target.value);
+              setBaseDateJson(savedDataList[e.target.value]);
+              setPerson(savedDataList[e.target.value].name);
+            }}
+          >
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
-        <button onClick={() => setTransitDate(addDays(transitDate, +1))}>
-          &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;
-        </button>
+        <div style={buttonsMenuStyle} className="transits-page-buttons-1">
+          <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
+            &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
+          </button>
+          <div style={{ fontSize: "large" }}>
+            {transitDate.getUTCDate()}. {transitDate.getUTCMonth() + 1}.{" "}
+            {transitDate.getUTCFullYear()}
+          </div>
+          <button onClick={() => setTransitDate(addDays(transitDate, +1))}>
+            &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;
+          </button>
+        </div>
+        <div style={buttonsMenuStyle} className="transits-page-buttons-2">
+          <button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
+            &nbsp;&nbsp;&lt;&lt;&nbsp;rok
+          </button>
+          <button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
+            &nbsp;&nbsp;&lt;&lt;&nbsp;měs.
+          </button>
+          <button onClick={() => setTransitDate(new Date())}>
+            &nbsp;&nbsp;dnes&nbsp;&nbsp;
+          </button>
+          <button onClick={() => setTransitDate(addMonths(transitDate, +1))}>
+            měs.&nbsp;&gt;&gt;&nbsp;&nbsp;
+          </button>
+          <button onClick={() => setTransitDate(addMonths(transitDate, +12))}>
+            rok&nbsp;&gt;&gt;&nbsp;&nbsp;
+          </button>
+        </div>
+        <TransitsBoxes data={data} />
       </div>
-      <div style={buttonsMenuStyle}  class="transits-page-buttons-2">
-        <button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
-          &nbsp;&nbsp;&lt;&lt;&nbsp;rok
-        </button>
-        <button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
-          &nbsp;&nbsp;&lt;&lt;&nbsp;měs.
-        </button>
-        <button onClick={() => setTransitDate(new Date())}>
-          &nbsp;&nbsp;dnes&nbsp;&nbsp;
-        </button>
-        <button onClick={() => setTransitDate(addMonths(transitDate, +1))}>
-          měs.&nbsp;&gt;&gt;&nbsp;&nbsp;
-        </button>
-        <button onClick={() => setTransitDate(addMonths(transitDate, +12))}>
-          rok&nbsp;&gt;&gt;&nbsp;&nbsp;
-        </button>
-      </div>
-      <TransitsBoxes data={data} />
-    </div>
+    </Hammer>
   );
 }

@@ -93,7 +93,7 @@ export default function TransitsBoxes({data}) {
     backgroundColor: "#AAFFFF",
     padding: "1px 2.5px",
   };
-  
+ 
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       {formatTransits(data).map((result, index) => (

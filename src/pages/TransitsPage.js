@@ -100,18 +100,23 @@ export default function TransitsPage() {
     }
   }
 
+  function formatDayOfWeek(date) {
+    const day = date.toLocaleDateString(undefined, {weekday: 'short'});
+    return day.charAt(0).toUpperCase() + day.slice(1);
+  }
+
   return (
     <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
       <div>
         <style>
           {`
         .transits-page-buttons-1 button {
-          padding: 7px 15px;
-          margin: 10px 15px;
+          padding: 8px;
+          margin: 8px;
         }
         .transits-page-buttons-2 button {
-          padding: 7px 5px;
-          margin-bottom: 5px
+          padding: 6px;
+          margin-bottom: 6px
         }
       `}
         </style>
@@ -144,7 +149,8 @@ export default function TransitsPage() {
           <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
             &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
           </button>
-          <div style={{ fontSize: "large" }}>
+          <div style={{ fontSize: "medium", minWidth: "130px", textAlign: "center" }}>
+            {formatDayOfWeek(transitDate)}{", "}
             {transitDate.getUTCDate()}. {transitDate.getUTCMonth() + 1}.{" "}
             {transitDate.getUTCFullYear()}
           </div>

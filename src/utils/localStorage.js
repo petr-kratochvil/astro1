@@ -45,7 +45,6 @@ export function setBaseDateJson(index, baseDateJson) {
   const filtered = savedData.filter(
     (item) => item !== undefined && item !== null
   );
-  console.log(filtered);
   setUserObject({ ...userObject, savedData: filtered });
 }
 

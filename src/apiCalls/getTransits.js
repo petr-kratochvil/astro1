@@ -1,7 +1,7 @@
 import axios from "axios";
 import constants from "../constants";
 
-export function getTransits(baseDate, transitDate) {
+export function getTransits(baseDateJson, transitDate, baseDateCoordinates) {
   const transitDateJson = {
     year: transitDate.getUTCFullYear(),
     month: transitDate.getUTCMonth() + 1,
@@ -10,8 +10,9 @@ export function getTransits(baseDate, transitDate) {
   };
   return axios
     .post(`${constants.ephemeridesApiBase}/transits`, {
-      baseDate,
+      baseDate: baseDateJson,
       transitDate: transitDateJson,
+      baseDateCoordinates
     })
     .then((response) => 
       response.data.filter(
@@ -23,3 +24,7 @@ export function getTransits(baseDate, transitDate) {
       )
     );
 }
+
+// TODO: make this a convenient debug interface
+// window.gt = getTransits;
+// window.add = addDays;

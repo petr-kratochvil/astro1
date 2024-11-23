@@ -36,9 +36,10 @@ export default function TransitsPage() {
   );
   const [transitDate, setTransitDate] = React.useState(new Date());
 
-  function callGetTransits(baseDate, transitDate) {
-    if (baseDate && transitDate) {
-      getTransits(baseDate, transitDate).then((data) => setData(data));
+  function callGetTransits(baseDateJson, transitDate) {
+    if (baseDateJson && transitDate) {
+      const {lat, lon} = baseDateJson;
+      getTransits(baseDateJson, transitDate, lat && lon ? {lat, lon} : undefined).then((data) => setData(data));
     }
   }
 

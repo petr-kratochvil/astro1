@@ -224,7 +224,7 @@ export default function SetBaseDate() {
             onChange={(e) => {
               setCustomCoordinates(e.target.checked);
               if (!e.target.checked) {
-                const city = cities.find((city) => city.id == selectedCityId);
+                const city = cities.find((city) => city.id === selectedCityId);
                 setLat(city.lat);
                 setLon(city.lon);
               }

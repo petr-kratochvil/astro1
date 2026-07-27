@@ -5,8 +5,9 @@ import { getTransits } from "../apiCalls/getTransits";
 import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
+import AspectTable from "../components/AspectTable";
 
-export default function TransitsPage() {
+export default function TransitsPage({showAsTable = false}) {
   useTitle();
   const navigate = useNavigate();
 
@@ -17,7 +18,7 @@ export default function TransitsPage() {
       setRefererOfEditPage('/');
       navigate('/saved-data/0');
     }
-  }, []);
+  }, [navigate, savedDataList.length]);
 
   const [selectedBaseDate, setSelectedBaseDate] = React.useState(
     savedDataList.length > 0 ? 0 : null
@@ -31,7 +32,7 @@ export default function TransitsPage() {
   const [baseDateJson, setBaseDateJson] = React.useState(
     savedDataList.length > 0 ? savedDataList[0] : null
   );
-  const [person, setPerson] = React.useState(
+  const [, setPerson] = React.useState(
     savedDataList.length > 0 ? savedDataList[0].name : null
   );
   const [transitDate, setTransitDate] = React.useState(new Date());
@@ -97,6 +98,8 @@ export default function TransitsPage() {
         break;
       case 4:
         setTransitDate((prevDate) => addDays(prevDate, -1));
+        break;
+      default:
         break;
     }
   }
@@ -176,7 +179,28 @@ export default function TransitsPage() {
             rok&nbsp;&gt;&gt;&nbsp;&nbsp;
           </button>
         </div>
-        <TransitsBoxes data={data} />
+        { showAsTable ?
+            <div
+              width="100%"
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                marginTop: "20px",
+                flexWrap: "wrap",
+              }}
+              className="smallFont"
+            >
+              <AspectTable
+                aspectChart={data}
+                title=""
+                name1="Tranzitující"
+                name2="Nativní"
+                style={{ useSignSymbols: true, useSignText: false }}
+              />
+            </div>
+          :
+            <TransitsBoxes data={data} />
+        }
       </div>
     </Hammer>
   );

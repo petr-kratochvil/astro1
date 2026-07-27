@@ -9,7 +9,6 @@ import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 
 function NatalPage() {
   useTitle("Planets");
-  // const [data, setData] = React.useState([]);
 
   // const chartStyleP = {
   //   useSignSymbols: true,
@@ -43,7 +42,7 @@ function NatalPage() {
       setRefererOfEditPage("/natal-planets");
       navigate("/saved-data/0");
     }
-  }, []);
+  }, [navigate, savedDataList.length]);
 
   const [selectedBaseDate, setSelectedBaseDate] = React.useState(
     savedDataList.length > 0 ? 0 : null

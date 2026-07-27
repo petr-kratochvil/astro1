@@ -25,14 +25,6 @@ const router = createBrowserRouter([
         path: "/natal-planets",
         element: <NatalPage />,
       },
-      // {
-      //   path: "/transit-tables",
-      //   element: <TransitsTablePage />,
-      // },
-      // {
-      //   path: "/synastry-tables",
-      //   element: <SynastryTablePage />,
-      // },
       {
         path: "/saved-data",
         element: <SavedDataList />,
@@ -44,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <TransitsPage />,
+      },
+      {
+        path: "/transits-table",
+        element: <TransitsPage showAsTable/>,
       },
       {
         path: "*",

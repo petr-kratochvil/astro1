@@ -47,6 +47,11 @@ export default function RootPage() {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
+            <Link className="Router-link" to={"/transits-table"}>
+              Tranzity - tabulka
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/current-planets"}>
               Aktuální planety
             </Link>
@@ -56,16 +61,6 @@ export default function RootPage() {
               Nativní planety
             </Link>
           </MenuItem>
-          {/* <MenuItem onClick={handleClose}>
-            <Link className="Router-link" to={"/transit-tables"}>
-              Transit Tables
-            </Link>
-          </MenuItem> */}
-          {/* <MenuItem onClick={handleClose}>
-            <Link className="Router-link" to={"/synastry-tables"}>
-              Synastry Tables
-            </Link>
-          </MenuItem> */}
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/saved-data"}>
               Uložené záznamy
@@ -73,7 +68,6 @@ export default function RootPage() {
           </MenuItem>
         </Menu>
         <Outlet />
-        <div id="chartElement" style={{ margin: "20px" }}></div>
       </div>
     </>
   );

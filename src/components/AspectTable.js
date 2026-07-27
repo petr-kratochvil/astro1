@@ -1,4 +1,5 @@
-import { aspectSymbols, planetSymbols, signSymbols } from "../constants";
+import { aspectSymbols, planetSymbols, signList, signSymbols } from "../constants";
+import { translatePlanet } from "../utils/translations";
 
 const defaultStyle = {
   useSignSymbols: false,
@@ -30,7 +31,7 @@ export default function AspectTable({
   };
 
   const formatPlanet = (planet) => {
-    return usedStyle.usePlanetSymbols ? planetSymbols[planet] : planet;
+    return usedStyle.usePlanetSymbols ? planetSymbols[planet.name] : translatePlanet(planet);
   };
 
   const formatAspect = (aspect) => {
@@ -39,24 +40,24 @@ export default function AspectTable({
 
   const aspectColor = (aspect) => {
     let color = { r: 255, g: 255, b: 255 };
-    switch (aspect.aspect) {
-      case "Conjunction":
+    switch (aspect.name) {
+      case "conjunction":
         color = { r: 255, g: 255, b: 0 };
         break;
-      case "Opposition":
+      case "opposition":
         color = { r: 0, g: 255, b: 0 };
         break;
-      case "Trine":
+      case "trine":
         color = { r: 0, g: 170, b: 255 };
         break;
-      case "Square":
+      case "square":
         color = { r: 255, g: 60, b: 80 };
         break;
-      case "Sextile":
+      case "sextile":
         color = { r: 90, g: 150, b: 255 };
         break;
       default:
-        color = { r: 0, g: 0, b: 0 };
+        color = { r: 255, g: 255, b: 255 };
     }
     const lighten = (Math.min(aspect.orb, 8) / 8) * 225;
     color = {
@@ -67,7 +68,7 @@ export default function AspectTable({
     return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
   };
 
-  const sign = (a) => formatSign(a.sign);
+  const sign = (a) => formatSign(signList[a.sign-1]);
   const degrees = (a) => a.degrees + "°";
   const secondField = usedStyle.degreesFirst ? degrees : sign;
   const thirdField = usedStyle.degreesFirst ? sign : degrees;
@@ -92,17 +93,17 @@ export default function AspectTable({
           </tr>
           {aspectChart.map((a) => (
             <tr
-              key={a.aspect + a.planet1.name + a.planet2.name}
+              key={a.name + a.pos1.name + a.pos2.name}
               style={{ backgroundColor: aspectColor(a) }}
             >
-              <td className="AspectTable-Aspect">{formatAspect(a.aspect)}</td>
+              <td className="AspectTable-Aspect">{formatAspect(a.name)}</td>
               <td>{a.orb.toFixed(1)}°</td>
-              <td>{formatPlanet(a.planet1.name)}</td>
-              <td>{secondField(a.planet1)}</td>
-              <td>{thirdField(a.planet1)}</td>
-              <td>{formatPlanet(a.planet2.name)}</td>
-              <td>{secondField(a.planet2)}</td>
-              <td>{thirdField(a.planet2)}</td>
+              <td>{formatPlanet(a.pos1)}</td>
+              <td>{secondField(a.pos1)}</td>
+              <td>{thirdField(a.pos1)}</td>
+              <td>{formatPlanet(a.pos2)}</td>
+              <td>{secondField(a.pos2)}</td>
+              <td>{thirdField(a.pos2)}</td>
             </tr>
           ))}
         </tbody>

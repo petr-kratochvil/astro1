@@ -24,7 +24,3 @@ export function getTransits(baseDateJson, transitDate, baseDateCoordinates) {
       )
     );
 }
-
-// TODO: make this a convenient debug interface
-// window.gt = getTransits;
-// window.add = addDays;

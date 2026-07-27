@@ -82,7 +82,7 @@ function formatTransits(data) {
     currentResult.sign = signSymbols[signList[data[i].pos1.sign-1]];
     i++;
   }
-  if (currentResult !== "") {
+  if (Object.keys(currentResult).length > 0) {
     result.push(currentResult);
   }
   return result;

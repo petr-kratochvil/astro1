@@ -25,46 +25,46 @@ export const getAspects = (chart1, chart2) => {
       const conOrb = Math.abs(diff);
       if (conOrb < orb.conjunction) {
         aspects.push({
-          aspect: "Conjunction",
+          name: "conjunction",
           orb: conOrb,
-          planet1: chart1[i],
-          planet2: chart2[j],
+          pos1: chart1[i],
+          pos2: chart2[j],
         });
       }
       const opOrb = Math.abs(diff - 180);
       if (opOrb < orb.opposition) {
         aspects.push({
-          aspect: "Opposition",
+          name: "opposition",
           orb: opOrb,
-          planet1: chart1[i],
-          planet2: chart2[j],
+          pos1: chart1[i],
+          pos2: chart2[j],
         });
       }
       const sqOrb = Math.min(Math.abs(diff - 90), Math.abs(diff - 270));
       if (sqOrb < orb.square) {
         aspects.push({
-          aspect: "Square",
+          name: "square",
           orb: sqOrb,
-          planet1: chart1[i],
-          planet2: chart2[j],
+          pos1: chart1[i],
+          pos2: chart2[j],
         });
       }
       const trOrb = Math.min(Math.abs(diff - 120), Math.abs(diff - 240));
       if (trOrb < orb.trine) {
         aspects.push({
-          aspect: "Trine",
+          name: "trine",
           orb: trOrb,
-          planet1: chart1[i],
-          planet2: chart2[j],
+          pos1: chart1[i],
+          pos2: chart2[j],
         });
       }
       const sexOrb = Math.min(Math.abs(diff - 60), Math.abs(diff - 300));
       if (sexOrb < orb.sextile) {
         aspects.push({
-          aspect: "Sextile",
+          name: "sextile",
           orb: sexOrb,
-          planet1: chart1[i],
-          planet2: chart2[j],
+          pos1: chart1[i],
+          pos2: chart2[j],
         });
       }
     }

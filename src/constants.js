@@ -1,4 +1,4 @@
-export const ephemeridesApiBase = process.env.REACT_APP_EPHEMERIDES_API_BASE;
+export const ephemeridesApiBase = import.meta.env.VITE_EPHEMERIDES_API_BASE;
 
 export const signSymbols = {
   Aries: "♈",

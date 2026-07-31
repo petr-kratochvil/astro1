@@ -8,7 +8,7 @@ import globals from "globals";
 export default [
   js.configs.recommended,
   {
-    files: ["src/**/*.js"],
+    files: ["src/**/*.{js,jsx}"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
@@ -17,7 +17,6 @@ export default [
       },
       globals: {
         ...globals.browser,
-        ...globals.node,
       },
     },
     plugins: {

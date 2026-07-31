@@ -39,13 +39,5 @@ export default [
       "react/prop-types": "off",
     },
   },
-  {
-    files: ["src/**/*.test.js"],
-    languageOptions: {
-      globals: {
-        ...globals.jest,
-      },
-    },
-  },
   eslintConfigPrettier,
 ];

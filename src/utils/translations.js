@@ -29,7 +29,7 @@ export function translatePlanet(planet) {
     Uranus: "Uran",
     Neptune: "Neptun",
   };
-  if (planet.type === 'house') {
+  if (planet.type === "house") {
     return `${planet.houseNumber}. dům`;
   }
   return t[planet.name] || planet.name;

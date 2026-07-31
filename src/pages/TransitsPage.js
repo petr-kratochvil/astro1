@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
 import AspectTable from "../components/AspectTable";
 
-export default function TransitsPage({showAsTable = false}) {
+export default function TransitsPage({ showAsTable = false }) {
   useTitle();
   const navigate = useNavigate();
 
@@ -15,8 +15,8 @@ export default function TransitsPage({showAsTable = false}) {
 
   React.useEffect(() => {
     if (savedDataList.length === 0) {
-      setRefererOfEditPage('/');
-      navigate('/saved-data/0');
+      setRefererOfEditPage("/");
+      navigate("/saved-data/0");
     }
   }, [navigate, savedDataList.length]);
 
@@ -39,8 +39,12 @@ export default function TransitsPage({showAsTable = false}) {
 
   function callGetTransits(baseDateJson, transitDate) {
     if (baseDateJson && transitDate) {
-      const {lat, lon} = baseDateJson;
-      getTransits(baseDateJson, transitDate, lat && lon ? {lat, lon} : undefined).then((data) => setData(data));
+      const { lat, lon } = baseDateJson;
+      getTransits(
+        baseDateJson,
+        transitDate,
+        lat && lon ? { lat, lon } : undefined
+      ).then((data) => setData(data));
     }
   }
 
@@ -105,7 +109,7 @@ export default function TransitsPage({showAsTable = false}) {
   }
 
   function formatDayOfWeek(date) {
-    const day = date.toLocaleDateString(undefined, {weekday: 'short'});
+    const day = date.toLocaleDateString(undefined, { weekday: "short" });
     return day.charAt(0).toUpperCase() + day.slice(1);
   }
 
@@ -153,8 +157,15 @@ export default function TransitsPage({showAsTable = false}) {
           <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
             &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
           </button>
-          <div style={{ fontSize: "medium", minWidth: "130px", textAlign: "center" }}>
-            {formatDayOfWeek(transitDate)}{", "}
+          <div
+            style={{
+              fontSize: "medium",
+              minWidth: "130px",
+              textAlign: "center",
+            }}
+          >
+            {formatDayOfWeek(transitDate)}
+            {", "}
             {transitDate.getUTCDate()}. {transitDate.getUTCMonth() + 1}.{" "}
             {transitDate.getUTCFullYear()}
           </div>
@@ -179,28 +190,28 @@ export default function TransitsPage({showAsTable = false}) {
             rok&nbsp;&gt;&gt;&nbsp;&nbsp;
           </button>
         </div>
-        { showAsTable ?
-            <div
-              width="100%"
-              style={{
-                display: "flex",
-                justifyContent: "space-evenly",
-                marginTop: "20px",
-                flexWrap: "wrap",
-              }}
-              className="smallFont"
-            >
-              <AspectTable
-                aspectChart={data}
-                title=""
-                name1="Tranzitující"
-                name2="Nativní"
-                style={{ useSignSymbols: true, useSignText: false }}
-              />
-            </div>
-          :
-            <TransitsBoxes data={data} />
-        }
+        {showAsTable ? (
+          <div
+            width="100%"
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              marginTop: "20px",
+              flexWrap: "wrap",
+            }}
+            className="smallFont"
+          >
+            <AspectTable
+              aspectChart={data}
+              title=""
+              name1="Tranzitující"
+              name2="Nativní"
+              style={{ useSignSymbols: true, useSignText: false }}
+            />
+          </div>
+        ) : (
+          <TransitsBoxes data={data} />
+        )}
       </div>
     </Hammer>
   );

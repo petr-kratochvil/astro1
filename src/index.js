@@ -39,7 +39,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/transits-table",
-        element: <TransitsPage showAsTable/>,
+        element: <TransitsPage showAsTable />,
       },
       {
         path: "*",

@@ -20,24 +20,31 @@ export default function RootPage() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <header className="App App-header">
             <div>Astro Transits</div>
-            <div
+            <button
+              type="button"
               onClick={handleClick}
               style={{
                 position: "absolute",
                 right: "10px",
-                paddingRight: "10px",
                 cursor: "pointer",
+                background: "none",
+                border: "none",
+                margin: 0,
+                padding: 0,
+                paddingRight: "10px",
+                color: "inherit",
+                font: "inherit",
               }}
             >
-              <span className="main-menu-text">Menu&nbsp;&nbsp;</span>
-              ☰
-            </div>
+              <span className="main-menu-text">Menu&nbsp;&nbsp;</span>☰
+            </button>
           </header>
         </div>
         <Menu
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- MUI Menu's own focus-management prop, already disabled here, not a DOM attribute
           autoFocus={false}
           disableScrollLock={true}
         >

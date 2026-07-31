@@ -1,4 +1,9 @@
-import { aspectSymbols, planetSymbols, signList, signSymbols } from "../constants";
+import {
+  aspectSymbols,
+  planetSymbols,
+  signList,
+  signSymbols,
+} from "../constants";
 import { translatePlanet } from "../utils/translations";
 
 const defaultStyle = {
@@ -31,7 +36,9 @@ export default function AspectTable({
   };
 
   const formatPlanet = (planet) => {
-    return usedStyle.usePlanetSymbols ? planetSymbols[planet.name] : translatePlanet(planet);
+    return usedStyle.usePlanetSymbols
+      ? planetSymbols[planet.name]
+      : translatePlanet(planet);
   };
 
   const formatAspect = (aspect) => {
@@ -68,7 +75,7 @@ export default function AspectTable({
     return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
   };
 
-  const sign = (a) => formatSign(signList[a.sign-1]);
+  const sign = (a) => formatSign(signList[a.sign - 1]);
   const degrees = (a) => a.degrees + "°";
   const secondField = usedStyle.degreesFirst ? degrees : sign;
   const thirdField = usedStyle.degreesFirst ? sign : degrees;

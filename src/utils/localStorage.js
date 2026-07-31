@@ -3,7 +3,7 @@ const USER_OBJECT_KEY = "ASTRO_USER_OBJECT";
 export function getUserObject() {
   try {
     return JSON.parse(localStorage.getItem(USER_OBJECT_KEY)) || {};
-  } catch (e) {
+  } catch {
     return {};
   }
 }
@@ -28,14 +28,13 @@ export function setlastNameNumber(nameNumber) {
 }
 
 export function getRefererOfEditPage() {
-  return getUserObject().refererOfEditPage || '/saved-data';
+  return getUserObject().refererOfEditPage || "/saved-data";
 }
 
 export function setRefererOfEditPage(page) {
   const userObject = getUserObject();
   setUserObject({ ...userObject, refererOfEditPage: page });
 }
-
 
 export function setBaseDateJson(index, baseDateJson) {
   const userObject = getUserObject();

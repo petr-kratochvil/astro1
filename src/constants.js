@@ -1,27 +1,73 @@
 export const ephemeridesApiBase = process.env.REACT_APP_EPHEMERIDES_API_BASE;
 
 export const signSymbols = {
-  "Aries": "♈", "Taurus": "♉", "Gemini": "♊", "Cancer": "♋", "Leo": "♌", "Virgo": "♍",
-  "Libra": "♎", "Scorpio": "♏", "Sagittarius": "♐", "Capricorn": "♑", "Aquarius": "♒", "Pisces": "♓",
-}
+  Aries: "♈",
+  Taurus: "♉",
+  Gemini: "♊",
+  Cancer: "♋",
+  Leo: "♌",
+  Virgo: "♍",
+  Libra: "♎",
+  Scorpio: "♏",
+  Sagittarius: "♐",
+  Capricorn: "♑",
+  Aquarius: "♒",
+  Pisces: "♓",
+};
 
 export const planetSymbols = {
-  "Sun": "☉", "Moon": "☾", "Mercury": "☿", "Venus": "♀", "Mars": "♂", "Jupiter": "♃", "Saturn": "♄",
-  "Uranus": "♅", "Neptune": "♆", "Pluto": "♇", "TrueNode": "☊", "Chiron": "ch",
-}
+  Sun: "☉",
+  Moon: "☾",
+  Mercury: "☿",
+  Venus: "♀",
+  Mars: "♂",
+  Jupiter: "♃",
+  Saturn: "♄",
+  Uranus: "♅",
+  Neptune: "♆",
+  Pluto: "♇",
+  TrueNode: "☊",
+  Chiron: "ch",
+};
 
 export const signPositions = {
-  "Aries": 0, "Taurus": 30, "Gemini": 60, "Cancer": 90, "Leo": 120, "Virgo": 150,
-  "Libra": 180, "Scorpio": 210, "Sagittarius": 240, "Capricorn": 270, "Aquarius": 300, "Pisces": 330,
-}
+  Aries: 0,
+  Taurus: 30,
+  Gemini: 60,
+  Cancer: 90,
+  Leo: 120,
+  Virgo: 150,
+  Libra: 180,
+  Scorpio: 210,
+  Sagittarius: 240,
+  Capricorn: 270,
+  Aquarius: 300,
+  Pisces: 330,
+};
 
 export const signList = [
-  "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces",
-]
+  "Aries",
+  "Taurus",
+  "Gemini",
+  "Cancer",
+  "Leo",
+  "Virgo",
+  "Libra",
+  "Scorpio",
+  "Sagittarius",
+  "Capricorn",
+  "Aquarius",
+  "Pisces",
+];
 
 export const aspectSymbols = {
-  "conjunction": "☌", "opposition": "☍", "square": "□", "trine": "△", "sextile": "✶", "semiSextile" : "✧",
-}
+  conjunction: "☌",
+  opposition: "☍",
+  square: "□",
+  trine: "△",
+  sextile: "✶",
+  semiSextile: "✧",
+};
 
-const constants = {signList, ephemeridesApiBase, signSymbols};
+const constants = { signList, ephemeridesApiBase, signSymbols };
 export default constants;

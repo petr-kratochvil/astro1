@@ -46,7 +46,7 @@ function formatTransits(data) {
         result.push(currentResult);
         currentResult = {};
       }
-      currentResult.name = translatePlanet({name: newName});
+      currentResult.name = translatePlanet({ name: newName });
       currentResult.aspects = [];
       currentName = newName;
     }
@@ -62,8 +62,8 @@ function formatTransits(data) {
     const daysFormat = m
       ? `${fixedFormat(m, 0.3)} měs`
       : t
-      ? `${fixedFormat(t, 0.2)} týd `
-      : `${fixedFormat(days, 0.1)} dní`;
+        ? `${fixedFormat(t, 0.2)} týd `
+        : `${fixedFormat(days, 0.1)} dní`;
     currentResult.aspects.push({
       aspect: data[i].name,
       name: translateAspect(data[i].name),
@@ -73,13 +73,11 @@ function formatTransits(data) {
       days: daysFormat,
       strong:
         planetWeight(data[i].pos1.name) >= planetWeight(data[i].pos2.name) &&
-        ["conjunction", "opposition", "square", "trine"].includes(
-          data[i].name
-        ),
+        ["conjunction", "opposition", "square", "trine"].includes(data[i].name),
     });
     currentResult.speed = data[i].pos1.speed.toFixed(2);
     currentResult.pos = data[i].pos1.degrees;
-    currentResult.sign = signSymbols[signList[data[i].pos1.sign-1]];
+    currentResult.sign = signSymbols[signList[data[i].pos1.sign - 1]];
     i++;
   }
   if (Object.keys(currentResult).length > 0) {
@@ -88,58 +86,55 @@ function formatTransits(data) {
   return result;
 }
 
-export default function TransitsBoxes({data}) {
+export default function TransitsBoxes({ data }) {
   const strongStyle = {
     backgroundColor: "#AAFFFF",
     padding: "1px 2.5px",
   };
- 
+
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       {formatTransits(data).map((result, index) => (
-          <pre
-            key={index}
-            className="PlanetBox"
-          >
-            {result.name}{" "}
-            <span style={{ color: "LightSeaGreen", fontSize: 12 }}>
-              {result.speed}
-            </span>
-            {' '}
-            <span style={{ color: "Blue", fontSize: 15 }}>
-              <span style={{ fontSize: 11 }}>{result.pos}°</span>{''}{result.sign} 
-            </span>
-            {"\n\n"}
-            {result.aspects.map(
-              (a, index) => (
-                <React.Fragment key={index}>
-                  {"\n" + a.name + " "}
-                  <span style={a.strong ? strongStyle : {}}>
-                    {a.planet}
-                  </span>{" "}
-                  {a.orb}{" "}
-                  <span
-                    style={{
-                      color: a.strengthening
-                        ? aspectColor(a.aspect)
-                        : "lightgrey",
-                    }}
-                  >
-                    {a.strengthening ? "⬆" : "⬇"}
-                  </span>{" "}
-                  <span
-                    style={{
-                      color: a.strengthening ? "LightSeaGreen" : "lightgray",
-                      fontSize: 11,
-                    }}
-                  >
-                    {a.days}
-                  </span>
-                </React.Fragment>
-              ),
-              ""
-            )}
-          </pre>
-        ))}
-    </div>);
+        <pre key={index} className="PlanetBox">
+          {result.name}{" "}
+          <span style={{ color: "LightSeaGreen", fontSize: 12 }}>
+            {result.speed}
+          </span>{" "}
+          <span style={{ color: "Blue", fontSize: 15 }}>
+            <span style={{ fontSize: 11 }}>{result.pos}°</span>
+            {""}
+            {result.sign}
+          </span>
+          {"\n\n"}
+          {result.aspects.map(
+            (a, index) => (
+              <React.Fragment key={index}>
+                {"\n" + a.name + " "}
+                <span style={a.strong ? strongStyle : {}}>{a.planet}</span>{" "}
+                {a.orb}{" "}
+                <span
+                  style={{
+                    color: a.strengthening
+                      ? aspectColor(a.aspect)
+                      : "lightgrey",
+                  }}
+                >
+                  {a.strengthening ? "⬆" : "⬇"}
+                </span>{" "}
+                <span
+                  style={{
+                    color: a.strengthening ? "LightSeaGreen" : "lightgray",
+                    fontSize: 11,
+                  }}
+                >
+                  {a.days}
+                </span>
+              </React.Fragment>
+            ),
+            ""
+          )}
+        </pre>
+      ))}
+    </div>
+  );
 }

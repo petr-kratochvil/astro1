@@ -7,9 +7,11 @@ export function fromUTC(baseDateJson) {
     parseInt(baseDateJson.month) - 1,
     parseInt(baseDateJson.day),
     Math.floor(parseFloat(baseDateJson.hour)),
-    Math.round((parseFloat(baseDateJson.hour) -
-      Math.floor(parseFloat(baseDateJson.hour))) *
-      60)
+    Math.round(
+      (parseFloat(baseDateJson.hour) -
+        Math.floor(parseFloat(baseDateJson.hour))) *
+        60
+    )
   );
   if (!isNaN(baseDateTimestamp)) {
     return new Date(baseDateTimestamp);

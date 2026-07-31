@@ -21,15 +21,15 @@ export default function SetBaseDate() {
     { name: "Brno", lat: 49.195, lon: 16.606, id: 582786 },
     { name: "Ostrava", lat: 49.821, lon: 18.262, id: 554821 },
     { name: "Plzeň", lat: 49.738, lon: 13.373, id: 554791 },
-    { name: "Olomouc", lat: 49.593, lon: 17.250, id: 500496 },
-    { name: "Hradec Králové", lat: 50.210, lon: 15.825, id: 569810 },
+    { name: "Olomouc", lat: 49.593, lon: 17.25, id: 500496 },
+    { name: "Hradec Králové", lat: 50.21, lon: 15.825, id: 569810 },
     { name: "Karlovy Vary", lat: 50.231, lon: 12.872, id: 554961 },
     { name: "Liberec", lat: 50.766, lon: 15.054, id: 563889 },
-    { name: "České Budějovice", lat: 48.975, lon: 14.480, id: 544256 },
+    { name: "České Budějovice", lat: 48.975, lon: 14.48, id: 544256 },
     { name: "Zlín", lat: 49.224, lon: 17.662, id: 585068 },
     { name: "Ústí nad Labem", lat: 50.661, lon: 14.053, id: 554804 },
     { name: "Pardubice", lat: 50.034, lon: 15.781, id: 555134 },
-  ].sort((a,b) => a.name.localeCompare(b.name));
+  ].sort((a, b) => a.name.localeCompare(b.name));
 
   const options = cities.map((city) => ({ value: city.id, label: city.name }));
   const defaultCity = cities.find((city) => city.name === "Praha") || cities[0];
@@ -39,7 +39,9 @@ export default function SetBaseDate() {
 
   const [lat, setLat] = React.useState(baseDateJson?.lat ?? defaultCity.lat);
   const [lon, setLon] = React.useState(baseDateJson?.lon ?? defaultCity.lon);
-  const [customCoordinates, setCustomCoordinates] = React.useState(baseDateJson?.customCoordinates ?? false);
+  const [customCoordinates, setCustomCoordinates] = React.useState(
+    baseDateJson?.customCoordinates ?? false
+  );
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -197,7 +199,9 @@ export default function SetBaseDate() {
                   cursor: "pointer",
                 }}
                 onChange={(e) => {
-                  const city = cities.find((city) => city.id === parseInt(e.target.value));
+                  const city = cities.find(
+                    (city) => city.id === parseInt(e.target.value)
+                  );
                   setSelectedCityId(e.target.value);
                   setLat(city.lat);
                   setLon(city.lon);

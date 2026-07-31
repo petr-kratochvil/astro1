@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useTitle } from "../utils/utils";
 import ChartTable from "../components/ChartTable";
 import { useCurrentPosition } from "../apiCalls/usePosition";
@@ -7,7 +5,10 @@ import { translatePlanet } from "../utils/translations";
 
 function PlanetsPage() {
   useTitle("Planets");
-  const data = useCurrentPosition().map(item => ({...item, name: translatePlanet(item)}));
+  const data = useCurrentPosition().map((item) => ({
+    ...item,
+    name: translatePlanet(item),
+  }));
 
   // const chartStyleP = {
   //   useSignSymbols: true,
@@ -49,9 +50,7 @@ function PlanetsPage() {
           title="Aktuální planety"
           style={currentChartStyle}
         />
-
       </div>
-      
     </>
   );
 }

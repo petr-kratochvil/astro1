@@ -31,7 +31,9 @@ export function usePosition(ephDate) {
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
-    getPlanets(ephDate, setData);
+    if (ephDate) {
+      getPlanets(ephDate, setData);
+    }
     // Intentionally depending on content, not identity, of ephDate.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(ephDate)]);

@@ -1,0 +1,19 @@
+FROM node:24-alpine
+
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
+
+COPY package*.json ./
+
+USER node
+
+RUN npm ci
+
+# index.html, vite.config.js, src/, public/, etc. are bind-mounted at
+# runtime (see docker-compose.dev.yml)
+
+# --host binds Vite to 0.0.0.0 so the port published from the container is
+# actually reachable from outside it; only applied here, not in vite.config.js,
+# so a plain non-Docker `npm run dev` still binds to localhost only.
+CMD ["npx", "vite", "--host"]

@@ -1,0 +1,18 @@
+services:
+  astro1:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3600:3600"
+    volumes:
+      # Bind-mount the project so edits on the host are live (Vite HMR)
+      - .:/home/node/app
+      # Shadow node_modules with a Docker-managed named volume so the
+      # container's Linux-resolved deps (Vite's Rolldown/lightningcss native
+      # bindings) never touch the host's node_modules.
+      - astro1_node_modules:/home/node/app/node_modules
+
+volumes:
+  astro1_node_modules:
+    name: astro1_node_modules

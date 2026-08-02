@@ -11,6 +11,14 @@ services:
       # Shadow node_modules with a Docker-managed named volume so the
       # container's Linux-resolved deps (Vite's Rolldown/lightningcss native
       # bindings) never touch the host's node_modules.
+      #
+      # CAVEAT: Docker only seeds a named volume from the image the first
+      # time the volume is created. Once it exists, `up --build` mounts the
+      # existing volume as-is and silently ignores whatever `npm ci` produced
+      # in the freshly built image layer. Whenever package.json/package-lock.json
+      # changes, run `npm run docker:dev:reset` (or `docker compose -f
+      # docker-compose.dev.yml down -v`) instead of a plain rebuild, or the
+      # container will keep running with stale/missing dependencies.
       - astro1_node_modules:/home/node/app/node_modules
 
 volumes:

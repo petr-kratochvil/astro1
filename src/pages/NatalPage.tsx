@@ -6,6 +6,7 @@ import { usePosition } from "../apiCalls/usePosition";
 import { translatePlanet } from "../utils/translations";
 import { useNavigate } from "react-router-dom";
 import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
+import { SavedDate } from "../types";
 
 function NatalPage() {
   useTitle("Planets");
@@ -28,12 +29,12 @@ function NatalPage() {
     }
   }, [navigate, savedDataList.length]);
 
-  const [selectedBaseDate, setSelectedBaseDate] = React.useState(
-    savedDataList.length > 0 ? 0 : null
-  );
+  const [selectedBaseDate, setSelectedBaseDate] = React.useState<
+    number | undefined
+  >(savedDataList.length > 0 ? 0 : undefined);
 
-  const [baseDateJson, setBaseDateJson] = React.useState(
-    savedDataList.length > 0 ? savedDataList[0] : null
+  const [baseDateJson, setBaseDateJson] = React.useState<SavedDate | undefined>(
+    savedDataList.length > 0 ? savedDataList[0] : undefined
   );
 
   const data = usePosition(baseDateJson).map((item) => ({
@@ -61,8 +62,9 @@ function NatalPage() {
           style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer" }}
           value={selectedBaseDate}
           onChange={(e) => {
-            setSelectedBaseDate(e.target.value);
-            setBaseDateJson(savedDataList[e.target.value]);
+            const index = Number(e.target.value);
+            setSelectedBaseDate(index);
+            setBaseDateJson(savedDataList[index]);
           }}
         >
           {options.map((option) => (
@@ -73,7 +75,6 @@ function NatalPage() {
         </select>
       </div>
       <div
-        width="100%"
         style={{
           display: "flex",
           justifyContent: "space-evenly",

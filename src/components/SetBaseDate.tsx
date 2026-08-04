@@ -8,11 +8,13 @@ import {
 } from "../utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
 import { fromUTC } from "../utils/timeZones";
+import { SavedDate } from "../types";
 
 export default function SetBaseDate() {
   const navigate = useNavigate();
   const { index } = useParams();
-  const baseDateJson = getBaseDateJson(index);
+  const numericIndex = Number(index);
+  const baseDateJson = getBaseDateJson(numericIndex);
 
   const cities = [
     { name: "Praha", lat: 50.075, lon: 14.437, id: 554782 },
@@ -43,10 +45,14 @@ export default function SetBaseDate() {
     baseDateJson?.customCoordinates ?? false
   );
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+    const formData = new FormData(e.currentTarget);
+    // All fields in this form are text/number inputs, never files.
+    const data = Object.fromEntries(formData.entries()) as Record<
+      string,
+      string
+    >;
     const baseDate = new Date(
       parseInt(data.year),
       parseInt(data.month) - 1,
@@ -56,21 +62,21 @@ export default function SetBaseDate() {
     );
     // convert baseDate to UTC - the API currently needs UTC time
     // TODO: use proper time zone based on geolocation
-    const baseDateJson = {
+    const baseDateJson: SavedDate = {
       name: data.name || `[Datum ${getNextNameNumber()}]`,
       year: baseDate.getUTCFullYear(),
       month: baseDate.getUTCMonth() + 1,
       day: baseDate.getUTCDate(),
       hour: baseDate.getUTCHours() + baseDate.getUTCMinutes() / 60,
       customCoordinates: !!customCoordinates,
-      cityId: customCoordinates ? undefined : parseInt(selectedCityId),
+      cityId: customCoordinates ? undefined : selectedCityId,
       lat,
       lon,
     };
     if (!data.name) {
       setlastNameNumber(getNextNameNumber());
     }
-    setBaseDateJson(index, baseDateJson);
+    setBaseDateJson(numericIndex, baseDateJson);
     navigate(getRefererOfEditPage());
   }
 
@@ -83,18 +89,18 @@ export default function SetBaseDate() {
     baseDate = fromUTC(baseDateJson);
   }
 
-  const labelStyle = {
+  const labelStyle: React.CSSProperties = {
     display: "block",
     padding: "12px 15px",
   };
 
-  const inputStyle = {
+  const inputStyle: React.CSSProperties = {
     width: "50px",
     position: "absolute",
     left: "200px",
   };
 
-  const geoInputStyle = {
+  const geoInputStyle: React.CSSProperties = {
     width: "100px",
     position: "absolute",
     left: "150px",
@@ -147,7 +153,7 @@ export default function SetBaseDate() {
             max="12"
             required
             name="month"
-            defaultValue={baseDate?.getMonth() + 1 || ""}
+            defaultValue={baseDate ? baseDate.getMonth() + 1 : ""}
           />
         </label>
         <label style={labelStyle}>
@@ -199,12 +205,13 @@ export default function SetBaseDate() {
                   cursor: "pointer",
                 }}
                 onChange={(e) => {
-                  const city = cities.find(
-                    (city) => city.id === parseInt(e.target.value)
-                  );
-                  setSelectedCityId(e.target.value);
-                  setLat(city.lat);
-                  setLon(city.lon);
+                  const cityId = Number(e.target.value);
+                  const city = cities.find((city) => city.id === cityId);
+                  setSelectedCityId(cityId);
+                  if (city) {
+                    setLat(city.lat);
+                    setLon(city.lon);
+                  }
                 }}
                 value={selectedCityId}
                 name="birthplace"
@@ -229,8 +236,10 @@ export default function SetBaseDate() {
               setCustomCoordinates(e.target.checked);
               if (!e.target.checked) {
                 const city = cities.find((city) => city.id === selectedCityId);
-                setLat(city.lat);
-                setLon(city.lon);
+                if (city) {
+                  setLat(city.lat);
+                  setLon(city.lon);
+                }
               }
             }}
           />

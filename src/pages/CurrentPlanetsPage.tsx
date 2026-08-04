@@ -3,7 +3,7 @@ import ChartTable from "../components/ChartTable";
 import { useCurrentPosition } from "../apiCalls/usePosition";
 import { translatePlanet } from "../utils/translations";
 
-function PlanetsPage() {
+function CurrentPlanetsPage() {
   useTitle("Planets");
   const data = useCurrentPosition().map((item) => ({
     ...item,
@@ -21,7 +21,6 @@ function PlanetsPage() {
   return (
     <>
       <div
-        width="100%"
         style={{
           display: "flex",
           justifyContent: "space-evenly",
@@ -39,4 +38,4 @@ function PlanetsPage() {
   );
 }
 
-export default PlanetsPage;
+export default CurrentPlanetsPage;

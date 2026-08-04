@@ -1,3 +1,4 @@
+import React from "react";
 import {
   deleteBaseDate,
   getSavedData,
@@ -10,11 +11,11 @@ import { fromUTC } from "../utils/timeZones";
 export default function SavedDataList() {
   const navigate = useNavigate();
   const savedDataList = getSavedData().map((item) => {
-    let baseDate = fromUTC(item);
+    const baseDate = fromUTC(item);
     return {
       name: item?.name,
       day: baseDate?.getDate(),
-      month: baseDate?.getMonth() + 1 || undefined,
+      month: baseDate ? baseDate.getMonth() + 1 : undefined,
       year: baseDate?.getFullYear(),
       hour: baseDate?.getHours().toString().padStart(2, "0"),
       minutes: baseDate?.getMinutes().toString().padStart(2, "0"),
@@ -23,7 +24,7 @@ export default function SavedDataList() {
 
   const forceUpdate = useForceUpdate();
 
-  const itemStyle = {
+  const itemStyle: React.CSSProperties = {
     border: "1px solid slateblue",
     padding: "15px",
     margin: "20px",

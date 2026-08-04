@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import RootPage from "./pages/RootPage";
 import TransitsPage from "./pages/TransitsPage";
-import PlanetsPage from "./pages/PlanetsPage";
+import PlanetsPage from "./pages/CurrentPlanetsPage";
 import PageNotFound from "./pages/PageNotFound";
 import SetBaseDate from "./components/SetBaseDate";
 import SavedDataList from "./components/SavedDataList";

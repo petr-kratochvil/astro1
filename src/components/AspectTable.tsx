@@ -94,7 +94,8 @@ export default function AspectTable({
     return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
   };
 
-  const sign = (pos: CelestialObjectPosition) => formatSign(signList[pos.sign - 1]);
+  const sign = (pos: CelestialObjectPosition) =>
+    formatSign(signList[pos.sign - 1]);
   const degrees = (pos: CelestialObjectPosition) => pos.degrees + "°";
   const secondField = usedStyle.degreesFirst ? degrees : sign;
   const thirdField = usedStyle.degreesFirst ? sign : degrees;

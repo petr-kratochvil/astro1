@@ -6,8 +6,13 @@ import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
 import AspectTable from "../components/AspectTable";
+import { AspectWithPositions, SavedDate } from "../types";
 
-export default function TransitsPage({ showAsTable = false }) {
+export default function TransitsPage({
+  showAsTable = false,
+}: {
+  showAsTable?: boolean;
+}) {
   useTitle();
   const navigate = useNavigate();
 
@@ -20,52 +25,55 @@ export default function TransitsPage({ showAsTable = false }) {
     }
   }, [navigate, savedDataList.length]);
 
-  const [selectedBaseDate, setSelectedBaseDate] = React.useState(
-    savedDataList.length > 0 ? 0 : null
-  );
+  const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState<
+    number | undefined
+  >(savedDataList.length > 0 ? 0 : undefined);
   const options = savedDataList.map((item, index) => ({
     value: index,
     label: item.name,
   }));
 
-  const [data, setData] = React.useState([]);
-  const [baseDateJson, setBaseDateJson] = React.useState(
-    savedDataList.length > 0 ? savedDataList[0] : null
+  const [data, setData] = React.useState<AspectWithPositions[]>([]);
+  const [baseDate, setBaseDate] = React.useState<SavedDate | undefined>(
+    savedDataList.length > 0 ? savedDataList[0] : undefined
   );
-  const [, setPerson] = React.useState(
-    savedDataList.length > 0 ? savedDataList[0].name : null
+  const [, setPerson] = React.useState<string | undefined>(
+    savedDataList.length > 0 ? savedDataList[0].name : undefined
   );
   const [transitDate, setTransitDate] = React.useState(new Date());
 
-  function callGetTransits(baseDateJson, transitDate) {
-    if (baseDateJson && transitDate) {
-      const { lat, lon } = baseDateJson;
+  function callGetTransits(
+    baseDate: SavedDate | undefined,
+    transitDate: Date
+  ) {
+    if (baseDate && transitDate) {
+      const { lat, lon } = baseDate;
       getTransits(
-        baseDateJson,
+        baseDate,
         transitDate,
         lat && lon ? { lat, lon } : undefined
       ).then((data) => setData(data));
     }
   }
 
-  function addDays(date, days) {
-    var result = new Date(date);
+  function addDays(date: Date, days: number): Date {
+    const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
   }
 
-  function addMonths(date, months) {
-    var result = new Date(date);
+  function addMonths(date: Date, months: number): Date {
+    const result = new Date(date);
     result.setMonth(result.getMonth() + months);
     return result;
   }
 
   React.useEffect(
-    () => callGetTransits(baseDateJson, transitDate),
-    [baseDateJson, transitDate]
+    () => callGetTransits(baseDate, transitDate),
+    [baseDate, transitDate]
   );
 
-  function handleKeyDown(event) {
+  function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
       case "ArrowLeft":
         setTransitDate(addDays(transitDate, -1));
@@ -86,7 +94,7 @@ export default function TransitsPage({ showAsTable = false }) {
     };
   });
 
-  const buttonsMenuStyle = {
+  const buttonsMenuStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -95,7 +103,7 @@ export default function TransitsPage({ showAsTable = false }) {
     margin: "10px 0px",
   };
 
-  function handleSwipe(param) {
+  function handleSwipe(param: { direction: number }) {
     switch (param.direction) {
       case 2:
         setTransitDate((prevDate) => addDays(prevDate, +1));
@@ -108,7 +116,7 @@ export default function TransitsPage({ showAsTable = false }) {
     }
   }
 
-  function formatDayOfWeek(date) {
+  function formatDayOfWeek(date: Date): string {
     const day = date.toLocaleDateString(undefined, { weekday: "short" });
     return day.charAt(0).toUpperCase() + day.slice(1);
   }
@@ -139,11 +147,12 @@ export default function TransitsPage({ showAsTable = false }) {
           Vyberte záznam: &nbsp;
           <select
             style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer" }}
-            value={selectedBaseDate}
+            value={selectedBaseDateIndex}
             onChange={(e) => {
-              setSelectedBaseDate(e.target.value);
-              setBaseDateJson(savedDataList[e.target.value]);
-              setPerson(savedDataList[e.target.value].name);
+              const index = Number(e.target.value);
+              setSelectedBaseDateIndex(index);
+              setBaseDate(savedDataList[index]);
+              setPerson(savedDataList[index].name);
             }}
           >
             {options.map((option) => (
@@ -192,7 +201,6 @@ export default function TransitsPage({ showAsTable = false }) {
         </div>
         {showAsTable ? (
           <div
-            width="100%"
             style={{
               display: "flex",
               justifyContent: "space-evenly",

@@ -27,6 +27,7 @@ npm run build          # production build
 npm run preview        # serve the production build locally
 npm run typecheck      # tsc --noEmit
 npm run lint           # eslint
+npm run test           # vitest
 npm run format         # prettier --write
 npm run format:check   # prettier --check
 ```
@@ -38,3 +39,12 @@ Vite, React 18, TypeScript, react-router-dom, MUI.
 ## License
 
 AGPL-3.0-or-later — see [`LICENSE`](LICENSE).
+
+### Icons license
+
+License: Flaticon License
+Terms: https://www.flaticon.com/legal
+Downloaded as a Free user (attribution required).
+Miscellaneous icons created by Rooman12 - Flaticon
+https://www.flaticon.com/free-icons/miscellaneous
+Icon pack: https://www.flaticon.com/packs/space-and-moon-life-1

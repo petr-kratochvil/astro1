@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -7,7 +8,11 @@ export default defineConfig({
     port: 3600,
   },
   build: {
-    // Keep the Dockerfile's `COPY build/ .` working unchanged.
     outDir: "build",
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./vitest.setup.ts"],
+    css: false,
   },
 });

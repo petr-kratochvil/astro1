@@ -1,4 +1,4 @@
-name: Run typecheck, lint and build
+name: Run typecheck, lint, test and build
 
 on:
   push:
@@ -28,8 +28,20 @@ jobs:
 
       - run: npm run lint
 
+  test:
+    needs: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-node
+
+      - run: npm ci
+
+      - run: npm test
+
   build:
-    needs: lint
+    needs: [lint, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

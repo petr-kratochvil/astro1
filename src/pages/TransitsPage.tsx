@@ -42,10 +42,7 @@ export default function TransitsPage({
   );
   const [transitDate, setTransitDate] = React.useState(new Date());
 
-  function callGetTransits(
-    baseDate: SavedDate | undefined,
-    transitDate: Date
-  ) {
+  function callGetTransits(baseDate: SavedDate | undefined, transitDate: Date) {
     if (baseDate && transitDate) {
       const { lat, lon } = baseDate;
       getTransits(

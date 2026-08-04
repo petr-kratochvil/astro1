@@ -1,11 +1,18 @@
 import axios from "axios";
 import React from "react";
 import constants from "../constants";
+import { FormattedObjectPosition, JsonDate, PlanetPosition } from "../types";
 
-const getPlanets = (body, setData) => {
+const getPlanets = (
+  jsonDate: JsonDate,
+  setData: (data: PlanetPosition[]) => void
+) => {
   // Call Ephemerides API for current planets:
   axios
-    .post(`${constants.ephemeridesApiBase}/position`, body)
+    .post<FormattedObjectPosition[]>(
+      `${constants.ephemeridesApiBase}/position`,
+      jsonDate
+    )
     .then((response) => {
       setData(
         response.data.map((planet) => ({
@@ -16,9 +23,9 @@ const getPlanets = (body, setData) => {
     });
 };
 
-export function useCurrentPosition() {
+export function useCurrentPosition(): PlanetPosition[] {
   const date = new Date();
-  const ephDate = {
+  const ephDate: JsonDate = {
     year: date.getUTCFullYear(),
     month: date.getUTCMonth() + 1,
     day: date.getUTCDate(),
@@ -27,8 +34,8 @@ export function useCurrentPosition() {
   return usePosition(ephDate);
 }
 
-export function usePosition(ephDate) {
-  const [data, setData] = React.useState([]);
+export function usePosition(ephDate?: JsonDate): PlanetPosition[] {
+  const [data, setData] = React.useState<PlanetPosition[]>([]);
 
   React.useEffect(() => {
     if (ephDate) {

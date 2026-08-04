@@ -1,6 +1,6 @@
 import React from "react";
 
-export function useTitle(title) {
+export function useTitle(title?: string) {
   const baseTitle = "Astro Transits";
 
   React.useEffect(() => {

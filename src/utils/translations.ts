@@ -1,4 +1,7 @@
-export function translateAspect(aspect) {
+import { AspectName } from "../constants";
+import { CelestialObject } from "../types";
+
+export function translateAspect(aspect: AspectName): string {
   switch (aspect) {
     case "conjunction":
       return "🟡";
@@ -20,8 +23,8 @@ export function translateAspect(aspect) {
   }
 }
 
-export function translatePlanet(planet) {
-  const t = {
+export function translatePlanet(planet: CelestialObject): string {
+  const t: Record<string, string> = {
     Sun: "Slunce",
     Moon: "Luna",
     Mercury: "Merkur",

@@ -45,7 +45,9 @@ export const signPositions = {
   Pisces: 330,
 };
 
-export const signList = [
+export type SignName = keyof typeof signPositions;
+
+export const signList: SignName[] = [
   "Aries",
   "Taurus",
   "Gemini",
@@ -67,7 +69,10 @@ export const aspectSymbols = {
   trine: "△",
   sextile: "✶",
   semiSextile: "✧",
+  quincunx: "⚻",
 };
+
+export type AspectName = keyof typeof aspectSymbols;
 
 const constants = { signList, ephemeridesApiBase, signSymbols };
 export default constants;

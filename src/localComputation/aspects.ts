@@ -1,6 +1,25 @@
-import { signPositions } from "../constants";
+import { signPositions, SignName, AspectName } from "../constants";
 
-const degPosition = (planet) => {
+interface ChartPosition {
+  sign: SignName;
+  degrees: number;
+  minutes?: number;
+  seconds?: number;
+}
+
+type ComputedAspectName = Extract<
+  AspectName,
+  "conjunction" | "opposition" | "square" | "trine" | "sextile"
+>;
+
+interface AspectResult {
+  name: ComputedAspectName;
+  orb: number;
+  pos1: ChartPosition;
+  pos2: ChartPosition;
+}
+
+const degPosition = (planet: ChartPosition): number => {
   return (
     signPositions[planet.sign] +
     planet.degrees +
@@ -9,7 +28,7 @@ const degPosition = (planet) => {
   );
 };
 
-const orb = {
+const orb: Record<ComputedAspectName, number> = {
   conjunction: 10,
   opposition: 8,
   square: 5,
@@ -17,8 +36,11 @@ const orb = {
   sextile: 3,
 };
 
-export const getAspects = (chart1, chart2) => {
-  const aspects = [];
+export const getAspects = (
+  chart1: ChartPosition[],
+  chart2: ChartPosition[]
+): AspectResult[] => {
+  const aspects: AspectResult[] = [];
   for (let i = 0; i < chart1.length; i++) {
     for (let j = 0; j < chart2.length; j++) {
       const diff = Math.abs(degPosition(chart1[i]) - degPosition(chart2[j]));

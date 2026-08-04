@@ -2,6 +2,12 @@
 
 React (Vite + TypeScript) frontend for viewing planetary positions, natal charts, and transit aspects. Consumes the [`ephemerides`](https://github.com/petr-kratochvil/ephemerides) API for astronomical calculations.
 
+## Screenshots
+
+[Desktop](screens/screen-desktop.png), [Mobile](screens/screen-mobile.jpg)
+
+![Desktop screenshot](screens/screen-desktop.png)
+
 ## Run locally
 
 ```bash
@@ -42,9 +48,8 @@ AGPL-3.0-or-later — see [`LICENSE`](LICENSE).
 
 ### Icons license
 
-License: Flaticon License
-Terms: https://www.flaticon.com/legal
-Downloaded as a Free user (attribution required).
-Miscellaneous icons created by Rooman12 - Flaticon
-https://www.flaticon.com/free-icons/miscellaneous
-Icon pack: https://www.flaticon.com/packs/space-and-moon-life-1
+- License: Flaticon License
+- Terms: https://www.flaticon.com/legal
+- Downloaded as a Free user (attribution required).
+- Icon pack created by Rooman12 - Flaticon
+- Icon pack link: https://www.flaticon.com/packs/space-and-moon-life-1

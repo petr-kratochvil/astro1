@@ -1,9 +1,10 @@
 import React from "react";
-import { signList, signSymbols } from "../constants";
+import { AspectName, signList, signSymbols } from "../constants";
 import { translateAspect, translatePlanet } from "../utils/translations";
+import { AspectWithPositions } from "../types";
 
-function planetWeight(planet) {
-  const w = {
+function planetWeight(planet: string): number {
+  const w: Record<string, number> = {
     Sun: 3,
     Moon: 1,
     Mercury: 2,
@@ -18,8 +19,8 @@ function planetWeight(planet) {
   return w[planet] || 0;
 }
 
-function aspectColor(aspect) {
-  const c = {
+function aspectColor(aspect: AspectName): string {
+  const c: Record<AspectName, string> = {
     conjunction: "gold",
     opposition: "gold",
     square: "DeepPink",
@@ -31,62 +32,93 @@ function aspectColor(aspect) {
   return c[aspect] || "black";
 }
 
-function formatTransits(data) {
+interface FormattedAspect {
+  aspect: AspectName;
+  name: string;
+  planet: string;
+  orb: string;
+  strengthening: boolean;
+  days: string;
+  strong: boolean;
+}
+
+interface TransitGroup {
+  name: string;
+  aspects: FormattedAspect[];
+  speed: string;
+  pos: number;
+  sign: string;
+}
+
+function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
   if (data.length === 0) {
     return [];
   }
-  let result = [];
-  let currentResult = { aspects: [] };
+  const result: TransitGroup[] = [];
+  let currentResult: TransitGroup | null = null;
   let i = 0;
-  let currentName = null;
+  let currentName: string | null = null;
   while (i < data.length) {
     const newName = data[i]?.pos1.name;
     if (newName !== currentName) {
-      if (currentName !== null) {
+      if (currentResult !== null) {
         result.push(currentResult);
-        currentResult = {};
       }
-      currentResult.name = translatePlanet({ name: newName });
-      currentResult.aspects = [];
+      currentResult = {
+        name: translatePlanet({ name: newName }),
+        aspects: [],
+        speed: "",
+        pos: 0,
+        sign: "",
+      };
       currentName = newName;
     }
-    let days = data[i].orb / Math.abs(data[i].orbSpeed);
+    const days = data[i].orb / Math.abs(data[i].orbSpeed ?? 0);
     let m, t;
     if (days > 30) {
       m = days / 30;
     } else if (days > 7) {
       t = days / 7;
     }
-    const fixedFormat = (x, precision) =>
+    const fixedFormat = (x: number, precision: number) =>
       x.toFixed(x < 10 && Math.abs(x - Math.round(x)) > precision ? 1 : 0);
     const daysFormat = m
       ? `${fixedFormat(m, 0.3)} měs`
       : t
         ? `${fixedFormat(t, 0.2)} týd `
         : `${fixedFormat(days, 0.1)} dní`;
+
+    currentResult = currentResult as TransitGroup;
     currentResult.aspects.push({
       aspect: data[i].name,
       name: translateAspect(data[i].name),
       planet: translatePlanet(data[i].pos2),
       orb: data[i].orb.toFixed(1),
-      strengthening: data[i].orbSpeed < 0,
+      strengthening: (data[i].orbSpeed ?? 0) < 0,
       days: daysFormat,
       strong:
         planetWeight(data[i].pos1.name) >= planetWeight(data[i].pos2.name) &&
         ["conjunction", "opposition", "square", "trine"].includes(data[i].name),
     });
-    currentResult.speed = data[i].pos1.speed.toFixed(2);
+
+    // pos1 in a transits response always comes with `speed`
+    // - but let's better use defensive style
+    currentResult.speed = (data[i].pos1.speed ?? 0).toFixed(2);
     currentResult.pos = data[i].pos1.degrees;
     currentResult.sign = signSymbols[signList[data[i].pos1.sign - 1]];
     i++;
   }
-  if (Object.keys(currentResult).length > 0) {
+  if (currentResult !== null) {
     result.push(currentResult);
   }
   return result;
 }
 
-export default function TransitsBoxes({ data }) {
+export default function TransitsBoxes({
+  data,
+}: {
+  data: AspectWithPositions[];
+}) {
   const strongStyle = {
     backgroundColor: "#AAFFFF",
     padding: "1px 2.5px",

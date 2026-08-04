@@ -1,12 +1,25 @@
 import {
   aspectSymbols,
+  AspectName,
   planetSymbols,
   signList,
   signSymbols,
+  SignName,
 } from "../constants";
 import { translatePlanet } from "../utils/translations";
+import { AspectWithPositions, CelestialObjectPosition } from "../types";
 
-const defaultStyle = {
+interface AspectTableStyle {
+  useSignSymbols: boolean;
+  usePlanetSymbols: boolean;
+  useAspectSymbols: boolean;
+  useSignText: boolean;
+  signSymbolFirst: boolean;
+  degreesFirst: boolean;
+  showMinutes: boolean;
+}
+
+const defaultStyle: AspectTableStyle = {
   useSignSymbols: false,
   usePlanetSymbols: false,
   useAspectSymbols: true,
@@ -22,10 +35,16 @@ export default function AspectTable({
   style = {},
   name1 = "chart 1",
   name2 = "chart 2",
+}: {
+  aspectChart: AspectWithPositions[];
+  title: string;
+  style?: Partial<AspectTableStyle>;
+  name1?: string;
+  name2?: string;
 }) {
   const usedStyle = { ...defaultStyle, ...style };
 
-  const formatSign = (sign) => {
+  const formatSign = (sign: SignName): string => {
     const symbol = usedStyle.useSignSymbols ? signSymbols[sign] : "";
     const text = usedStyle.useSignText ? sign : "";
     const space = usedStyle.useSignSymbols && usedStyle.useSignText ? " " : "";
@@ -35,17 +54,17 @@ export default function AspectTable({
     return text + space + symbol;
   };
 
-  const formatPlanet = (planet) => {
+  const formatPlanet = (pos: CelestialObjectPosition): string => {
     return usedStyle.usePlanetSymbols
-      ? planetSymbols[planet.name]
-      : translatePlanet(planet);
+      ? (planetSymbols as Record<string, string>)[pos.name]
+      : translatePlanet(pos);
   };
 
-  const formatAspect = (aspect) => {
+  const formatAspect = (aspect: AspectName): string => {
     return usedStyle.useAspectSymbols ? aspectSymbols[aspect] : aspect;
   };
 
-  const aspectColor = (aspect) => {
+  const aspectColor = (aspect: AspectWithPositions): string => {
     let color = { r: 255, g: 255, b: 255 };
     switch (aspect.name) {
       case "conjunction":
@@ -75,8 +94,8 @@ export default function AspectTable({
     return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
   };
 
-  const sign = (a) => formatSign(signList[a.sign - 1]);
-  const degrees = (a) => a.degrees + "°";
+  const sign = (pos: CelestialObjectPosition) => formatSign(signList[pos.sign - 1]);
+  const degrees = (pos: CelestialObjectPosition) => pos.degrees + "°";
   const secondField = usedStyle.degreesFirst ? degrees : sign;
   const thirdField = usedStyle.degreesFirst ? sign : degrees;
 
@@ -85,16 +104,16 @@ export default function AspectTable({
       <table className="MyTable">
         <tbody>
           <tr>
-            <td className="MyTableHeading" colSpan="8">
+            <td className="MyTableHeading" colSpan={8}>
               {title}
             </td>
           </tr>
           <tr>
-            <td colSpan="2">aspect/orb</td>
-            <td className="MyTableSubHeading" colSpan="3">
+            <td colSpan={2}>aspect/orb</td>
+            <td className="MyTableSubHeading" colSpan={3}>
               {name1}
             </td>
-            <td className="MyTableSubHeading" colSpan="3">
+            <td className="MyTableSubHeading" colSpan={3}>
               {name2}
             </td>
           </tr>

@@ -10,22 +10,6 @@ import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 function NatalPage() {
   useTitle("Planets");
 
-  // const chartStyleP = {
-  //   useSignSymbols: true,
-  //   useSignText: false,
-  //   usePlanetSymbols: true,
-  //   degreesFirst: false,
-  //   showMinutes: true,
-  //   signSymbolFirst: false,
-  // };
-
-  // const chartStyleJ = {
-  //   useSignSymbols: false,
-  //   usePlanetSymbols: true,
-  //   degreesFirst: true,
-  //   showMinutes: false,
-  // };
-
   const currentChartStyle = {
     degreesFirst: true,
     useSignSymbols: true,

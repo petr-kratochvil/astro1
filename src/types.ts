@@ -22,8 +22,9 @@ export interface CelestialObject {
   houseNumber?: number;
 }
 
-// mirrors ephemerides/src/types.ts (`bodyId`, `pointName` are omitted)
-export interface FormattedObjectPosition extends CelestialObject {
+// mirrors `CelestialObjectPosition` from ephemerides/src/types.ts
+// (`bodyId`, `pointName` are omitted)
+export interface CelestialObjectPosition extends CelestialObject {
   type: CelestialObjectType;
   position: number;
   sign: number;
@@ -35,17 +36,17 @@ export interface FormattedObjectPosition extends CelestialObject {
 }
 
 // replace the backend's numeric `sign` with the sign name
-export interface PlanetPosition extends Omit<FormattedObjectPosition, "sign"> {
+export interface PlanetPosition extends Omit<CelestialObjectPosition, "sign"> {
   sign: SignName;
 }
 
-// mirrors ephemerides/src/types.ts AspectWithPositions<FormattedObjectPosition>
+// mirrors ephemerides/src/types.ts AspectWithPositions<CelestialObjectPosition>
 export interface AspectWithPositions {
   name: AspectName;
   orb: number;
   orbSpeed?: number;
-  pos1: FormattedObjectPosition;
-  pos2: FormattedObjectPosition;
+  pos1: CelestialObjectPosition;
+  pos2: CelestialObjectPosition;
 }
 
 // A saved entry (from localStorage) with additional data

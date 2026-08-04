@@ -1,14 +1,26 @@
-function formatCell(c, d) {
-  if (typeof c === "string") {
-    return d[c];
-  } else if (typeof c === "function") {
-    return c(d);
+import type { ReactNode } from "react";
+
+export type Column<T> = keyof T | ((row: T) => ReactNode);
+
+function formatCell<T>(column: Column<T>, data: T): ReactNode {
+  if (typeof column === "string") {
+    return data[column as keyof T] as ReactNode;
+  } else if (typeof column === "function") {
+    return column(data);
   } else {
-    return "Uknown column: " + typeof c;
+    return "Uknown column: " + typeof column;
   }
 }
 
-export default function BasicTable({ columns, data, title }) {
+export default function BasicTable<T>({
+  columns,
+  data,
+  title,
+}: {
+  columns: Column<T>[];
+  data: T[];
+  title: string;
+}) {
   return (
     <div>
       <table className="MyTable">

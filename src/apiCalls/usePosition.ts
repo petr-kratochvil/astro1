@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import constants from "../constants";
-import { FormattedObjectPosition, JsonDate, PlanetPosition } from "../types";
+import { CelestialObjectPosition, JsonDate, PlanetPosition } from "../types";
 
 const getPlanets = (
   jsonDate: JsonDate,
@@ -9,7 +9,7 @@ const getPlanets = (
 ) => {
   // Call Ephemerides API for current planets:
   axios
-    .post<FormattedObjectPosition[]>(
+    .post<CelestialObjectPosition[]>(
       `${constants.ephemeridesApiBase}/position`,
       jsonDate
     )

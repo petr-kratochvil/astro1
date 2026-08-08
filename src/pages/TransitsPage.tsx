@@ -9,6 +9,7 @@ import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
 import AspectTable from "../components/AspectTable";
+import RecordSelect from "../components/RecordSelect";
 import { AspectWithPositions, SavedDate } from "../types";
 import { formatDateWithWeekday } from "../utils/formatting";
 import { getLocale } from "../utils/language";
@@ -34,10 +35,6 @@ export default function TransitsPage({
   const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState<
     number | undefined
   >(savedDataList.length > 0 ? 0 : undefined);
-  const options = savedDataList.map((item, index) => ({
-    value: index,
-    label: item.name,
-  }));
 
   const [data, setData] = React.useState<AspectWithPositions[]>([]);
   const [baseDate, setBaseDate] = React.useState<SavedDate | undefined>(
@@ -129,24 +126,16 @@ export default function TransitsPage({
             alignItems: "center",
             margin: "15px 0px 10px 0px",
           }}
-        >
-          {t("common.selectRecord")} &nbsp;
-          <select
-            style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer" }}
+        >{t("common.selectRecord")}:
+          <RecordSelect
+            records={savedDataList}
             value={selectedBaseDateIndex}
-            onChange={(e) => {
-              const index = Number(e.target.value);
+            onChange={(index) => {
               setSelectedBaseDateIndex(index);
               setBaseDate(savedDataList[index]);
               setPerson(savedDataList[index]?.name);
             }}
-          >
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
           <Button

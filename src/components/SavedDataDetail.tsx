@@ -1,7 +1,15 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 import {
   getBaseDateJson,
   getNextNameNumber,
@@ -60,7 +68,7 @@ export default function SavedDataDetail() {
     id: 554782,
   };
 
-  const options = cities.map((city) => ({ value: city.id, label: city.name }));
+  const birthplaceLabelId = React.useId();
 
   const [selectedCityId, setSelectedCityId] = React.useState(
     baseDateJson?.cityId ?? defaultCity.id
@@ -118,201 +126,184 @@ export default function SavedDataDetail() {
     baseDate = fromUTC(baseDateJson);
   }
 
-  const labelStyle: React.CSSProperties = {
-    display: "block",
-    padding: "12px 15px",
-  };
-
-  const inputStyle: React.CSSProperties = {
-    width: "50px",
-    position: "absolute",
-    left: "200px",
-  };
-
-  const geoInputStyle: React.CSSProperties = {
-    width: "100px",
-    position: "absolute",
-    left: "150px",
-  };
-
   return (
     <>
       <h1 style={{ color: "slateblue", textAlign: "center" }}>{heading}</h1>
-      <form
+      <Box
+        component="form"
         onSubmit={handleSubmit}
-        style={{
-          margin: "10px auto",
-          width: "300px",
-          position: "relative",
-          border: "1px solid slateblue",
-          borderRadius: "8px",
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          m: "10px auto",
+          p: 2.5,
+          width: "340px",
+          maxWidth: "calc(100% - 20px)",
+          border: "1px solid",
+          borderColor: "primary.main",
+          borderRadius: 2,
           backgroundColor: "white",
         }}
       >
-        <label style={labelStyle}>
-          {t("savedDataDetail.name")}{" "}
-          <input
-            style={{ ...inputStyle, width: "150px", left: "100px" }}
-            type="text"
-            name="name"
-            defaultValue={baseDateJson?.name}
-          />
-        </label>
+        <TextField
+          label={t("savedDataDetail.name")}
+          name="name"
+          defaultValue={baseDateJson?.name}
+          size="small"
+          fullWidth
+        />
 
-        <label style={labelStyle}>
-          {t("savedDataDetail.day")}{" "}
-          <input
-            style={inputStyle}
-            type="number"
-            inputMode="numeric"
-            min="1"
-            max="31"
-            required
+        <Stack direction="row" spacing={1.5}>
+          <TextField
+            label={t("savedDataDetail.day")}
             name="day"
+            type="number"
+            required
+            size="small"
+            fullWidth
             defaultValue={baseDate?.getDate()}
+            slotProps={{ htmlInput: { min: 1, max: 31, inputMode: "numeric" } }}
           />
-        </label>
-        <label style={labelStyle}>
-          {t("savedDataDetail.month")}{" "}
-          <input
-            style={inputStyle}
-            type="number"
-            inputMode="numeric"
-            min="1"
-            max="12"
-            required
+          <TextField
+            label={t("savedDataDetail.month")}
             name="month"
-            defaultValue={baseDate ? baseDate.getMonth() + 1 : ""}
-          />
-        </label>
-        <label style={labelStyle}>
-          {t("savedDataDetail.year")}{" "}
-          <input
-            style={inputStyle}
             type="number"
-            inputMode="numeric"
-            min="1900"
-            max="2100"
             required
+            size="small"
+            fullWidth
+            defaultValue={baseDate ? baseDate.getMonth() + 1 : ""}
+            slotProps={{ htmlInput: { min: 1, max: 12, inputMode: "numeric" } }}
+          />
+          <TextField
+            label={t("savedDataDetail.year")}
             name="year"
+            type="number"
+            required
+            size="small"
+            fullWidth
             defaultValue={baseDate?.getFullYear()}
+            slotProps={{
+              htmlInput: { min: 1900, max: 2100, inputMode: "numeric" },
+            }}
           />
-        </label>
-        <label style={labelStyle}>
-          {t("savedDataDetail.hour")}{" "}
-          <small>{t("savedDataDetail.hourFormat")}</small>:{" "}
-          <input
-            style={inputStyle}
-            type="number"
-            inputMode="numeric"
-            min="0"
-            max="23"
+        </Stack>
+
+        <Stack direction="row" spacing={1.5}>
+          <TextField
+            label={t("savedDataDetail.hour")}
             name="hour"
-            defaultValue={baseDate?.getHours()}
-          />
-        </label>
-        <label style={labelStyle}>
-          {t("savedDataDetail.minute")}{" "}
-          <input
-            style={inputStyle}
             type="number"
-            inputMode="numeric"
-            min="0"
-            max="59"
-            name="minutes"
-            defaultValue={baseDate?.getMinutes()}
+            size="small"
+            fullWidth
+            defaultValue={baseDate?.getHours()}
+            helperText={t("savedDataDetail.hourFormat")}
+            slotProps={{ htmlInput: { min: 0, max: 23, inputMode: "numeric" } }}
           />
-        </label>
-        <label style={labelStyle}>
-          <span>{t("savedDataDetail.birthplace")}</span>
-          {!customCoordinates && (
-            <>
-              <select
-                style={{
-                  width: "110px",
-                  left: "150px",
-                  position: "absolute",
-                  cursor: "pointer",
-                }}
-                onChange={(e) => {
-                  const cityId = Number(e.target.value);
-                  const city = cities.find((city) => city.id === cityId);
-                  setSelectedCityId(cityId);
-                  if (city) {
-                    setLat(city.lat);
-                    setLon(city.lon);
-                  }
-                }}
-                value={selectedCityId}
-                name="birthplace"
-              >
-                {options.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </>
-          )}
-        </label>
-        <label style={{ ...labelStyle, cursor: "pointer" }}>
-          <small>{t("savedDataDetail.customCoordinates")}</small>
-          <input
-            type="checkbox"
-            style={{ marginLeft: "10px" }}
-            name="customCoordinates"
-            checked={customCoordinates}
-            onChange={(e) => {
-              setCustomCoordinates(e.target.checked);
-              if (!e.target.checked) {
-                const city = cities.find((city) => city.id === selectedCityId);
+          <TextField
+            label={t("savedDataDetail.minute")}
+            name="minutes"
+            type="number"
+            size="small"
+            fullWidth
+            defaultValue={baseDate?.getMinutes()}
+            slotProps={{ htmlInput: { min: 0, max: 59, inputMode: "numeric" } }}
+          />
+        </Stack>
+
+        {!customCoordinates && (
+          <FormControl size="small" fullWidth>
+            <InputLabel id={birthplaceLabelId}>
+              {t("savedDataDetail.birthplace")}
+            </InputLabel>
+            <Select
+              labelId={birthplaceLabelId}
+              label={t("savedDataDetail.birthplace")}
+              name="birthplace"
+              value={selectedCityId}
+              onChange={(event) => {
+                const cityId = Number(event.target.value);
+                const city = cities.find((city) => city.id === cityId);
+                setSelectedCityId(cityId);
                 if (city) {
                   setLat(city.lat);
                   setLon(city.lon);
                 }
-              }
-            }}
-          />
-        </label>
-        {customCoordinates && (
-          <>
-            <label style={labelStyle}>
-              <small>{t("savedDataDetail.latitude")} </small>
-              <input
-                style={geoInputStyle}
-                type="number"
-                inputMode="decimal"
-                min="-90"
-                max="90"
-                step="any"
-                name="latitude"
-                value={lat}
-                onChange={(e) => setLat(parseFloat(e.target.value))}
-              />
-            </label>
-            <label style={labelStyle}>
-              <small>{t("savedDataDetail.longitude")} </small>
-              <input
-                style={geoInputStyle}
-                type="number"
-                inputMode="decimal"
-                min="-180"
-                max="180"
-                step="any"
-                name="longitude"
-                value={lon}
-                onChange={(e) => setLon(parseFloat(e.target.value))}
-              />
-            </label>
-          </>
+              }}
+              MenuProps={{ disableScrollLock: true }}
+            >
+              {cities.map((city) => (
+                <MenuItem key={city.id} value={city.id}>
+                  {city.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         )}
-        <Stack
-          direction="row"
-          spacing={1.5}
-          sx={{ justifyContent: "center", px: "15px", pt: "10px", pb: "20px" }}
-        >
-          {/* MUI's ButtonBase defaults to type="button", so Cancel no longer
-              submits the form (and silently saves) on its way out. */}
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="customCoordinates"
+              checked={customCoordinates}
+              onChange={(e) => {
+                setCustomCoordinates(e.target.checked);
+                if (!e.target.checked) {
+                  const city = cities.find(
+                    (city) => city.id === selectedCityId
+                  );
+                  if (city) {
+                    setLat(city.lat);
+                    setLon(city.lon);
+                  }
+                }
+              }}
+            />
+          }
+          label={t("savedDataDetail.customCoordinates")}
+          slotProps={{ typography: { variant: "body2" } }}
+        />
+
+        {customCoordinates && (
+          <Stack direction="row" spacing={1.5}>
+            <TextField
+              label={t("savedDataDetail.latitude")}
+              name="latitude"
+              type="number"
+              size="small"
+              fullWidth
+              value={lat}
+              onChange={(e) => setLat(parseFloat(e.target.value))}
+              slotProps={{
+                htmlInput: {
+                  min: -90,
+                  max: 90,
+                  step: "any",
+                  inputMode: "decimal",
+                },
+              }}
+            />
+            <TextField
+              label={t("savedDataDetail.longitude")}
+              name="longitude"
+              type="number"
+              size="small"
+              fullWidth
+              value={lon}
+              onChange={(e) => setLon(parseFloat(e.target.value))}
+              slotProps={{
+                htmlInput: {
+                  min: -180,
+                  max: 180,
+                  step: "any",
+                  inputMode: "decimal",
+                },
+              }}
+            />
+          </Stack>
+        )}
+
+        <Stack direction="row" spacing={1.5} sx={{ justifyContent: "center" }}>
           <Button
             variant="outlined"
             onClick={() => navigate(getRefererOfEditPage())}
@@ -323,7 +314,7 @@ export default function SavedDataDetail() {
             {t("savedDataDetail.save")}
           </Button>
         </Stack>
-      </form>
+      </Box>
       <div style={{ margin: "0 auto", width: "300px" }}>
         <p>{t("savedDataDetail.timeZoneNote")}</p>
         <p>{t("savedDataDetail.localTimeNote")}</p>

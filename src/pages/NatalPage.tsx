@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { useTitle } from "../utils/utils";
 import ChartTable from "../components/ChartTable";
+import RecordSelect from "../components/RecordSelect";
 import { usePosition } from "../apiCalls/usePosition";
 import { useNavigate } from "react-router-dom";
 import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
@@ -40,11 +41,6 @@ function NatalPage() {
 
   const data = usePosition(baseDateJson);
 
-  const options = savedDataList.map((item, index) => ({
-    value: index,
-    label: item.name,
-  }));
-
   return (
     <>
       <div
@@ -55,22 +51,14 @@ function NatalPage() {
           margin: "15px 0px",
         }}
       >
-        {t("common.selectRecord")} &nbsp;
-        <select
-          style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer" }}
+        <RecordSelect
+          records={savedDataList}
           value={selectedBaseDate}
-          onChange={(e) => {
-            const index = Number(e.target.value);
+          onChange={(index) => {
             setSelectedBaseDate(index);
             setBaseDateJson(savedDataList[index]);
           }}
-        >
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        />
       </div>
       <div
         style={{

@@ -15,18 +15,15 @@ export interface GeoCoordinates {
 
 export type CelestialObjectType = "body" | "point" | "house";
 
-// A common interface for `BodyObject`, `PointObject` and `HouseObject` from ephemerides
+// A common interface for BodyObject, PointObject and HouseObject from ephemerides
 export interface CelestialObject {
   name: string;
   type?: CelestialObjectType;
   houseNumber?: number;
-  // client-side only: localized display name
-  nameTranslated?: string;
 }
 
 // mirrors `CelestialObjectPosition` from ephemerides/src/types.ts
-// (`bodyId`, `pointName` are omitted)
-export interface CelestialObjectPosition extends CelestialObject {
+export interface ApiCelestialObjectPosition extends CelestialObject {
   type: CelestialObjectType;
   position: number;
   sign: SignIndex;
@@ -37,13 +34,25 @@ export interface CelestialObjectPosition extends CelestialObject {
   retrograde?: boolean;
 }
 
+// client-side only: localized translations
+export interface CelestialObjectPosition extends ApiCelestialObjectPosition {
+  nameTranslated: string;
+}
+
 // mirrors ephemerides/src/types.ts AspectWithPositions<CelestialObjectPosition>
-export interface AspectWithPositions {
+export interface ApiAspectWithPositions {
   name: AspectName;
   orb: number;
   orbSpeed?: number;
+  pos1: ApiCelestialObjectPosition;
+  pos2: ApiCelestialObjectPosition;
+}
+
+// client-side only: localized translations
+export interface AspectWithPositions extends Omit<ApiAspectWithPositions, "pos1" | "pos2"> {
   pos1: CelestialObjectPosition;
   pos2: CelestialObjectPosition;
+  nameTranslated: string;
 }
 
 // A saved entry (from localStorage) with additional data

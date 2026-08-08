@@ -1,7 +1,7 @@
 import { AspectName, SignName } from "../constants";
 import { CelestialObject } from "../types";
 
-export function translateAspect(aspect: AspectName): string {
+export function translateAspectName(aspect: AspectName): string {
   switch (aspect) {
     case "conjunction":
       return "🟡";
@@ -23,7 +23,7 @@ export function translateAspect(aspect: AspectName): string {
   }
 }
 
-export function translatePlanet(planet: CelestialObject): string {
+export function translateCelestialObject(planet: CelestialObject): string {
   const t: Record<string, string> = {
     Sun: "Slunce",
     Moon: "Luna",
@@ -38,7 +38,7 @@ export function translatePlanet(planet: CelestialObject): string {
   return t[planet.name] ?? planet.name;
 }
 
-export function translateSign(sign: SignName) : string {
+export function translateSignName(sign: SignName): string {
   const t: Record<SignName, string> = {
     Aries: "Beran",
     Taurus: "Býk",
@@ -52,6 +52,6 @@ export function translateSign(sign: SignName) : string {
     Capricorn: "Kozoroh",
     Aquarius: "Vodnář",
     Pisces: "Ryby",
-  }
+  };
   return t[sign] ?? sign;
 }

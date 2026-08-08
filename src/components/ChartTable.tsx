@@ -6,7 +6,7 @@ import {
   SignIndex,
 } from "../constants";
 import { CelestialObjectPosition } from "../types";
-import { translateSign } from "../utils/translations";
+import { translateSignName } from "../utils/translations";
 
 interface ChartTableStyle {
   useSignSymbols: boolean;
@@ -42,7 +42,7 @@ export default function ChartTable({
   const formatSign = (sign: SignIndex): string => {
     const signName = signNumberToSignName(sign);
     const symbol = usedStyle.useSignSymbols ? signSymbols[signName] : "";
-    const text = usedStyle.useSignText ? translateSign(signName) : "";
+    const text = usedStyle.useSignText ? translateSignName(signName) : "";
     const space = usedStyle.useSignSymbols && usedStyle.useSignText ? " " : "";
     if (usedStyle.signSymbolFirst) {
       return symbol + space + text;
@@ -51,7 +51,7 @@ export default function ChartTable({
   };
 
   const formatPlanet = (planet: CelestialObjectPosition): string => {
-    const displayName = planet.nameTranslated ?? planet.name;
+    const displayName = planet.nameTranslated;
     return usedStyle.usePlanetSymbols
       ? ((planetSymbols as Record<string, string>)[planet.name] ?? displayName)
       : displayName;

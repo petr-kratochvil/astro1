@@ -1,6 +1,5 @@
 import React from "react";
 import { AspectName, signNumberToSignName, signSymbols } from "../constants";
-import { translateAspect, translatePlanet } from "../utils/translations";
 import { AspectWithPositions } from "../types";
 
 function planetWeight(planet: string): number {
@@ -58,19 +57,19 @@ function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
   let currentResult: TransitGroup | null = null;
   let currentName: string | null = null;
   for (const transitItem of data) {
-    const newName = transitItem.pos1.name;
-    if (newName !== currentName) {
+    const newBoxName = transitItem.pos1.name;
+    if (newBoxName !== currentName) {
       if (currentResult !== null) {
         result.push(currentResult);
       }
       currentResult = {
-        name: translatePlanet({ name: newName }),
+        name: transitItem.pos1.nameTranslated,
         aspects: [],
         speed: "",
         pos: 0,
         sign: "",
       };
-      currentName = newName;
+      currentName = newBoxName;
     }
     const days = transitItem.orb / Math.abs(transitItem.orbSpeed ?? 0);
     let m, t;
@@ -90,8 +89,8 @@ function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
     currentResult = currentResult as TransitGroup;
     currentResult.aspects.push({
       aspect: transitItem.name,
-      name: translateAspect(transitItem.name),
-      planet: translatePlanet(transitItem.pos2),
+      name: transitItem.nameTranslated,
+      planet: transitItem.pos2.nameTranslated,
       orb: transitItem.orb.toFixed(1),
       strengthening: (transitItem.orbSpeed ?? 0) < 0,
       days: daysFormat,

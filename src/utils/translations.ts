@@ -1,4 +1,4 @@
-import { AspectName } from "../constants";
+import { AspectName, SignName } from "../constants";
 import { CelestialObject } from "../types";
 
 export function translateAspect(aspect: AspectName): string {
@@ -35,5 +35,23 @@ export function translatePlanet(planet: CelestialObject): string {
   if (planet.type === "house") {
     return `${planet.houseNumber}. dům`;
   }
-  return t[planet.name] || planet.name;
+  return t[planet.name] ?? planet.name;
+}
+
+export function translateSign(sign: SignName) : string {
+  const t: Record<SignName, string> = {
+    Aries: "Beran",
+    Taurus: "Býk",
+    Gemini: "Blíženci",
+    Cancer: "Rak",
+    Leo: "Lev",
+    Virgo: "Panna",
+    Libra: "Váhy",
+    Scorpio: "Štír",
+    Sagittarius: "Střelec",
+    Capricorn: "Kozoroh",
+    Aquarius: "Vodnář",
+    Pisces: "Ryby",
+  }
+  return t[sign] ?? sign;
 }

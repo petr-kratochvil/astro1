@@ -1,5 +1,5 @@
 import React from "react";
-import { AspectName, signList, signSymbols } from "../constants";
+import { AspectName, signNumberToSignName, signSymbols } from "../constants";
 import { translateAspect, translatePlanet } from "../utils/translations";
 import { AspectWithPositions } from "../types";
 
@@ -105,7 +105,7 @@ function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
     // - but let's better use defensive style
     currentResult.speed = (data[i].pos1.speed ?? 0).toFixed(2);
     currentResult.pos = data[i].pos1.degrees;
-    currentResult.sign = signSymbols[signList[data[i].pos1.sign - 1]];
+    currentResult.sign = signSymbols[signNumberToSignName(data[i].pos1.sign)];
     i++;
   }
   if (currentResult !== null) {

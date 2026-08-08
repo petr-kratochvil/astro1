@@ -1,6 +1,24 @@
 export const ephemeridesApiBase = import.meta.env.VITE_EPHEMERIDES_API_BASE;
 
-export const signSymbols = {
+export const signList = [
+  "Aries",
+  "Taurus",
+  "Gemini",
+  "Cancer",
+  "Leo",
+  "Virgo",
+  "Libra",
+  "Scorpio",
+  "Sagittarius",
+  "Capricorn",
+  "Aquarius",
+  "Pisces",
+] as const;
+
+export type SignName = (typeof signList)[number];
+export type SignIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
+export const signSymbols: Record<SignName, string> = {
   Aries: "♈",
   Taurus: "♉",
   Gemini: "♊",
@@ -13,7 +31,7 @@ export const signSymbols = {
   Capricorn: "♑",
   Aquarius: "♒",
   Pisces: "♓",
-};
+} as const;
 
 export const planetSymbols = {
   Sun: "☉",
@@ -28,39 +46,11 @@ export const planetSymbols = {
   Pluto: "♇",
   TrueNode: "☊",
   Chiron: "ch",
-};
+} as const;
 
-export const signPositions = {
-  Aries: 0,
-  Taurus: 30,
-  Gemini: 60,
-  Cancer: 90,
-  Leo: 120,
-  Virgo: 150,
-  Libra: 180,
-  Scorpio: 210,
-  Sagittarius: 240,
-  Capricorn: 270,
-  Aquarius: 300,
-  Pisces: 330,
-};
-
-export type SignName = keyof typeof signPositions;
-
-export const signList: SignName[] = [
-  "Aries",
-  "Taurus",
-  "Gemini",
-  "Cancer",
-  "Leo",
-  "Virgo",
-  "Libra",
-  "Scorpio",
-  "Sagittarius",
-  "Capricorn",
-  "Aquarius",
-  "Pisces",
-];
+export function signNumberToSignName(sign: SignIndex): SignName {
+  return signList[sign-1]!;
+}
 
 export const aspectSymbols = {
   conjunction: "☌",
@@ -70,9 +60,8 @@ export const aspectSymbols = {
   sextile: "✶",
   semiSextile: "✧",
   quincunx: "⚻",
-};
+} as const;
 
 export type AspectName = keyof typeof aspectSymbols;
 
-const constants = { signList, ephemeridesApiBase, signSymbols };
-export default constants;
+export default { signList, ephemeridesApiBase, signSymbols };

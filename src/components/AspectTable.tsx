@@ -2,11 +2,11 @@ import {
   aspectSymbols,
   AspectName,
   planetSymbols,
-  signList,
+  signNumberToSignName,
   signSymbols,
-  SignName,
+  SignIndex,
 } from "../constants";
-import { translatePlanet } from "../utils/translations";
+import { translatePlanet, translateSign } from "../utils/translations";
 import { AspectWithPositions, CelestialObjectPosition } from "../types";
 
 interface AspectTableStyle {
@@ -44,9 +44,10 @@ export default function AspectTable({
 }) {
   const usedStyle = { ...defaultStyle, ...style };
 
-  const formatSign = (sign: SignName): string => {
-    const symbol = usedStyle.useSignSymbols ? signSymbols[sign] : "";
-    const text = usedStyle.useSignText ? sign : "";
+  const formatSign = (sign: SignIndex): string => {
+    const signName = signNumberToSignName(sign);
+    const symbol = usedStyle.useSignSymbols ? signSymbols[signName] : "";
+    const text = usedStyle.useSignText ? translateSign(signName) : "";
     const space = usedStyle.useSignSymbols && usedStyle.useSignText ? " " : "";
     if (usedStyle.signSymbolFirst) {
       return symbol + space + text;
@@ -95,8 +96,7 @@ export default function AspectTable({
     return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
   };
 
-  const sign = (pos: CelestialObjectPosition) =>
-    formatSign(signList[pos.sign - 1]);
+  const sign = (pos: CelestialObjectPosition) => formatSign(pos.sign);
   const degrees = (pos: CelestialObjectPosition) => pos.degrees + "°";
   const secondField = usedStyle.degreesFirst ? degrees : sign;
   const thirdField = usedStyle.degreesFirst ? sign : degrees;

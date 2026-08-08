@@ -1,6 +1,12 @@
 import BasicTable, { Column } from "./BasicTable";
-import { planetSymbols, signSymbols, SignName } from "../constants";
-import { PlanetPosition } from "../types";
+import {
+  planetSymbols,
+  signSymbols,
+  signNumberToSignName,
+  SignIndex,
+} from "../constants";
+import { CelestialObjectPosition } from "../types";
+import { translateSign } from "../utils/translations";
 
 interface ChartTableStyle {
   useSignSymbols: boolean;
@@ -27,15 +33,16 @@ export default function ChartTable({
   title,
   style = {},
 }: {
-  chart: PlanetPosition[];
+  chart: CelestialObjectPosition[];
   title: string;
   style?: Partial<ChartTableStyle>;
 }) {
   const usedStyle = { ...defaultStyle, ...style };
 
-  const formatSign = (sign: SignName): string => {
-    const symbol = usedStyle.useSignSymbols ? signSymbols[sign] : "";
-    const text = usedStyle.useSignText ? sign : "";
+  const formatSign = (sign: SignIndex): string => {
+    const signName = signNumberToSignName(sign);
+    const symbol = usedStyle.useSignSymbols ? signSymbols[signName] : "";
+    const text = usedStyle.useSignText ? translateSign(signName) : "";
     const space = usedStyle.useSignSymbols && usedStyle.useSignText ? " " : "";
     if (usedStyle.signSymbolFirst) {
       return symbol + space + text;
@@ -43,17 +50,17 @@ export default function ChartTable({
     return text + space + symbol;
   };
 
-  const formatPlanet = (planet: PlanetPosition): string => {
+  const formatPlanet = (planet: CelestialObjectPosition): string => {
     const displayName = planet.nameTranslated ?? planet.name;
     return usedStyle.usePlanetSymbols
       ? ((planetSymbols as Record<string, string>)[planet.name] ?? displayName)
       : displayName;
   };
 
-  const sign = (a: PlanetPosition) => formatSign(a.sign);
-  const degrees = (a: PlanetPosition) => a.degrees + "°";
+  const sign = (a: CelestialObjectPosition) => formatSign(a.sign);
+  const degrees = (a: CelestialObjectPosition) => a.degrees + "°";
 
-  const columns: Column<PlanetPosition>[] = [
+  const columns: Column<CelestialObjectPosition>[] = [
     (row) => formatPlanet(row),
     usedStyle.degreesFirst ? degrees : sign,
     usedStyle.degreesFirst ? sign : degrees,

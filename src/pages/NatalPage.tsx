@@ -3,7 +3,6 @@ import React from "react";
 import { useTitle } from "../utils/utils";
 import ChartTable from "../components/ChartTable";
 import { usePosition } from "../apiCalls/usePosition";
-import { translatePlanet } from "../utils/translations";
 import { useNavigate } from "react-router-dom";
 import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 import { SavedDate } from "../types";
@@ -37,10 +36,7 @@ function NatalPage() {
     savedDataList.length > 0 ? savedDataList[0] : undefined
   );
 
-  const data = usePosition(baseDateJson).map((item) => ({
-    ...item,
-    nameTranslated: translatePlanet(item),
-  }));
+  const data = usePosition(baseDateJson);
 
   const options = savedDataList.map((item, index) => ({
     value: index,

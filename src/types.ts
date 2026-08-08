@@ -1,4 +1,4 @@
-import { AspectName, SignName } from "./constants";
+import { AspectName, SignIndex } from "./constants";
 
 // mirrors ephemerides/src/types.ts
 export interface JsonDate {
@@ -29,17 +29,12 @@ export interface CelestialObject {
 export interface CelestialObjectPosition extends CelestialObject {
   type: CelestialObjectType;
   position: number;
-  sign: number;
+  sign: SignIndex;
   degrees: number;
   minutes: number;
   seconds: number;
   speed?: number;
   retrograde?: boolean;
-}
-
-// replace the backend's numeric `sign` with the sign name
-export interface PlanetPosition extends Omit<CelestialObjectPosition, "sign"> {
-  sign: SignName;
 }
 
 // mirrors ephemerides/src/types.ts AspectWithPositions<CelestialObjectPosition>

@@ -1,14 +1,10 @@
 import { useTitle } from "../utils/utils";
 import ChartTable from "../components/ChartTable";
 import { useCurrentPosition } from "../apiCalls/usePosition";
-import { translatePlanet } from "../utils/translations";
 
 function CurrentPlanetsPage() {
   useTitle("Planets");
-  const data = useCurrentPosition().map((item) => ({
-    ...item,
-    nameTranslated: translatePlanet(item),
-  }));
+  const data = useCurrentPosition();
 
   const currentChartStyle = {
     degreesFirst: true,

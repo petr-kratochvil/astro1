@@ -1,5 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import {
   deleteBaseDate,
   getSavedData,
@@ -43,15 +45,16 @@ export default function SavedDataList() {
         {t("savedData.title")}
       </h1>
       <div style={{ margin: "0px auto", maxWidth: "500px" }}>
-        <button
-          style={{ padding: "10px", margin: "20px" }}
+        <Button
+          variant="contained"
+          sx={{ m: "20px" }}
           onClick={() => {
             setRefererOfEditPage("/saved-data");
             navigate(`${savedDataList.length}`);
           }}
         >
           {t("savedData.add")}
-        </button>
+        </Button>
         {savedDataList.map(
           (item, index) =>
             item && (
@@ -63,24 +66,33 @@ export default function SavedDataList() {
                     {item.minutes}
                   </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "row" }}>
-                  <button
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ alignItems: "center" }}
+                >
+                  <Button
+                    variant="outlined"
+                    size="small"
                     onClick={() => {
                       setRefererOfEditPage("/saved-data");
                       navigate(`${index}`);
                     }}
                   >
                     {t("savedData.edit")}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    color="error"
                     onClick={() => {
                       deleteBaseDate(index);
                       forceUpdate();
                     }}
                   >
                     {t("savedData.delete")}
-                  </button>
-                </div>
+                  </Button>
+                </Stack>
               </div>
             )
         )}

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
+import HeaderButton from "../components/HeaderButton";
 import LanguageSelect from "../components/LanguageSelect";
 
 import "../App.css";
@@ -26,9 +27,7 @@ export default function RootPage() {
             <div>Astro Transits</div>
             <div className="App-header-actions">
               <LanguageSelect />
-              <button
-                type="button"
-                className="App-header-button"
+              <HeaderButton
                 onClick={handleClick}
                 aria-haspopup="true"
                 aria-expanded={open}
@@ -52,7 +51,7 @@ export default function RootPage() {
                     strokeLinecap="round"
                   />
                 </svg>
-              </button>
+              </HeaderButton>
             </div>
           </header>
         </div>

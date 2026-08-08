@@ -24,12 +24,6 @@
   height: 50px;
 }
 
-button {
-  cursor: pointer;
-  margin: 0px 5px;
-  padding: 5px;
-}
-
 .App-header-actions {
   position: absolute;
   right: 12px;
@@ -55,6 +49,7 @@ button {
   line-height: 1;
   font-size: 20px;
   transition: background-color 0.15s ease-in-out;
+  cursor: pointer;
 }
 
 .App-header-button:hover {
@@ -125,7 +120,7 @@ button {
 }
 
 .PlanetBox {
-  border: 1px solid slateblue;
+  border: 1px solid rgba(106, 90, 205, 0.75);
   border-radius: 8px;
   padding: 10px;
   width: 220px;
@@ -134,7 +129,6 @@ button {
 
 @media only screen and (max-width: 500px) {
   .PlanetBox {
-    border: 1px solid slateblue;
     margin: 5px;
     width: 160px;
   }

@@ -1,5 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import {
   getBaseDateJson,
   getNextNameNumber,
@@ -304,23 +306,23 @@ export default function SavedDataDetail() {
             </label>
           </>
         )}
-        <button
-          type="submit"
-          style={{
-            marginLeft: "90px",
-            marginBottom: "20px",
-            marginTop: "10px",
-            width: "120px",
-          }}
+        <Stack
+          direction="row"
+          spacing={1.5}
+          sx={{ justifyContent: "center", px: "15px", pt: "10px", pb: "20px" }}
         >
-          {t("savedDataDetail.save")}
-        </button>
-        <button
-          onClick={() => navigate(getRefererOfEditPage())}
-          style={{ marginLeft: "90px", marginBottom: "20px", width: "120px" }}
-        >
-          {t("savedDataDetail.cancel")}
-        </button>
+          {/* MUI's ButtonBase defaults to type="button", so Cancel no longer
+              submits the form (and silently saves) on its way out. */}
+          <Button
+            variant="outlined"
+            onClick={() => navigate(getRefererOfEditPage())}
+          >
+            {t("savedDataDetail.cancel")}
+          </Button>
+          <Button type="submit" variant="contained">
+            {t("savedDataDetail.save")}
+          </Button>
+        </Stack>
       </form>
       <div style={{ margin: "0 auto", width: "300px" }}>
         <p>{t("savedDataDetail.timeZoneNote")}</p>

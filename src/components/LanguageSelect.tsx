@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
+import HeaderButton from "./HeaderButton";
 import {
   DEFAULT_LANGUAGE,
   getLanguageOption,
@@ -36,16 +37,14 @@ export default function LanguageSelect() {
 
   return (
     <>
-      <button
-        type="button"
-        className="App-header-button"
+      <HeaderButton
         onClick={handleClick}
         aria-haspopup="true"
         aria-expanded={open}
         aria-label={t("language.label", { language: currentOption.label })}
       >
         {currentOption.flag}
-      </button>
+      </HeaderButton>
       <Menu
         anchorEl={anchorEl}
         open={open}

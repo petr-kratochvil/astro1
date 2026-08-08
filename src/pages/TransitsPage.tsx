@@ -1,5 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import { useTitle } from "../utils/utils";
 import TransitsBoxes from "../components/TrasitsBoxes";
 import { getTransits } from "../apiCalls/getTransits";
@@ -120,18 +122,6 @@ export default function TransitsPage({
   return (
     <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
       <div>
-        <style>
-          {`
-        .transits-page-buttons-1 button {
-          padding: 8px;
-          margin: 8px;
-        }
-        .transits-page-buttons-2 button {
-          padding: 6px;
-          margin-bottom: 6px
-        }
-      `}
-        </style>
         <div
           style={{
             display: "flex",
@@ -158,10 +148,13 @@ export default function TransitsPage({
             ))}
           </select>
         </div>
-        <div style={buttonsMenuStyle} className="transits-page-buttons-1">
-          <button onClick={() => setTransitDate(addDays(transitDate, -1))}>
-            &nbsp;&nbsp;&lt;&lt;&nbsp;&nbsp;
-          </button>
+        <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
+          <Button
+            variant="outlined"
+            onClick={() => setTransitDate(addDays(transitDate, -1))}
+          >
+            ◁◁
+          </Button>
           <div
             style={{
               fontSize: "medium",
@@ -171,26 +164,31 @@ export default function TransitsPage({
           >
             {formatDateWithWeekday(transitDate, getLocale(i18n.language))}
           </div>
-          <button onClick={() => setTransitDate(addDays(transitDate, +1))}>
-            &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;
-          </button>
+          <Button
+            variant="outlined"
+            onClick={() => setTransitDate(addDays(transitDate, +1))}
+          >
+            ▷▷
+          </Button>
         </div>
-        <div style={buttonsMenuStyle} className="transits-page-buttons-2">
-          <button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
-            &nbsp;&nbsp;&lt;&lt;&nbsp;{t("transits.year")}
-          </button>
-          <button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
-            &nbsp;&nbsp;&lt;&lt;&nbsp;{t("transits.month")}
-          </button>
-          <button onClick={() => setTransitDate(new Date())}>
-            &nbsp;&nbsp;{t("transits.today")}&nbsp;&nbsp;
-          </button>
-          <button onClick={() => setTransitDate(addMonths(transitDate, +1))}>
-            {t("transits.month")}&nbsp;&gt;&gt;&nbsp;&nbsp;
-          </button>
-          <button onClick={() => setTransitDate(addMonths(transitDate, +12))}>
-            {t("transits.year")}&nbsp;&gt;&gt;&nbsp;&nbsp;
-          </button>
+        <div style={buttonsMenuStyle}>
+          <ButtonGroup variant="outlined" size="small">
+            <Button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
+              ◁&nbsp;{t("transits.year")}
+            </Button>
+            <Button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
+              ◁&nbsp;{t("transits.month")}
+            </Button>
+            <Button onClick={() => setTransitDate(new Date())}>
+              &nbsp;&nbsp;{t("transits.today")}&nbsp;&nbsp;
+            </Button>
+            <Button onClick={() => setTransitDate(addMonths(transitDate, +1))}>
+              {t("transits.month")}&nbsp;▷
+            </Button>
+            <Button onClick={() => setTransitDate(addMonths(transitDate, +12))}>
+              {t("transits.year")}&nbsp;▷
+            </Button>
+          </ButtonGroup>
         </div>
         {showAsTable ? (
           <div

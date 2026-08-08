@@ -20,6 +20,8 @@ export interface CelestialObject {
   name: string;
   type?: CelestialObjectType;
   houseNumber?: number;
+  // client-side only: localized display name
+  nameTranslated?: string;
 }
 
 // mirrors `CelestialObjectPosition` from ephemerides/src/types.ts

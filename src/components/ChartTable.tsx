@@ -43,20 +43,18 @@ export default function ChartTable({
     return text + space + symbol;
   };
 
-  // NB: `planet` here is already translated to Czech by the caller
-  // (translatePlanet), so `usePlanetSymbols` never actually matches — a
-  // pre-existing dormant style option, not something introduced here.
-  const formatPlanet = (planet: string): string => {
+  const formatPlanet = (planet: PlanetPosition): string => {
+    const displayName = planet.nameTranslated ?? planet.name;
     return usedStyle.usePlanetSymbols
-      ? (planetSymbols as Record<string, string>)[planet]
-      : planet;
+      ? ((planetSymbols as Record<string, string>)[planet.name] ?? displayName)
+      : displayName;
   };
 
   const sign = (a: PlanetPosition) => formatSign(a.sign);
   const degrees = (a: PlanetPosition) => a.degrees + "°";
 
   const columns: Column<PlanetPosition>[] = [
-    (row) => formatPlanet(row.name),
+    (row) => formatPlanet(row),
     usedStyle.degreesFirst ? degrees : sign,
     usedStyle.degreesFirst ? sign : degrees,
   ];

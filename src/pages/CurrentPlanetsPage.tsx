@@ -7,7 +7,7 @@ function CurrentPlanetsPage() {
   useTitle("Planets");
   const data = useCurrentPosition().map((item) => ({
     ...item,
-    name: translatePlanet(item),
+    nameTranslated: translatePlanet(item),
   }));
 
   const currentChartStyle = {

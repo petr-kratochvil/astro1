@@ -39,7 +39,7 @@ function NatalPage() {
 
   const data = usePosition(baseDateJson).map((item) => ({
     ...item,
-    name: translatePlanet(item),
+    nameTranslated: translatePlanet(item),
   }));
 
   const options = savedDataList.map((item, index) => ({

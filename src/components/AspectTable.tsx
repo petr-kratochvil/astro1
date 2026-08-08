@@ -56,7 +56,8 @@ export default function AspectTable({
 
   const formatPlanet = (pos: CelestialObjectPosition): string => {
     return usedStyle.usePlanetSymbols
-      ? (planetSymbols as Record<string, string>)[pos.name]
+      ? ((planetSymbols as Record<string, string>)[pos.name] ??
+          translatePlanet(pos))
       : translatePlanet(pos);
   };
 

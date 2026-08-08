@@ -8,7 +8,8 @@ COPY package*.json ./
 
 USER node
 
-RUN npm ci
+RUN --mount=type=cache,id=npm-cache,target=/home/node/.npm,uid=1000,gid=1000 \
+npm ci --cache /home/node/.npm
 
 # Vite bakes VITE_* vars into the client bundle at build time, so it must be available here as a
 # build arg, not just an env var at `docker run` time. 

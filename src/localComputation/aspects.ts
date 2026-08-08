@@ -56,16 +56,16 @@ export const getAspects = (
   chart2: ChartPosition[]
 ): AspectResult[] => {
   const aspects: AspectResult[] = [];
-  for (let i = 0; i < chart1.length; i++) {
-    for (let j = 0; j < chart2.length; j++) {
-      const diff = Math.abs(degPosition(chart1[i]) - degPosition(chart2[j]));
+  for (const elem1 of chart1) {
+    for (const elem2 of chart2) {
+      const diff = Math.abs(degPosition(elem1) - degPosition(elem2));
       const conOrb = Math.abs(diff);
       if (conOrb < orb.conjunction) {
         aspects.push({
           name: "conjunction",
           orb: conOrb,
-          pos1: chart1[i],
-          pos2: chart2[j],
+          pos1: elem1,
+          pos2: elem2,
         });
       }
       const opOrb = Math.abs(diff - 180);
@@ -73,8 +73,8 @@ export const getAspects = (
         aspects.push({
           name: "opposition",
           orb: opOrb,
-          pos1: chart1[i],
-          pos2: chart2[j],
+          pos1: elem1,
+          pos2: elem2,
         });
       }
       const sqOrb = Math.min(Math.abs(diff - 90), Math.abs(diff - 270));
@@ -82,8 +82,8 @@ export const getAspects = (
         aspects.push({
           name: "square",
           orb: sqOrb,
-          pos1: chart1[i],
-          pos2: chart2[j],
+          pos1: elem1,
+          pos2: elem2,
         });
       }
       const trOrb = Math.min(Math.abs(diff - 120), Math.abs(diff - 240));
@@ -91,8 +91,8 @@ export const getAspects = (
         aspects.push({
           name: "trine",
           orb: trOrb,
-          pos1: chart1[i],
-          pos2: chart2[j],
+          pos1: elem1,
+          pos2: elem2,
         });
       }
       const sexOrb = Math.min(Math.abs(diff - 60), Math.abs(diff - 300));
@@ -100,8 +100,8 @@ export const getAspects = (
         aspects.push({
           name: "sextile",
           orb: sexOrb,
-          pos1: chart1[i],
-          pos2: chart2[j],
+          pos1: elem1,
+          pos2: elem2,
         });
       }
     }

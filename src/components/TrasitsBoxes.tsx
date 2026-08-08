@@ -56,10 +56,9 @@ function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
   }
   const result: TransitGroup[] = [];
   let currentResult: TransitGroup | null = null;
-  let i = 0;
   let currentName: string | null = null;
-  while (i < data.length) {
-    const newName = data[i]?.pos1.name;
+  for (const transitItem of data) {
+    const newName = transitItem.pos1.name;
     if (newName !== currentName) {
       if (currentResult !== null) {
         result.push(currentResult);
@@ -73,7 +72,7 @@ function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
       };
       currentName = newName;
     }
-    const days = data[i].orb / Math.abs(data[i].orbSpeed ?? 0);
+    const days = transitItem.orb / Math.abs(transitItem.orbSpeed ?? 0);
     let m, t;
     if (days > 30) {
       m = days / 30;
@@ -90,23 +89,23 @@ function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
 
     currentResult = currentResult as TransitGroup;
     currentResult.aspects.push({
-      aspect: data[i].name,
-      name: translateAspect(data[i].name),
-      planet: translatePlanet(data[i].pos2),
-      orb: data[i].orb.toFixed(1),
-      strengthening: (data[i].orbSpeed ?? 0) < 0,
+      aspect: transitItem.name,
+      name: translateAspect(transitItem.name),
+      planet: translatePlanet(transitItem.pos2),
+      orb: transitItem.orb.toFixed(1),
+      strengthening: (transitItem.orbSpeed ?? 0) < 0,
       days: daysFormat,
       strong:
-        planetWeight(data[i].pos1.name) >= planetWeight(data[i].pos2.name) &&
-        ["conjunction", "opposition", "square", "trine"].includes(data[i].name),
+        planetWeight(transitItem.pos1.name) >= planetWeight(transitItem.pos2.name) &&
+        ["conjunction", "opposition", "square", "trine"].includes(transitItem.name),
     });
 
     // pos1 in a transits response always comes with `speed`
     // - but let's better use defensive style
-    currentResult.speed = (data[i].pos1.speed ?? 0).toFixed(2);
-    currentResult.pos = data[i].pos1.degrees;
-    currentResult.sign = signSymbols[signNumberToSignName(data[i].pos1.sign)];
-    i++;
+    currentResult.speed = (transitItem.pos1.speed ?? 0).toFixed(2);
+    currentResult.pos = transitItem.pos1.degrees;
+    currentResult.sign = signSymbols[signNumberToSignName(transitItem.pos1.sign)];
+
   }
   if (currentResult !== null) {
     result.push(currentResult);

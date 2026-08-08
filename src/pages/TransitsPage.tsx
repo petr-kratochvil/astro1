@@ -35,10 +35,10 @@ export default function TransitsPage({
 
   const [data, setData] = React.useState<AspectWithPositions[]>([]);
   const [baseDate, setBaseDate] = React.useState<SavedDate | undefined>(
-    savedDataList.length > 0 ? savedDataList[0] : undefined
+    savedDataList[0]
   );
   const [, setPerson] = React.useState<string | undefined>(
-    savedDataList.length > 0 ? savedDataList[0].name : undefined
+    savedDataList[0]?.name
   );
   const [transitDate, setTransitDate] = React.useState(new Date());
 
@@ -149,7 +149,7 @@ export default function TransitsPage({
               const index = Number(e.target.value);
               setSelectedBaseDateIndex(index);
               setBaseDate(savedDataList[index]);
-              setPerson(savedDataList[index].name);
+              setPerson(savedDataList[index]?.name);
             }}
           >
             {options.map((option) => (

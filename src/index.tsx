@@ -7,7 +7,7 @@ import RootPage from "./pages/RootPage";
 import TransitsPage from "./pages/TransitsPage";
 import PlanetsPage from "./pages/CurrentPlanetsPage";
 import PageNotFound from "./pages/PageNotFound";
-import SetBaseDate from "./components/SetBaseDate";
+import SavedDataDetail from "./components/SavedDataDetail";
 import SavedDataList from "./components/SavedDataList";
 import NatalPage from "./pages/NatalPage";
 
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/saved-data/:index",
-        element: <SetBaseDate />,
+        element: <SavedDataDetail />,
       },
       {
         path: "/",

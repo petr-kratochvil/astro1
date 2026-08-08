@@ -10,13 +10,29 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fromUTC } from "../utils/timeZones";
 import { SavedDate } from "../types";
 
-export default function SetBaseDate() {
+interface City {
+  name: string,
+  lat: number,
+  lon: number,
+  id: number,
+};
+
+type FormDataValues = {
+  name: string;
+  year: string;
+  month: string;
+  day: string;
+  hour: string;
+  minutes: string;
+};
+
+export default function SavedDataDetail() {
   const navigate = useNavigate();
   const { index } = useParams();
   const numericIndex = Number(index);
   const baseDateJson = getBaseDateJson(numericIndex);
 
-  const cities = [
+  const cities: City[] = [
     { name: "Praha", lat: 50.075, lon: 14.437, id: 554782 },
     // { name: "Havlíčkův Brod", lat: 49.604, lon: 15.579, id: 568414 },
     { name: "Jihlava", lat: 49.415, lon: 15.595, id: 586846 },
@@ -33,8 +49,10 @@ export default function SetBaseDate() {
     { name: "Pardubice", lat: 50.034, lon: 15.781, id: 555134 },
   ].sort((a, b) => a.name.localeCompare(b.name));
 
+  const defaultCity: City = { name: "Praha", lat: 50.075, lon: 14.437, id: 554782 };
+
   const options = cities.map((city) => ({ value: city.id, label: city.name }));
-  const defaultCity = cities.find((city) => city.name === "Praha") || cities[0];
+  
   const [selectedCityId, setSelectedCityId] = React.useState(
     baseDateJson?.cityId ?? defaultCity.id
   );
@@ -48,11 +66,7 @@ export default function SetBaseDate() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    // All fields in this form are text/number inputs, never files.
-    const data = Object.fromEntries(formData.entries()) as Record<
-      string,
-      string
-    >;
+    const data = Object.fromEntries(formData.entries()) as FormDataValues
     const year = parseInt(data.year);
     const baseDate = new Date(
       year,

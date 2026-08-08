@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { useTitle } from "../utils/utils";
 import ChartTable from "../components/ChartTable";
@@ -8,7 +9,8 @@ import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 import { SavedDate } from "../types";
 
 function NatalPage() {
-  useTitle("Planets");
+  const { t } = useTranslation();
+  useTitle(t("title.planets"));
 
   const currentChartStyle = {
     degreesFirst: true,
@@ -53,7 +55,7 @@ function NatalPage() {
           margin: "15px 0px",
         }}
       >
-        Vyberte záznam: &nbsp;
+        {t("common.selectRecord")} &nbsp;
         <select
           style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer" }}
           value={selectedBaseDate}
@@ -80,7 +82,7 @@ function NatalPage() {
       >
         <ChartTable
           chart={data}
-          title="Nativní planety"
+          title={t("natalPlanets.title")}
           style={currentChartStyle}
         />
       </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   deleteBaseDate,
   getSavedData,
@@ -9,6 +10,7 @@ import { useForceUpdate } from "../utils/useForceUpdate";
 import { fromUTC } from "../utils/timeZones";
 
 export default function SavedDataList() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const savedDataList = getSavedData().map((item) => {
     const baseDate = fromUTC(item);
@@ -38,7 +40,7 @@ export default function SavedDataList() {
   return (
     <>
       <h1 style={{ color: "slateblue", textAlign: "center" }}>
-        Uložené záznamy
+        {t("savedData.title")}
       </h1>
       <div style={{ margin: "0px auto", maxWidth: "500px" }}>
         <button
@@ -48,7 +50,7 @@ export default function SavedDataList() {
             navigate(`${savedDataList.length}`);
           }}
         >
-          + Přidat záznam
+          {t("savedData.add")}
         </button>
         {savedDataList.map(
           (item, index) =>
@@ -68,7 +70,7 @@ export default function SavedDataList() {
                       navigate(`${index}`);
                     }}
                   >
-                    Upravit
+                    {t("savedData.edit")}
                   </button>
                   <button
                     onClick={() => {
@@ -76,7 +78,7 @@ export default function SavedDataList() {
                       forceUpdate();
                     }}
                   >
-                    Smazat
+                    {t("savedData.delete")}
                   </button>
                 </div>
               </div>

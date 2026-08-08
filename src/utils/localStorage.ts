@@ -1,4 +1,5 @@
 import { SavedDate } from "../types";
+import { isLanguage, Language } from "./language";
 
 const USER_OBJECT_KEY = "ASTRO_USER_OBJECT";
 const defaultUserObject: UserObject = {};
@@ -7,6 +8,7 @@ interface UserObject {
   savedData?: (SavedDate | null | undefined)[];
   lastNameNumber?: number;
   refererOfEditPage?: string;
+  language?: Language;
 }
 
 function isUserObject(x: unknown): x is UserObject {
@@ -52,6 +54,16 @@ export function getRefererOfEditPage(): string {
 export function setRefererOfEditPage(page: string): void {
   const userObject = getUserObject();
   setUserObject({ ...userObject, refererOfEditPage: page });
+}
+
+export function getLanguage(): Language | undefined {
+  const language = getUserObject().language;
+  return isLanguage(language) ? language : undefined;
+}
+
+export function setLanguage(language: Language): void {
+  const userObject = getUserObject();
+  setUserObject({ ...userObject, language });
 }
 
 export function setBaseDateJson(index: number, baseDateJson: SavedDate): void {

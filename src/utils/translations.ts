@@ -1,6 +1,9 @@
+import { TFunction } from "i18next";
 import { AspectName, SignName } from "../constants";
 import { CelestialObject } from "../types";
 
+// The aspect glyphs are language-independent, so this one needs no `t` and is
+// deliberately not part of the i18n resources.
 export function translateAspectName(aspect: AspectName): string {
   switch (aspect) {
     case "conjunction":
@@ -23,35 +26,19 @@ export function translateAspectName(aspect: AspectName): string {
   }
 }
 
-export function translateCelestialObject(planet: CelestialObject): string {
-  const t: Record<string, string> = {
-    Sun: "Slunce",
-    Moon: "Luna",
-    Mercury: "Merkur",
-    Venus: "Venuše",
-    Uranus: "Uran",
-    Neptune: "Neptun",
-  };
+// `t` is passed in rather than pulled from a hook, so these stay pure functions
+// that can be unit-tested and called from helpers. Call them during render (the
+// component owning `t` re-renders on language change) - never store the result.
+export function translateCelestialObject(
+  planet: CelestialObject,
+  t: TFunction
+): string {
   if (planet.type === "house") {
-    return `${planet.houseNumber}. dům`;
+    return t("house", { number: planet.houseNumber });
   }
-  return t[planet.name] ?? planet.name;
+  return t(`celestialObjects.${planet.name}`, { defaultValue: planet.name });
 }
 
-export function translateSignName(sign: SignName): string {
-  const t: Record<SignName, string> = {
-    Aries: "Beran",
-    Taurus: "Býk",
-    Gemini: "Blíženci",
-    Cancer: "Rak",
-    Leo: "Lev",
-    Virgo: "Panna",
-    Libra: "Váhy",
-    Scorpio: "Štír",
-    Sagittarius: "Střelec",
-    Capricorn: "Kozoroh",
-    Aquarius: "Vodnář",
-    Pisces: "Ryby",
-  };
-  return t[sign] ?? sign;
+export function translateSignName(sign: SignName, t: TFunction): string {
+  return t(`signs.${sign}`, { defaultValue: sign });
 }

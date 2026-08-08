@@ -23,7 +23,7 @@ export interface CelestialObject {
 }
 
 // mirrors `CelestialObjectPosition` from ephemerides/src/types.ts
-export interface ApiCelestialObjectPosition extends CelestialObject {
+export interface CelestialObjectPosition extends CelestialObject {
   type: CelestialObjectType;
   position: number;
   sign: SignIndex;
@@ -34,28 +34,15 @@ export interface ApiCelestialObjectPosition extends CelestialObject {
   retrograde?: boolean;
 }
 
-// client-side only: localized translations
-export interface CelestialObjectPosition extends ApiCelestialObjectPosition {
-  nameTranslated: string;
-}
-
 // mirrors ephemerides/src/types.ts AspectWithPositions<CelestialObjectPosition>
-export interface ApiAspectWithPositions {
+export interface AspectWithPositions {
   name: AspectName;
   orb: number;
   orbSpeed?: number;
-  pos1: ApiCelestialObjectPosition;
-  pos2: ApiCelestialObjectPosition;
-}
-
-// client-side only: localized translations
-export interface AspectWithPositions extends Omit<ApiAspectWithPositions, "pos1" | "pos2"> {
   pos1: CelestialObjectPosition;
   pos2: CelestialObjectPosition;
-  nameTranslated: string;
 }
 
-// A saved entry (from localStorage) with additional data
 export interface SavedDate extends JsonDate {
   name: string;
   customCoordinates: boolean;

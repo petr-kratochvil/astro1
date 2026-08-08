@@ -2,11 +2,9 @@ import axios from "axios";
 import React from "react";
 import constants from "../constants";
 import {
-  ApiCelestialObjectPosition,
   CelestialObjectPosition,
   JsonDate,
 } from "../types";
-import { translateCelestialObject } from "../utils/translations";
 
 const getPlanets = (
   jsonDate: JsonDate,
@@ -14,17 +12,12 @@ const getPlanets = (
 ) => {
   // Call Ephemerides API for current planets:
   axios
-    .post<ApiCelestialObjectPosition[]>(
+    .post<CelestialObjectPosition[]>(
       `${constants.ephemeridesApiBase}/position`,
       jsonDate
     )
     .then((response) => {
-      setData(
-        response.data.map((planet) => ({
-          ...planet,
-          nameTranslated: translateCelestialObject(planet),
-        }))
-      );
+      setData(response.data);
     });
 };
 

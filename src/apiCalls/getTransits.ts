@@ -1,32 +1,10 @@
 import axios from "axios";
 import constants from "../constants";
 import {
-  ApiAspectWithPositions,
-  ApiCelestialObjectPosition,
   AspectWithPositions,
-  CelestialObjectPosition,
   GeoCoordinates,
   JsonDate,
 } from "../types";
-import { translateAspectName, translateCelestialObject } from "../utils/translations";
-
-const translatePosition = (
-  pos: ApiCelestialObjectPosition
-): CelestialObjectPosition => ({
-  ...pos,
-  nameTranslated: translateCelestialObject(pos),
-});
-
-const translateAspect = (
-  aspect: ApiAspectWithPositions
-): AspectWithPositions => {
-  return {
-    ...aspect,
-    pos1: translatePosition(aspect.pos1),
-    pos2: translatePosition(aspect.pos2),
-    nameTranslated: translateAspectName(aspect.name),
-  };
-};
 
 export function getTransits(
   baseDateJson: JsonDate,
@@ -40,7 +18,7 @@ export function getTransits(
     hour: transitDate.getUTCHours() + transitDate.getUTCMinutes() / 60,
   };
   return axios
-    .post<ApiAspectWithPositions[]>(
+    .post<AspectWithPositions[]>(
       `${constants.ephemeridesApiBase}/transits`,
       {
         baseDate: baseDateJson,
@@ -49,14 +27,12 @@ export function getTransits(
       }
     )
     .then((response) =>
-      response.data
-        .filter(
-          (d) =>
-            !["Moon", "Mercury"].includes(d.pos1.name) &&
-            !["vertex"].includes(d.pos2.name) &&
-            !["quincunx"].includes(d.name)
-          // && planetWeight(d.pos1.name) >= planetWeight(d.pos2.name)
-        )
-        .map(translateAspect)
+      response.data.filter(
+        (d) =>
+          !["Moon", "Mercury"].includes(d.pos1.name) &&
+          !["vertex"].includes(d.pos2.name) &&
+          !["quincunx"].includes(d.name)
+        // && planetWeight(d.pos1.name) >= planetWeight(d.pos2.name)
+      )
     );
 }

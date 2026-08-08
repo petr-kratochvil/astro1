@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useTitle } from "../utils/utils";
 import TransitsBoxes from "../components/TrasitsBoxes";
 import { getTransits } from "../apiCalls/getTransits";
@@ -7,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
 import AspectTable from "../components/AspectTable";
 import { AspectWithPositions, SavedDate } from "../types";
+import { formatDateWithWeekday } from "../utils/formatting";
+import { getLocale } from "../utils/language";
 
 export default function TransitsPage({
   showAsTable = false,
@@ -14,6 +17,7 @@ export default function TransitsPage({
   showAsTable?: boolean;
 }) {
   useTitle();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const savedDataList = getSavedData();
@@ -113,11 +117,6 @@ export default function TransitsPage({
     }
   }
 
-  function formatDayOfWeek(date: Date): string {
-    const day = date.toLocaleDateString(undefined, { weekday: "short" });
-    return day.charAt(0).toUpperCase() + day.slice(1);
-  }
-
   return (
     <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
       <div>
@@ -141,7 +140,7 @@ export default function TransitsPage({
             margin: "15px 0px 10px 0px",
           }}
         >
-          Vyberte záznam: &nbsp;
+          {t("common.selectRecord")} &nbsp;
           <select
             style={{ minWidth: "150px", minHeight: "30px", cursor: "pointer" }}
             value={selectedBaseDateIndex}
@@ -170,10 +169,7 @@ export default function TransitsPage({
               textAlign: "center",
             }}
           >
-            {formatDayOfWeek(transitDate)}
-            {", "}
-            {transitDate.getUTCDate()}. {transitDate.getUTCMonth() + 1}.{" "}
-            {transitDate.getUTCFullYear()}
+            {formatDateWithWeekday(transitDate, getLocale(i18n.language))}
           </div>
           <button onClick={() => setTransitDate(addDays(transitDate, +1))}>
             &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;
@@ -181,19 +177,19 @@ export default function TransitsPage({
         </div>
         <div style={buttonsMenuStyle} className="transits-page-buttons-2">
           <button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
-            &nbsp;&nbsp;&lt;&lt;&nbsp;rok
+            &nbsp;&nbsp;&lt;&lt;&nbsp;{t("transits.year")}
           </button>
           <button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
-            &nbsp;&nbsp;&lt;&lt;&nbsp;měs.
+            &nbsp;&nbsp;&lt;&lt;&nbsp;{t("transits.month")}
           </button>
           <button onClick={() => setTransitDate(new Date())}>
-            &nbsp;&nbsp;dnes&nbsp;&nbsp;
+            &nbsp;&nbsp;{t("transits.today")}&nbsp;&nbsp;
           </button>
           <button onClick={() => setTransitDate(addMonths(transitDate, +1))}>
-            měs.&nbsp;&gt;&gt;&nbsp;&nbsp;
+            {t("transits.month")}&nbsp;&gt;&gt;&nbsp;&nbsp;
           </button>
           <button onClick={() => setTransitDate(addMonths(transitDate, +12))}>
-            rok&nbsp;&gt;&gt;&nbsp;&nbsp;
+            {t("transits.year")}&nbsp;&gt;&gt;&nbsp;&nbsp;
           </button>
         </div>
         {showAsTable ? (
@@ -209,8 +205,8 @@ export default function TransitsPage({
             <AspectTable
               aspectChart={data}
               title=""
-              name1="Tranzitující"
-              name2="Nativní"
+              name1={t("transits.transiting")}
+              name2={t("transits.natal")}
               style={{ useSignSymbols: true, useSignText: false }}
             />
           </div>

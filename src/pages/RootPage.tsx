@@ -1,11 +1,15 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+
+import LanguageSelect from "../components/LanguageSelect";
 
 import "../App.css";
 
 export default function RootPage() {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -20,24 +24,36 @@ export default function RootPage() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <header className="App App-header">
             <div>Astro Transits</div>
-            <button
-              type="button"
-              onClick={handleClick}
-              style={{
-                position: "absolute",
-                right: "10px",
-                cursor: "pointer",
-                background: "none",
-                border: "none",
-                margin: 0,
-                padding: 0,
-                paddingRight: "10px",
-                color: "inherit",
-                font: "inherit",
-              }}
-            >
-              <span className="main-menu-text">Menu&nbsp;&nbsp;</span>☰
-            </button>
+            <div className="App-header-actions">
+              <LanguageSelect />
+              <button
+                type="button"
+                className="App-header-button"
+                onClick={handleClick}
+                aria-haspopup="true"
+                aria-expanded={open}
+                aria-label="Menu"
+              >
+                <span className="main-menu-text">Menu</span>
+                {/* Inline SVG rather than the ☰ glyph: its ink is centred in
+                    its own box on every platform, whereas U+2630 sits high or
+                    low depending on which font ends up supplying it. */}
+                <svg
+                  className="main-menu-icon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M4 7h16M4 12h16M4 17h16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
           </header>
         </div>
         <Menu
@@ -50,27 +66,27 @@ export default function RootPage() {
         >
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/"}>
-              Tranzity
+              {t("menu.transits")}
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/transits-table"}>
-              Tranzity - tabulka
+              {t("menu.transitsTable")}
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/current-planets"}>
-              Aktuální planety
+              {t("menu.currentPlanets")}
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/natal-planets"}>
-              Nativní planety
+              {t("menu.natalPlanets")}
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/saved-data"}>
-              Uložené záznamy
+              {t("menu.savedData")}
             </Link>
           </MenuItem>
         </Menu>

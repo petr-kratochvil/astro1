@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   getBaseDateJson,
   getNextNameNumber,
@@ -11,11 +12,11 @@ import { fromUTC } from "../utils/timeZones";
 import { SavedDate } from "../types";
 
 interface City {
-  name: string,
-  lat: number,
-  lon: number,
-  id: number,
-};
+  name: string;
+  lat: number;
+  lon: number;
+  id: number;
+}
 
 type FormDataValues = {
   name: string;
@@ -27,6 +28,7 @@ type FormDataValues = {
 };
 
 export default function SavedDataDetail() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { index } = useParams();
   const numericIndex = Number(index);
@@ -49,10 +51,15 @@ export default function SavedDataDetail() {
     { name: "Pardubice", lat: 50.034, lon: 15.781, id: 555134 },
   ].sort((a, b) => a.name.localeCompare(b.name));
 
-  const defaultCity: City = { name: "Praha", lat: 50.075, lon: 14.437, id: 554782 };
+  const defaultCity: City = {
+    name: "Praha",
+    lat: 50.075,
+    lon: 14.437,
+    id: 554782,
+  };
 
   const options = cities.map((city) => ({ value: city.id, label: city.name }));
-  
+
   const [selectedCityId, setSelectedCityId] = React.useState(
     baseDateJson?.cityId ?? defaultCity.id
   );
@@ -66,7 +73,7 @@ export default function SavedDataDetail() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries()) as FormDataValues
+    const data = Object.fromEntries(formData.entries()) as FormDataValues;
     const year = parseInt(data.year);
     const baseDate = new Date(
       year,
@@ -100,12 +107,12 @@ export default function SavedDataDetail() {
     navigate(getRefererOfEditPage());
   }
 
-  let heading = "Nový záznam";
+  let heading = t("savedDataDetail.newRecord");
 
   let baseDate = null;
   // baseDateJson is in UTC
   if (baseDateJson) {
-    heading = "Upravit záznam";
+    heading = t("savedDataDetail.editRecord");
     baseDate = fromUTC(baseDateJson);
   }
 
@@ -141,7 +148,7 @@ export default function SavedDataDetail() {
         }}
       >
         <label style={labelStyle}>
-          Jméno:{" "}
+          {t("savedDataDetail.name")}{" "}
           <input
             style={{ ...inputStyle, width: "150px", left: "100px" }}
             type="text"
@@ -151,7 +158,7 @@ export default function SavedDataDetail() {
         </label>
 
         <label style={labelStyle}>
-          Den:{" "}
+          {t("savedDataDetail.day")}{" "}
           <input
             style={inputStyle}
             type="number"
@@ -164,7 +171,7 @@ export default function SavedDataDetail() {
           />
         </label>
         <label style={labelStyle}>
-          Měsíc:{" "}
+          {t("savedDataDetail.month")}{" "}
           <input
             style={inputStyle}
             type="number"
@@ -177,7 +184,7 @@ export default function SavedDataDetail() {
           />
         </label>
         <label style={labelStyle}>
-          Rok:{" "}
+          {t("savedDataDetail.year")}{" "}
           <input
             style={inputStyle}
             type="number"
@@ -190,7 +197,8 @@ export default function SavedDataDetail() {
           />
         </label>
         <label style={labelStyle}>
-          Hodina <small>(24h formát)</small>:{" "}
+          {t("savedDataDetail.hour")}{" "}
+          <small>{t("savedDataDetail.hourFormat")}</small>:{" "}
           <input
             style={inputStyle}
             type="number"
@@ -202,7 +210,7 @@ export default function SavedDataDetail() {
           />
         </label>
         <label style={labelStyle}>
-          Minuta:{" "}
+          {t("savedDataDetail.minute")}{" "}
           <input
             style={inputStyle}
             type="number"
@@ -214,7 +222,7 @@ export default function SavedDataDetail() {
           />
         </label>
         <label style={labelStyle}>
-          <span>Místo narození:</span>
+          <span>{t("savedDataDetail.birthplace")}</span>
           {!customCoordinates && (
             <>
               <select
@@ -246,7 +254,7 @@ export default function SavedDataDetail() {
           )}
         </label>
         <label style={{ ...labelStyle, cursor: "pointer" }}>
-          <small>Zadat vlastní souřadnice</small>
+          <small>{t("savedDataDetail.customCoordinates")}</small>
           <input
             type="checkbox"
             style={{ marginLeft: "10px" }}
@@ -267,7 +275,7 @@ export default function SavedDataDetail() {
         {customCoordinates && (
           <>
             <label style={labelStyle}>
-              <small>Zeměpisná šířka: </small>
+              <small>{t("savedDataDetail.latitude")} </small>
               <input
                 style={geoInputStyle}
                 type="number"
@@ -281,7 +289,7 @@ export default function SavedDataDetail() {
               />
             </label>
             <label style={labelStyle}>
-              <small>Zeměpisná délka: </small>
+              <small>{t("savedDataDetail.longitude")} </small>
               <input
                 style={geoInputStyle}
                 type="number"
@@ -305,24 +313,18 @@ export default function SavedDataDetail() {
             width: "120px",
           }}
         >
-          Uložit
+          {t("savedDataDetail.save")}
         </button>
         <button
           onClick={() => navigate(getRefererOfEditPage())}
           style={{ marginLeft: "90px", marginBottom: "20px", width: "120px" }}
         >
-          Zrušit
+          {t("savedDataDetail.cancel")}
         </button>
       </form>
       <div style={{ margin: "0 auto", width: "300px" }}>
-        <p>
-          V tuto chvíli je předpokládané místo narození v časovém pásmu SEČ/SELČ
-          (střední Evropa). V budoucnu plánujeme odstranit toto omezení.
-        </p>
-        <p>
-          Čas zadávejte místní v ČR (letní nebo zimní, jaký byl aktuální v době
-          narození).
-        </p>
+        <p>{t("savedDataDetail.timeZoneNote")}</p>
+        <p>{t("savedDataDetail.localTimeNote")}</p>
       </div>
     </>
   );

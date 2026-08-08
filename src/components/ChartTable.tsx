@@ -6,7 +6,11 @@ import {
   SignIndex,
 } from "../constants";
 import { CelestialObjectPosition } from "../types";
-import { translateSignName } from "../utils/translations";
+import {
+  translateCelestialObject,
+  translateSignName,
+} from "../utils/translations";
+import { useTranslation } from "react-i18next";
 
 interface ChartTableStyle {
   useSignSymbols: boolean;
@@ -37,12 +41,13 @@ export default function ChartTable({
   title: string;
   style?: Partial<ChartTableStyle>;
 }) {
+  const { t } = useTranslation();
   const usedStyle = { ...defaultStyle, ...style };
 
   const formatSign = (sign: SignIndex): string => {
     const signName = signNumberToSignName(sign);
     const symbol = usedStyle.useSignSymbols ? signSymbols[signName] : "";
-    const text = usedStyle.useSignText ? translateSignName(signName) : "";
+    const text = usedStyle.useSignText ? translateSignName(signName, t) : "";
     const space = usedStyle.useSignSymbols && usedStyle.useSignText ? " " : "";
     if (usedStyle.signSymbolFirst) {
       return symbol + space + text;
@@ -51,7 +56,7 @@ export default function ChartTable({
   };
 
   const formatPlanet = (planet: CelestialObjectPosition): string => {
-    const displayName = planet.nameTranslated;
+    const displayName = translateCelestialObject(planet, t);
     return usedStyle.usePlanetSymbols
       ? ((planetSymbols as Record<string, string>)[planet.name] ?? displayName)
       : displayName;

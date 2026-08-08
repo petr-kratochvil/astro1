@@ -10,6 +10,8 @@ import {
   setBaseDateJson,
   getBaseDateJson,
   deleteBaseDate,
+  getLanguage,
+  setLanguage,
 } from "./localStorage";
 import { SavedDate } from "../types";
 
@@ -84,6 +86,30 @@ describe("lastNameNumber", () => {
   it("increments from the stored value", () => {
     setlastNameNumber(5);
     expect(getNextNameNumber()).toBe(6);
+  });
+});
+
+describe("language", () => {
+  it("is undefined until the user picks one", () => {
+    expect(getLanguage()).toBeUndefined();
+  });
+
+  it("round-trips a stored value", () => {
+    setLanguage("cs");
+    expect(getLanguage()).toBe("cs");
+    setLanguage("en");
+    expect(getLanguage()).toBe("en");
+  });
+
+  it("ignores an unsupported stored value", () => {
+    setUserObject({ language: "not.a.language" } as never);
+    expect(getLanguage()).toBeUndefined();
+  });
+
+  it("keeps the rest of the user object intact", () => {
+    setlastNameNumber(3);
+    setLanguage("cs");
+    expect(getNextNameNumber()).toBe(4);
   });
 });
 

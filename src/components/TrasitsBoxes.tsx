@@ -1,6 +1,12 @@
 import React from "react";
+import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import { AspectName, signNumberToSignName, signSymbols } from "../constants";
 import { AspectWithPositions } from "../types";
+import {
+  translateAspectName,
+  translateCelestialObject,
+} from "../utils/translations";
 
 function planetWeight(planet: string): number {
   const w: Record<string, number> = {
@@ -49,7 +55,10 @@ interface TransitGroup {
   sign: string;
 }
 
-function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
+function formatTransits(
+  data: AspectWithPositions[],
+  t: TFunction
+): TransitGroup[] {
   if (data.length === 0) {
     return [];
   }
@@ -63,7 +72,7 @@ function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
         result.push(currentResult);
       }
       currentResult = {
-        name: transitItem.pos1.nameTranslated,
+        name: translateCelestialObject(transitItem.pos1, t),
         aspects: [],
         speed: "",
         pos: 0,
@@ -72,25 +81,30 @@ function formatTransits(data: AspectWithPositions[]): TransitGroup[] {
       currentName = newBoxName;
     }
     const days = transitItem.orb / Math.abs(transitItem.orbSpeed ?? 0);
-    let m, t;
+    let months, weeks;
     if (days > 30) {
-      m = days / 30;
+      months = days / 30;
     } else if (days > 7) {
-      t = days / 7;
+      weeks = days / 7;
     }
     const fixedFormat = (x: number, precision: number) =>
       x.toFixed(x < 10 && Math.abs(x - Math.round(x)) > precision ? 1 : 0);
-    const daysFormat = m
-      ? `${fixedFormat(m, 0.3)} měs`
-      : t
-        ? `${fixedFormat(t, 0.2)} týd `
-        : `${fixedFormat(days, 0.1)} dní`;
+    // `count` selects the plural form, so it is taken from the rounded `value`
+    const duration = (key: string, x: number, precision: number) => {
+      const value = fixedFormat(x, precision);
+      return t(key, { count: Number(value), value });
+    };
+    const daysFormat = months
+      ? duration("transits.months", months, 0.3)
+      : weeks
+        ? duration("transits.weeks", weeks, 0.2) + " "
+        : duration("transits.days", days, 0.1);
 
     currentResult = currentResult as TransitGroup;
     currentResult.aspects.push({
       aspect: transitItem.name,
-      name: transitItem.nameTranslated,
-      planet: transitItem.pos2.nameTranslated,
+      name: translateAspectName(transitItem.name),
+      planet: translateCelestialObject(transitItem.pos2, t),
       orb: transitItem.orb.toFixed(1),
       strengthening: (transitItem.orbSpeed ?? 0) < 0,
       days: daysFormat,
@@ -117,6 +131,7 @@ export default function TransitsBoxes({
 }: {
   data: AspectWithPositions[];
 }) {
+  const { t } = useTranslation();
   const strongStyle = {
     backgroundColor: "#AAFFFF",
     padding: "1px 2.5px",
@@ -124,7 +139,7 @@ export default function TransitsBoxes({
 
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
-      {formatTransits(data).map((result, index) => (
+      {formatTransits(data, t).map((result, index) => (
         <pre key={index} className="PlanetBox">
           {result.name}{" "}
           <span style={{ color: "LightSeaGreen", fontSize: 12 }}>

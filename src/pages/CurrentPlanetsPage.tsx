@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useTitle } from "../utils/utils";
 import ChartTable from "../components/ChartTable";
 import { useCurrentPosition } from "../apiCalls/usePosition";
 
 function CurrentPlanetsPage() {
-  useTitle("Planets");
+  const { t } = useTranslation();
+  useTitle(t("title.planets"));
   const data = useCurrentPosition();
 
   const currentChartStyle = {
@@ -26,7 +28,7 @@ function CurrentPlanetsPage() {
       >
         <ChartTable
           chart={data}
-          title="Aktuální planety"
+          title={t("currentPlanets.title")}
           style={currentChartStyle}
         />
       </div>

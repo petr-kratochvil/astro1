@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { AspectWithPositions, CelestialObjectPosition } from "../types";
 import {
   aspectColor,
@@ -30,10 +31,11 @@ export default function AspectTable({
   name1?: string;
   name2?: string;
 }) {
+  const { t } = useTranslation();
   const usedStyle = { ...defaultStyle, ...style };
 
   const sign = (pos: CelestialObjectPosition) =>
-    formatSign(pos.sign, usedStyle);
+    formatSign(pos.sign, usedStyle, t);
   const degrees = (pos: CelestialObjectPosition) => pos.degrees + "°";
   const secondField = usedStyle.degreesFirst ? degrees : sign;
   const thirdField = usedStyle.degreesFirst ? sign : degrees;
@@ -48,7 +50,7 @@ export default function AspectTable({
             </td>
           </tr>
           <tr>
-            <td colSpan={2}>aspect/orb</td>
+            <td colSpan={2}>{t("aspectTable.aspectOrb")}</td>
             <td className="MyTableSubHeading" colSpan={3}>
               {name1}
             </td>
@@ -65,10 +67,10 @@ export default function AspectTable({
                 {formatAspect(a.name, usedStyle)}
               </td>
               <td>{a.orb.toFixed(1)}°</td>
-              <td>{formatPlanet(a.pos1, usedStyle)}</td>
+              <td>{formatPlanet(a.pos1, usedStyle, t)}</td>
               <td>{secondField(a.pos1)}</td>
               <td>{thirdField(a.pos1)}</td>
-              <td>{formatPlanet(a.pos2, usedStyle)}</td>
+              <td>{formatPlanet(a.pos2, usedStyle, t)}</td>
               <td>{secondField(a.pos2)}</td>
               <td>{thirdField(a.pos2)}</td>
             </tr>

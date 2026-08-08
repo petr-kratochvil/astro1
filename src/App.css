@@ -30,6 +30,53 @@ button {
   padding: 5px;
 }
 
+.App-header-actions {
+  position: absolute;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+
+.App-header-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 1.4em;
+  padding: 8px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  font-size: 20px;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.App-header-button:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+.App-header-button:active {
+  background-color: rgba(255, 255, 255, 0.26);
+}
+
+.App-header-button:focus-visible {
+  background-color: rgba(255, 255, 255, 0.16);
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 1px;
+}
+
+.main-menu-icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -85,10 +132,6 @@ button {
   margin: 10px;
 }
 
-.main-menu-text {
-  visibility: visible;
-}
-
 @media only screen and (max-width: 500px) {
   .PlanetBox {
     border: 1px solid slateblue;
@@ -99,6 +142,6 @@ button {
 
 @media only screen and (max-width: 800px) {
   .main-menu-text {
-    visibility: hidden;
+    display: none;
   }
 }

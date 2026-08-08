@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { useTitle } from "../utils/utils";
 
 export default function PageNotFound() {
-  useTitle("Page not found");
+  const { t } = useTranslation();
+  useTitle(t("title.notFound"));
   const style = {
     border: "1px solid silver",
     background: "#fcfcfc",
@@ -18,7 +20,7 @@ export default function PageNotFound() {
   return (
     <>
       <h1 style={headerStyle}>404</h1>
-      <div style={style}>Stránka nenalezena / Page not found</div>
+      <div style={style}>{t("notFound.message")}</div>
     </>
   );
 }

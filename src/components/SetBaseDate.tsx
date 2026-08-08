@@ -53,13 +53,19 @@ export default function SetBaseDate() {
       string,
       string
     >;
+    const year = parseInt(data.year);
     const baseDate = new Date(
-      parseInt(data.year),
+      year,
       parseInt(data.month) - 1,
       parseInt(data.day),
       parseInt(data.hour) || 12,
       parseInt(data.minutes) || 0
     );
+    // Date.UTC maps years 0-99 onto 1900-1999
+    // Keep any month/day overflow that Date.UTC already made
+    if (year >= 0 && year < 100) {
+      baseDate.setFullYear(baseDate.getFullYear() - 1900);
+    }
     // convert baseDate to UTC - the API currently needs UTC time
     // TODO: use proper time zone based on geolocation
     const baseDateJson: SavedDate = {

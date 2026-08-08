@@ -12,7 +12,13 @@ export function fromUTC(baseDateJson?: JsonDate): Date | undefined {
     Math.round((baseDateJson.hour - Math.floor(baseDateJson.hour)) * 60)
   );
   if (!isNaN(baseDateTimestamp)) {
-    return new Date(baseDateTimestamp);
+    const baseDate = new Date(baseDateTimestamp);
+    // Date.UTC maps years 0-99 onto 1900-1999
+    // Keep any month/day overflow that Date.UTC already made
+    if (baseDateJson.year >= 0 && baseDateJson.year < 100) {
+      baseDate.setUTCFullYear(baseDate.getUTCFullYear() - 1900);
+    }
+    return baseDate;
   }
   return undefined;
 }

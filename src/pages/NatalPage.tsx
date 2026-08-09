@@ -64,7 +64,7 @@ function NatalPage() {
         style={{
           display: "flex",
           justifyContent: "space-evenly",
-          marginTop: "40px",
+          marginTop: "20px",
           flexWrap: "wrap",
         }}
       >

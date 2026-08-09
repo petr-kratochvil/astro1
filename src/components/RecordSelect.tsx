@@ -4,10 +4,12 @@ import Select from "@mui/material/Select";
 import { alpha } from "@mui/material/styles";
 
 import { SavedDate } from "../types";
+import { useTranslation } from "react-i18next";
+import { useId } from "react";
+import { InputLabel } from "@mui/material";
 
 interface RecordSelectProps {
   records: SavedDate[];
-  // Index into `records`, or undefined while nothing is selected yet.
   value: number | undefined;
   onChange: (index: number) => void;
 }
@@ -17,6 +19,9 @@ export default function RecordSelect({
   value,
   onChange,
 }: RecordSelectProps) {
+  const { t } = useTranslation();
+  const labelId = useId();
+
   return (
     <FormControl
       size="small"
@@ -33,12 +38,23 @@ export default function RecordSelect({
         },
       })}
     >
+      <InputLabel
+        id={labelId}
+        sx={(theme) => ({
+          color: alpha(theme.palette.primary.main, 0.75),
+          "&.Mui-focused": {
+            color: theme.palette.primary.main,
+          },
+        })}
+      >
+        {t("common.selectRecord")}
+      </InputLabel>
       <Select
-        // label={t("common.selectRecord")}
+        labelId={labelId}
+        label={t("common.selectRecord")}
         value={value ?? ""}
         onChange={(event) => onChange(Number(event.target.value))}
         MenuProps={{ disableScrollLock: true }}
-        sx={{marginLeft: "0.5em"}}
       >
         {records.map((record, index) => (
           <MenuItem key={index} value={index}>

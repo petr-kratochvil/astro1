@@ -100,7 +100,6 @@ export default function TransitsPage({
     justifyContent: "center",
     alignItems: "center",
     flexWrap: "wrap",
-    margin: "10px 0px",
   };
 
   function handleSwipe(param: { direction: number }) {
@@ -119,14 +118,9 @@ export default function TransitsPage({
   return (
     <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
       <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "15px 0px 10px 0px",
-          }}
-        >{t("common.selectRecord")}:
+      <div className="controls-container">
+        {/* 1) RecordSelect */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <RecordSelect
             records={savedDataList}
             value={selectedBaseDateIndex}
@@ -137,6 +131,8 @@ export default function TransitsPage({
             }}
           />
         </div>
+
+        {/* 2) Day switch buttons + formatted date */}
         <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
           <Button
             variant="outlined"
@@ -160,8 +156,10 @@ export default function TransitsPage({
             ▷▷
           </Button>
         </div>
+
+        {/* 3) Five date switching buttons */}
         <div style={buttonsMenuStyle}>
-          <ButtonGroup variant="outlined" size="small">
+          <ButtonGroup variant="outlined">
             <Button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
               ◁&nbsp;{t("transits.year")}
             </Button>
@@ -179,6 +177,7 @@ export default function TransitsPage({
             </Button>
           </ButtonGroup>
         </div>
+      </div>
         {showAsTable ? (
           <div
             style={{

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useTitle } from "../utils/utils";
+import { useTitle } from "src/hooks/useTitle";
 
 export default function PageNotFound() {
   const { t } = useTranslation();

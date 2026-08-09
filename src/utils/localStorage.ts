@@ -1,4 +1,4 @@
-import { SavedDate } from "../types";
+import { SavedDate } from "src/types";
 import { isLanguage, Language } from "./language";
 
 const USER_OBJECT_KEY = "ASTRO_USER_OBJECT";

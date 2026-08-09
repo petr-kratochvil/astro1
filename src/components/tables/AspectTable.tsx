@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { AspectWithPositions, CelestialObjectPosition } from "../types";
+import { AspectWithPositions, CelestialObjectPosition } from "src/types";
 import {
   aspectColor,
   formatAspect,
   formatPlanet,
   formatSign,
   FormattingStyle,
-} from "../utils/formatting";
+} from "../../utils/formatting";
 
 const defaultStyle: FormattingStyle = {
   useSignSymbols: false,

@@ -1,13 +1,13 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { useTitle } from "../utils/utils";
-import ChartTable from "../components/ChartTable";
-import RecordSelect from "../components/RecordSelect";
-import { usePosition } from "../apiCalls/usePosition";
+import { useTitle } from "src/hooks/useTitle";
+import ChartTable from "src/components/tables/ChartTable";
+import RecordSelect from "src/components/ui/RecordSelect";
+import { usePosition } from "src/api/usePosition";
 import { useNavigate } from "react-router-dom";
-import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
-import { SavedDate } from "../types";
+import { getSavedData, setRefererOfEditPage } from "src/utils/localStorage";
+import { SavedDate } from "src/types";
 
 function NatalPage() {
   const { t } = useTranslation();

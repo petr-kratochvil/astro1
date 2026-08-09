@@ -49,7 +49,7 @@ export const planetSymbols = {
 } as const;
 
 export function signNumberToSignName(sign: SignIndex): SignName {
-  return signList[sign-1]!;
+  return signList[sign - 1]!;
 }
 
 export const aspectSymbols = {

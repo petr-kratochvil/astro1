@@ -3,7 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { alpha } from "@mui/material/styles";
 
-import { SavedDate } from "../types";
+import { SavedDate } from "src/types";
 import { useTranslation } from "react-i18next";
 import { useId } from "react";
 import { InputLabel } from "@mui/material";

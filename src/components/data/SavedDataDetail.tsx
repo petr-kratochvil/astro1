@@ -16,10 +16,10 @@ import {
   getRefererOfEditPage,
   setBaseDateJson,
   setlastNameNumber,
-} from "../utils/localStorage";
+} from "src/utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
-import { fromUTC } from "../utils/timeZones";
-import { SavedDate } from "../types";
+import { fromUTC } from "src/utils/timeZones";
+import { SavedDate } from "src/types";
 
 interface City {
   name: string;

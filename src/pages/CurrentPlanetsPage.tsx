@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { useTitle } from "../utils/utils";
-import ChartTable from "../components/ChartTable";
-import { useCurrentPosition } from "../apiCalls/usePosition";
+import { useTitle } from "src/hooks/useTitle";
+import ChartTable from "src/components/tables/ChartTable";
+import { useCurrentPosition } from "src/api/usePosition";
 
 function CurrentPlanetsPage() {
   const { t } = useTranslation();

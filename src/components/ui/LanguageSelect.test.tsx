@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LanguageSelect from "./LanguageSelect";
-import i18n from "../i18n";
-import { getLanguage } from "../utils/localStorage";
+import i18n from "src/i18n";
+import { getLanguage } from "src/utils/localStorage";
 
 beforeEach(async () => {
   localStorage.clear();

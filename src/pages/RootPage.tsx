@@ -3,11 +3,10 @@ import { Link, Outlet } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import HeaderButton from "src/components/ui/HeaderButton";
+import LanguageSelect from "src/components/ui/LanguageSelect";
 
-import HeaderButton from "../components/HeaderButton";
-import LanguageSelect from "../components/LanguageSelect";
-
-import "../App.css";
+import "src/App.css";
 
 export default function RootPage() {
   const { t } = useTranslation();

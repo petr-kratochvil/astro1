@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, afterEach } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
 import BasicTable from "./BasicTable";
 
 interface Row {
@@ -12,6 +12,10 @@ describe("BasicTable", () => {
     { id: 1, label: "First" },
     { id: 2, label: "Second" },
   ];
+
+  afterEach(() => {
+    cleanup();
+  });
 
   it("renders the title and one row per data entry", () => {
     render(<BasicTable<Row> title="My Rows" columns={["label"]} data={data} />);

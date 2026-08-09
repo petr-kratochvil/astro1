@@ -10,8 +10,8 @@ import RootPage from "./pages/RootPage";
 import TransitsPage from "./pages/TransitsPage";
 import PlanetsPage from "./pages/CurrentPlanetsPage";
 import PageNotFound from "./pages/PageNotFound";
-import SavedDataDetail from "./components/SavedDataDetail";
-import SavedDataList from "./components/SavedDataList";
+import SavedDataDetail from "./components/data/SavedDataDetail";
+import SavedDataList from "./components/data/SavedDataList";
 import NatalPage from "./pages/NatalPage";
 
 const router = createBrowserRouter([

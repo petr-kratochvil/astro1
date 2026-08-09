@@ -1,4 +1,4 @@
-import { JsonDate } from "../types";
+import { JsonDate } from "src/types";
 
 export function fromUTC(baseDateJson?: JsonDate): Date | undefined {
   if (!baseDateJson) {

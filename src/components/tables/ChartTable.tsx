@@ -4,12 +4,12 @@ import {
   signSymbols,
   signNumberToSignName,
   SignIndex,
-} from "../constants";
-import { CelestialObjectPosition } from "../types";
+} from "src/constants";
+import { CelestialObjectPosition } from "src/types";
 import {
   translateCelestialObject,
   translateSignName,
-} from "../utils/translations";
+} from "src/utils/translations";
 import { useTranslation } from "react-i18next";
 
 interface ChartTableStyle {

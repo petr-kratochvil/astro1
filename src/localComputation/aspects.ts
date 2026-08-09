@@ -1,4 +1,4 @@
-import { SignName, AspectName } from "../constants";
+import { SignName, AspectName } from "src/constants";
 
 const signPositions = {
   Aries: 0,

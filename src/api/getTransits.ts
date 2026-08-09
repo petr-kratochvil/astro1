@@ -1,10 +1,6 @@
 import axios from "axios";
-import constants from "../constants";
-import {
-  AspectWithPositions,
-  GeoCoordinates,
-  JsonDate,
-} from "../types";
+import constants from "src/constants";
+import { AspectWithPositions, GeoCoordinates, JsonDate } from "src/types";
 
 export function getTransits(
   baseDateJson: JsonDate,
@@ -18,14 +14,11 @@ export function getTransits(
     hour: transitDate.getUTCHours() + transitDate.getUTCMinutes() / 60,
   };
   return axios
-    .post<AspectWithPositions[]>(
-      `${constants.ephemeridesApiBase}/transits`,
-      {
-        baseDate: baseDateJson,
-        transitDate: transitDateJson,
-        baseDateCoordinates,
-      }
-    )
+    .post<AspectWithPositions[]>(`${constants.ephemeridesApiBase}/transits`, {
+      baseDate: baseDateJson,
+      transitDate: transitDateJson,
+      baseDateCoordinates,
+    })
     .then((response) =>
       response.data.filter(
         (d) =>

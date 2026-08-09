@@ -5,8 +5,8 @@ export const DEFAULT_LANGUAGE: Language = "en";
 interface LanguageOption {
   code: Language;
   flag: string;
-  label: string;   // Used in aria-label
-  locale: string;  // BCP 47 tag for Intl - plain "en" would give US date order
+  label: string; // Used in aria-label
+  locale: string; // BCP 47 tag for Intl - plain "en" would give US date order
 }
 
 const languageOptionByCode: Record<Language, LanguageOption> = {

@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    /* Suppress TS 6.0 deprecation warning for baseUrl (prepared for migration in TS 7.0) */
+    "ignoreDeprecations": "6.0",
+
     /* Bundler-mode TS for Vite: tsc only type-checks, esbuild/Vite does the actual transpile. */
     "target": "ES2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
@@ -20,6 +23,12 @@
 
     "strict": true,
     "noUncheckedIndexedAccess": true,
+
+    /* Path mappings for src/ imports */
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["src/*"]
+    }
   },
   "include": ["src", "vitest.setup.ts"]
 }

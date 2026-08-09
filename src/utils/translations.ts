@@ -1,6 +1,6 @@
 import { TFunction } from "i18next";
-import { AspectName, SignName } from "../constants";
-import { CelestialObject } from "../types";
+import { AspectName, SignName } from "src/constants";
+import { CelestialObject } from "src/types";
 
 // The aspect glyphs are language-independent, so this one needs no `t` and is
 // deliberately not part of the i18n resources.

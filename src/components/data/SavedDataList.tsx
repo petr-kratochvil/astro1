@@ -6,10 +6,10 @@ import {
   deleteBaseDate,
   getSavedData,
   setRefererOfEditPage,
-} from "../utils/localStorage";
+} from "src/utils/localStorage";
 import { useNavigate } from "react-router-dom";
-import { useForceUpdate } from "../utils/useForceUpdate";
-import { fromUTC } from "../utils/timeZones";
+import { useForceUpdate } from "src/hooks/useForceUpdate";
+import { fromUTC } from "src/utils/timeZones";
 
 export default function SavedDataList() {
   const { t } = useTranslation();

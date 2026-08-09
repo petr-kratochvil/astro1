@@ -4,9 +4,9 @@ React (Vite + TypeScript) frontend for viewing planetary positions, natal charts
 
 ## Screenshots
 
-[Desktop](screens/screen-desktop.png), [Mobile](screens/screen-mobile.jpg)
+[Desktop](doc/screen-desktop.png), [Mobile](doc/screen-mobile.jpg)
 
-![Desktop screenshot](screens/screen-desktop.png)
+![Desktop screenshot](doc/screen-desktop.png)
 
 ## Run locally
 
@@ -31,7 +31,7 @@ The app is now available at `http://localhost:3600`.
 ```bash
 npm run build          # production build
 npm run preview        # serve the production build locally
-npm run typecheck      # tsc --noEmit
+npm run tsc            # typecheck (tsc --noEmit)
 npm run lint           # eslint
 npm run test           # vitest
 npm run format         # prettier --write

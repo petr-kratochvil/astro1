@@ -169,6 +169,6 @@
   }
 
   .controls-container > :nth-child(3) {
-  justify-self: center;
-}
+    justify-self: center;
+  }
 }

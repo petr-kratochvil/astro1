@@ -1,12 +1,12 @@
 import React from "react";
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
-import { AspectName, signNumberToSignName, signSymbols } from "../constants";
-import { AspectWithPositions } from "../types";
+import { AspectName, signNumberToSignName, signSymbols } from "src/constants";
+import { AspectWithPositions } from "src/types";
 import {
   translateAspectName,
   translateCelestialObject,
-} from "../utils/translations";
+} from "../../utils/translations";
 
 function planetWeight(planet: string): number {
   const w: Record<string, number> = {
@@ -109,16 +109,19 @@ function formatTransits(
       strengthening: (transitItem.orbSpeed ?? 0) < 0,
       days: daysFormat,
       strong:
-        planetWeight(transitItem.pos1.name) >= planetWeight(transitItem.pos2.name) &&
-        ["conjunction", "opposition", "square", "trine"].includes(transitItem.name),
+        planetWeight(transitItem.pos1.name) >=
+          planetWeight(transitItem.pos2.name) &&
+        ["conjunction", "opposition", "square", "trine"].includes(
+          transitItem.name
+        ),
     });
 
     // pos1 in a transits response always comes with `speed`
     // - but let's better use defensive style
     currentResult.speed = (transitItem.pos1.speed ?? 0).toFixed(2);
     currentResult.pos = transitItem.pos1.degrees;
-    currentResult.sign = signSymbols[signNumberToSignName(transitItem.pos1.sign)];
-
+    currentResult.sign =
+      signSymbols[signNumberToSignName(transitItem.pos1.sign)];
   }
   if (currentResult !== null) {
     result.push(currentResult);

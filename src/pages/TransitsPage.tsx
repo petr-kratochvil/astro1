@@ -2,17 +2,17 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import { useTitle } from "../utils/utils";
-import TransitsBoxes from "../components/TrasitsBoxes";
-import { getTransits } from "../apiCalls/getTransits";
-import { getSavedData, setRefererOfEditPage } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
-import AspectTable from "../components/AspectTable";
-import RecordSelect from "../components/RecordSelect";
-import { AspectWithPositions, SavedDate } from "../types";
-import { formatDateWithWeekday } from "../utils/formatting";
-import { getLocale } from "../utils/language";
+import { AspectWithPositions, SavedDate } from "src/types";
+import TransitsBoxes from "src/components/transits/TrasitsBoxes";
+import AspectTable from "src/components/tables/AspectTable";
+import RecordSelect from "src/components/ui/RecordSelect";
+import { useTitle } from "src/hooks/useTitle";
+import { getTransits } from "src/api/getTransits";
+import { getSavedData, setRefererOfEditPage } from "src/utils/localStorage";
+import { formatDateWithWeekday } from "src/utils/formatting";
+import { getLocale } from "src/utils/language";
 
 export default function TransitsPage({
   showAsTable = false,
@@ -118,66 +118,74 @@ export default function TransitsPage({
   return (
     <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
       <div>
-      <div className="controls-container">
-        {/* 1) RecordSelect */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <RecordSelect
-            records={savedDataList}
-            value={selectedBaseDateIndex}
-            onChange={(index) => {
-              setSelectedBaseDateIndex(index);
-              setBaseDate(savedDataList[index]);
-              setPerson(savedDataList[index]?.name);
-            }}
-          />
-        </div>
-
-        {/* 2) Day switch buttons + formatted date */}
-        <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
-          <Button
-            variant="outlined"
-            onClick={() => setTransitDate(addDays(transitDate, -1))}
-          >
-            ◁◁
-          </Button>
-          <div
-            style={{
-              fontSize: "medium",
-              minWidth: "130px",
-              textAlign: "center",
-            }}
-          >
-            {formatDateWithWeekday(transitDate, getLocale(i18n.language))}
+        <div className="controls-container">
+          {/* 1) RecordSelect */}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <RecordSelect
+              records={savedDataList}
+              value={selectedBaseDateIndex}
+              onChange={(index) => {
+                setSelectedBaseDateIndex(index);
+                setBaseDate(savedDataList[index]);
+                setPerson(savedDataList[index]?.name);
+              }}
+            />
           </div>
-          <Button
-            variant="outlined"
-            onClick={() => setTransitDate(addDays(transitDate, +1))}
-          >
-            ▷▷
-          </Button>
-        </div>
 
-        {/* 3) Five date switching buttons */}
-        <div style={buttonsMenuStyle}>
-          <ButtonGroup variant="outlined">
-            <Button onClick={() => setTransitDate(addMonths(transitDate, -12))}>
-              ◁&nbsp;{t("transits.year")}
+          {/* 2) Day switch buttons + formatted date */}
+          <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
+            <Button
+              variant="outlined"
+              onClick={() => setTransitDate(addDays(transitDate, -1))}
+            >
+              ◁◁
             </Button>
-            <Button onClick={() => setTransitDate(addMonths(transitDate, -1))}>
-              ◁&nbsp;{t("transits.month")}
+            <div
+              style={{
+                fontSize: "medium",
+                minWidth: "130px",
+                textAlign: "center",
+              }}
+            >
+              {formatDateWithWeekday(transitDate, getLocale(i18n.language))}
+            </div>
+            <Button
+              variant="outlined"
+              onClick={() => setTransitDate(addDays(transitDate, +1))}
+            >
+              ▷▷
             </Button>
-            <Button onClick={() => setTransitDate(new Date())}>
-              &nbsp;&nbsp;{t("transits.today")}&nbsp;&nbsp;
-            </Button>
-            <Button onClick={() => setTransitDate(addMonths(transitDate, +1))}>
-              {t("transits.month")}&nbsp;▷
-            </Button>
-            <Button onClick={() => setTransitDate(addMonths(transitDate, +12))}>
-              {t("transits.year")}&nbsp;▷
-            </Button>
-          </ButtonGroup>
+          </div>
+
+          {/* 3) Five date switching buttons */}
+          <div style={buttonsMenuStyle}>
+            <ButtonGroup variant="outlined">
+              <Button
+                onClick={() => setTransitDate(addMonths(transitDate, -12))}
+              >
+                ◁&nbsp;{t("transits.year")}
+              </Button>
+              <Button
+                onClick={() => setTransitDate(addMonths(transitDate, -1))}
+              >
+                ◁&nbsp;{t("transits.month")}
+              </Button>
+              <Button onClick={() => setTransitDate(new Date())}>
+                &nbsp;&nbsp;{t("transits.today")}&nbsp;&nbsp;
+              </Button>
+              <Button
+                onClick={() => setTransitDate(addMonths(transitDate, +1))}
+              >
+                {t("transits.month")}&nbsp;▷
+              </Button>
+              <Button
+                onClick={() => setTransitDate(addMonths(transitDate, +12))}
+              >
+                {t("transits.year")}&nbsp;▷
+              </Button>
+            </ButtonGroup>
+          </div>
         </div>
-      </div>
         {showAsTable ? (
           <div
             style={{

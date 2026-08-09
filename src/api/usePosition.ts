@@ -1,10 +1,7 @@
 import axios from "axios";
 import React from "react";
-import constants from "../constants";
-import {
-  CelestialObjectPosition,
-  JsonDate,
-} from "../types";
+import constants from "src/constants";
+import { CelestialObjectPosition, JsonDate } from "src/types";
 
 const getPlanets = (
   jsonDate: JsonDate,

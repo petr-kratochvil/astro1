@@ -5,9 +5,9 @@ import {
   SignIndex,
   signNumberToSignName,
   signSymbols,
-} from "../constants";
+} from "src/constants";
 import { TFunction } from "i18next";
-import { AspectWithPositions, CelestialObjectPosition } from "../types";
+import { AspectWithPositions, CelestialObjectPosition } from "src/types";
 import { translateCelestialObject, translateSignName } from "./translations";
 
 export interface FormattingStyle {

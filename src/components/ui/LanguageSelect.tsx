@@ -2,16 +2,16 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
 import HeaderButton from "./HeaderButton";
+
 import {
   DEFAULT_LANGUAGE,
   getLanguageOption,
   isLanguage,
   Language,
   languageOptions,
-} from "../utils/language";
-import { setLanguage } from "../utils/localStorage";
+} from "src/utils/language";
+import { setLanguage } from "src/utils/localStorage";
 
 export default function LanguageSelect() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);

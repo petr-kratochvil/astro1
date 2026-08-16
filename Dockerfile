@@ -1,10 +1,11 @@
-FROM node:24-alpine
+# builder stage
+FROM node:24-alpine AS builder
 
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
 WORKDIR /home/node/app
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 
 USER node
 
@@ -18,11 +19,14 @@ npm ci --cache /home/node/.npm
 ARG VITE_EPHEMERIDES_API_BASE=http://localhost:3601
 ENV VITE_EPHEMERIDES_API_BASE=$VITE_EPHEMERIDES_API_BASE
 
-COPY --chown=node:node . .
+COPY --chown=node:node tsconfig.json vite.config.js index.html ./
+COPY --chown=node:node src/ ./src/
+COPY --chown=node:node public/ ./public/ 
 
 RUN npm run build
 
-FROM node:24-alpine
+# runner stage
+FROM node:24-alpine AS runner
 
 RUN apk add --no-cache tini
 RUN npm install -g serve
@@ -33,7 +37,7 @@ WORKDIR /home/node/app
 
 USER node
 
-COPY --from=0 --chown=node:node /home/node/app/build/ .
+COPY --from=builder --chown=node:node /home/node/app/build/ .
 
 ENV PORT="3600"
 

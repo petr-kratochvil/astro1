@@ -1,12 +1,12 @@
-import React from "react";
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
-import { AspectName, signNumberToSignName, signSymbols } from "src/constants";
+import { signNumberToSignName, signSymbols } from "src/constants";
 import { AspectWithPositions } from "src/types";
 import {
   translateAspectName,
   translateCelestialObject,
 } from "../../utils/translations";
+import TransitBox, { TransitGroup } from "./TransitBox";
 
 function planetWeight(planet: string): number {
   const w: Record<string, number> = {
@@ -22,38 +22,6 @@ function planetWeight(planet: string): number {
     Pluto: 6,
   };
   return w[planet] || 0;
-}
-
-function aspectColor(aspect: AspectName): string {
-  const c: Record<AspectName, string> = {
-    conjunction: "gold",
-    opposition: "gold",
-    square: "DeepPink",
-    trine: "DodgerBlue	",
-    sextile: "DodgerBlue	",
-    semiSextile: "DodgerBlue	",
-    quincunx: "yellowgreen",
-  };
-  return c[aspect] || "black";
-}
-
-interface FormattedAspect {
-  aspect: AspectName;
-  name: string;
-  planet: string;
-  orb: string;
-  strengthening: boolean;
-  days: string;
-  daysShort: string;
-  strong: boolean;
-}
-
-interface TransitGroup {
-  name: string;
-  aspects: FormattedAspect[];
-  speed: string;
-  pos: number;
-  sign: string;
 }
 
 function formatTransits(
@@ -101,8 +69,8 @@ function formatTransits(
       return months
         ? duration(`transits.${shortString}months`, months, 0.3)
         : weeks
-          ? duration(`transits.${shortString}weeks`, weeks, 0.2) + " "
-          : duration(`transits.${shortString}days`, days, 0.1);
+        ? duration(`transits.${shortString}weeks`, weeks, 0.2) + " "
+        : duration(`transits.${shortString}days`, days, 0.1);
     };
 
     currentResult = currentResult as TransitGroup;
@@ -141,54 +109,11 @@ export default function TransitsBoxes({
   data: AspectWithPositions[];
 }) {
   const { t } = useTranslation();
-  const strongStyle = {
-    backgroundColor: "#AAFFFF",
-    padding: "1px 2.5px",
-  };
 
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       {formatTransits(data, t).map((result, index) => (
-        <pre key={index} className="PlanetBox">
-          {result.name}{" "}
-          <span style={{ color: "LightSeaGreen", fontSize: 12 }}>
-            {result.speed}
-          </span>{" "}
-          <span style={{ color: "Blue", fontSize: 15 }}>
-            <span style={{ fontSize: 11 }}>{result.pos}°</span>
-            {""}
-            {result.sign}
-          </span>
-          {"\n\n"}
-          {result.aspects.map(
-            (a, index) => (
-              <React.Fragment key={index}>
-                {"\n" + a.name + " "}
-                <span style={a.strong ? strongStyle : {}}>{a.planet}</span>{" "}
-                {a.orb}{" "}
-                <span
-                  style={{
-                    color: a.strengthening
-                      ? aspectColor(a.aspect)
-                      : "lightgrey",
-                  }}
-                >
-                  {a.strengthening ? "⬆" : "⬇"}
-                </span>{" "}
-                <span
-                  style={{
-                    color: a.strengthening ? "LightSeaGreen" : "lightgray",
-                    fontSize: 11,
-                  }}
-                >
-                  <span className="transitBoxesDays">{a.days}</span>
-                  <span className="transitBoxesDaysShort">{a.daysShort}</span>
-                </span>
-              </React.Fragment>
-            ),
-            ""
-          )}
-        </pre>
+        <TransitBox key={index} result={result} />
       ))}
     </div>
   );

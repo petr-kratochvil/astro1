@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import { buttonGroupClasses } from "@mui/material/ButtonGroup";
 
 // The app's own CSS (header, borders, table headings, headlines) is built
 // around `slateblue`. Mirroring it into the MUI palette keeps MUI components
@@ -27,6 +28,25 @@ const theme = createTheme({
           // Labels are user-facing prose in two languages; SHOUTING them adds
           // nothing and hurts Czech diacritics legibility.
           textTransform: "none",
+        },
+      },
+    },
+    MuiButtonGroup: {
+      styleOverrides: {
+        root: {
+          // In a horizontal outlined group every button but the last hides its
+          // right border (the neighbour's left one shows instead) and MUI paints
+          // it back on :hover. Touch browsers leave :hover stuck on the element
+          // last tapped, so that divider stayed visible after each tap. Restrict
+          // the effect to devices that can actually hover.
+          "@media (hover: none)": {
+            // `&&` doubles the root class so this outranks MUI's own rule
+            // regardless of stylesheet order.
+            [`&& .${buttonGroupClasses.firstButton}:hover, && .${buttonGroupClasses.middleButton}:hover`]:
+              {
+                borderRightColor: "transparent",
+              },
+          },
         },
       },
     },

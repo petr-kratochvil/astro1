@@ -158,7 +158,7 @@ export default function TransitsPage({
           </div>
 
           {/* 3) Five date switching buttons */}
-          <div style={buttonsMenuStyle}>
+          <div style={buttonsMenuStyle} className="timeShiftButtons">
             <ButtonGroup variant="outlined">
               <Button
                 onClick={() => setTransitDate(addMonths(transitDate, -12))}

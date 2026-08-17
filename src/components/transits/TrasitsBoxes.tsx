@@ -44,6 +44,7 @@ interface FormattedAspect {
   orb: string;
   strengthening: boolean;
   days: string;
+  daysShort: string;
   strong: boolean;
 }
 
@@ -81,7 +82,8 @@ function formatTransits(
       currentName = newBoxName;
     }
     const days = transitItem.orb / Math.abs(transitItem.orbSpeed ?? 0);
-    let months, weeks;
+    let months = 0;
+    let weeks = 0;
     if (days > 30) {
       months = days / 30;
     } else if (days > 7) {
@@ -94,11 +96,14 @@ function formatTransits(
       const value = fixedFormat(x, precision);
       return t(key, { count: Number(value), value });
     };
-    const daysFormat = months
-      ? duration("transits.months", months, 0.3)
-      : weeks
-        ? duration("transits.weeks", weeks, 0.2) + " "
-        : duration("transits.days", days, 0.1);
+    const daysFormat = (short: boolean) => {
+      const shortString = short ? "short_" : "";
+      return months
+        ? duration(`transits.${shortString}months`, months, 0.3)
+        : weeks
+          ? duration(`transits.${shortString}weeks`, weeks, 0.2) + " "
+          : duration(`transits.${shortString}days`, days, 0.1);
+    };
 
     currentResult = currentResult as TransitGroup;
     currentResult.aspects.push({
@@ -107,7 +112,8 @@ function formatTransits(
       planet: translateCelestialObject(transitItem.pos2, t),
       orb: transitItem.orb.toFixed(1),
       strengthening: (transitItem.orbSpeed ?? 0) < 0,
-      days: daysFormat,
+      days: daysFormat(false),
+      daysShort: daysFormat(true),
       strong:
         planetWeight(transitItem.pos1.name) >=
           planetWeight(transitItem.pos2.name) &&
@@ -175,7 +181,8 @@ export default function TransitsBoxes({
                     fontSize: 11,
                   }}
                 >
-                  {a.days}
+                  <span className="transitBoxesDays">{a.days}</span>
+                  <span className="transitBoxesDaysShort">{a.daysShort}</span>
                 </span>
               </React.Fragment>
             ),

@@ -59,6 +59,12 @@ const cs = {
       days_other: "{{value}} dní",
       weeks: "{{value}} týd",
       months: "{{value}} měs",
+      short_days_one: "{{value}} d",
+      short_days_few: "{{value}} d",
+      short_days_many: "{{value}} d",
+      short_days_other: "{{value}} d",
+      short_weeks: "{{value}} T",
+      short_months: "{{value}} M",
     },
     aspectTable: {
       aspectOrb: "aspekt/orbis",

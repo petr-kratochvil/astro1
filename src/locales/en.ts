@@ -36,6 +36,10 @@ const en = {
       days_other: "{{value}} days",
       weeks: "{{value}} wk",
       months: "{{value}} mo",
+      short_days_one: "{{value}} d",
+      short_days_other: "{{value}} d",
+      short_weeks: "{{value}} W",
+      short_months: "{{value}} M",
     },
     aspectTable: {
       aspectOrb: "aspect/orb",

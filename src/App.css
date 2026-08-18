@@ -123,33 +123,12 @@
   border: 1px solid slateblue;
   border-radius: 8px;
   padding: 10px;
-  width: 220px;
-  margin: 10px;
+  margin: 0px;
+  box-sizing: border-box;
 }
 
 .transitBoxesDaysShort {
   display: none;
-}
-
-@media only screen and (max-width: 540px) and (min-width: 460px) {
-  .PlanetBox {
-    margin: 8px;
-    width: 190px;
-  }
-}
-
-@media only screen and (max-width: 460px) and (min-width: 385px) {
-  .PlanetBox {
-    margin: 5px;
-    width: 160px;
-    font-size: 12px;
-  }
-  .transitBoxesDays {
-    display: none;
-  }
-  .transitBoxesDaysShort {
-    display: revert;
-  }
 }
 
 @media only screen and (max-width: 800px) {
@@ -163,7 +142,7 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 10px;
-  margin: 15px 15px 10px 15px;
+  margin: 15px 15px 15px 15px;
 }
 
 .controls-container > :nth-child(2) {
@@ -191,10 +170,9 @@
   }
 }
 
-@media (max-width: 410px) {
+@media (max-width: 420px) {
   .timeShiftButtons button {
-    padding-left: 8px;
-    padding-right: 8px;
+    padding: 6px 8px;
     min-width: 60px !important;
   }
 }

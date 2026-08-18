@@ -7,6 +7,7 @@ import {
   translateCelestialObject,
 } from "../../utils/translations";
 import TransitBox, { TransitGroup } from "./TransitBox";
+import { Box } from "@mui/material";
 
 function planetWeight(planet: string): number {
   const w: Record<string, number> = {
@@ -69,8 +70,8 @@ function formatTransits(
       return months
         ? duration(`transits.${shortString}months`, months, 0.3)
         : weeks
-        ? duration(`transits.${shortString}weeks`, weeks, 0.2) + " "
-        : duration(`transits.${shortString}days`, days, 0.1);
+          ? duration(`transits.${shortString}weeks`, weeks, 0.2) + " "
+          : duration(`transits.${shortString}days`, days, 0.1);
     };
 
     currentResult = currentResult as TransitGroup;
@@ -111,10 +112,33 @@ export default function TransitsBoxes({
   const { t } = useTranslation();
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
-      {formatTransits(data, t).map((result, index) => (
-        <TransitBox key={index} result={result} />
-      ))}
-    </div>
+    // <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <Box sx={{ containerType: "inline-size" }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          alignContent: "start",
+          gap: 1,
+          margin: "0px 15px",
+          "@supports (margin: 1cqi)": {
+            margin: "0px clamp(6px, 0.85cqi, 15px)",
+            marginBottom: "clamp(6px, 0.85cqi, 15px)",
+            gap: "clamp(6px, 0.85cqi, 20px)",
+          },
+          "@container (min-width: 380px) and (max-width: 460px)": {
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            "& .transitBoxesDays": { display: "none" },
+            "& .transitBoxesDaysShort": { display: "revert" },
+            "& .PlanetBox": { fontSize: "12px" },
+          },
+        }}
+      >
+        {formatTransits(data, t).map((result, index) => (
+          <TransitBox key={index} result={result} />
+        ))}
+      </Box>
+    </Box>
+    // </div>
   );
 }

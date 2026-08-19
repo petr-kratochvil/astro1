@@ -13,6 +13,7 @@ import { getTransits } from "src/api/getTransits";
 import { getSavedData, setRefererOfEditPage } from "src/utils/localStorage";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
+import TouchDebugOverlay from "src/debug/TouchDebugOverlay";
 
 export default function TransitsPage({
   showAsTable = false,
@@ -118,6 +119,7 @@ export default function TransitsPage({
   return (
     <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
       <div>
+        <TouchDebugOverlay />
         <div className="controls-container">
           {/* 1) RecordSelect */}
           <div style={{ display: "flex", justifyContent: "center" }}>

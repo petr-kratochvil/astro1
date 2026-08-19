@@ -1,20 +1,11 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+:root {
+  --color-primary: rgb(106, 90, 205);
+  --color-heading: rgba(106, 90, 205, 0.75);
+  --color-border: rgba(106, 90, 205, 0.5);
 }
 
 .App-header {
-  background-color: slateblue;
+  background-color: var(--color-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -93,12 +84,12 @@
 }
 
 .MyTable td {
-  border: 1px solid slateblue;
+  border: 1px solid var(--color-border);
   padding: 10px 10px;
 }
 
 .MyTableHeading {
-  background-color: slateblue;
+  background-color: var(--color-heading);
   color: white;
   font-weight: bold;
   text-align: center;
@@ -106,7 +97,7 @@
 }
 
 .MyTableSubHeading {
-  color: slateblue;
+  color: var(--color-primary);
   font-weight: bold;
   text-align: center;
 }
@@ -114,13 +105,13 @@
 .Router-link {
   padding: 5px 25px;
   text-decoration: none;
-  color: slateblue;
+  color: var(--color-primary);
   margin: 0px 1px;
   width: 100%;
 }
 
 .PlanetBox {
-  border: 1px solid slateblue;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 10px;
   margin: 0px;

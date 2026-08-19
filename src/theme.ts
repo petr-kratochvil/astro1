@@ -1,10 +1,8 @@
 import { createTheme } from "@mui/material/styles";
 import { buttonGroupClasses } from "@mui/material/ButtonGroup";
 
-// The app's own CSS (header, borders, table headings, headlines) is built
-// around `slateblue`. Mirroring it into the MUI palette keeps MUI components
-// on that accent instead of introducing MUI's default blue as a second one.
 // #6a5acd on white is 5.3:1, so `contrastText` resolves to white (WCAG AA).
+// Also called slateblue or rgb(106, 90, 205)
 export const accent = "#6a5acd";
 
 const theme = createTheme({

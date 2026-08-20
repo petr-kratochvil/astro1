@@ -2,6 +2,8 @@
 
 React (Vite + TypeScript) frontend for viewing planetary positions, natal charts, and transit aspects. Consumes the [`ephemerides`](https://github.com/petr-kratochvil/ephemerides) API for astronomical calculations.
 
+**Try it out live: https://astro-transits.vercel.app/**
+
 ## Screenshots
 
 [Desktop](doc/screen-desktop.png), [Mobile](doc/screen-mobile.jpg)

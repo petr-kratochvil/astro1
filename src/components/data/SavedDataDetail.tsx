@@ -20,13 +20,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { fromUTC } from "src/utils/timeZones";
 import { SavedDate } from "src/types";
-
-interface City {
-  name: string;
-  lat: number;
-  lon: number;
-  id: number;
-}
+import { cityList, defaultCity } from "src/constants";
 
 type FormDataValues = {
   name: string;
@@ -44,29 +38,7 @@ export default function SavedDataDetail() {
   const numericIndex = Number(index);
   const baseDateJson = getBaseDateJson(numericIndex);
 
-  const cities: City[] = [
-    { name: "Praha", lat: 50.075, lon: 14.437, id: 554782 },
-    // { name: "Havlíčkův Brod", lat: 49.604, lon: 15.579, id: 568414 },
-    { name: "Jihlava", lat: 49.415, lon: 15.595, id: 586846 },
-    { name: "Brno", lat: 49.195, lon: 16.606, id: 582786 },
-    { name: "Ostrava", lat: 49.821, lon: 18.262, id: 554821 },
-    { name: "Plzeň", lat: 49.738, lon: 13.373, id: 554791 },
-    { name: "Olomouc", lat: 49.593, lon: 17.25, id: 500496 },
-    { name: "Hradec Králové", lat: 50.21, lon: 15.825, id: 569810 },
-    { name: "Karlovy Vary", lat: 50.231, lon: 12.872, id: 554961 },
-    { name: "Liberec", lat: 50.766, lon: 15.054, id: 563889 },
-    { name: "České Budějovice", lat: 48.975, lon: 14.48, id: 544256 },
-    { name: "Zlín", lat: 49.224, lon: 17.662, id: 585068 },
-    { name: "Ústí nad Labem", lat: 50.661, lon: 14.053, id: 554804 },
-    { name: "Pardubice", lat: 50.034, lon: 15.781, id: 555134 },
-  ].sort((a, b) => a.name.localeCompare(b.name));
 
-  const defaultCity: City = {
-    name: "Praha",
-    lat: 50.075,
-    lon: 14.437,
-    id: 554782,
-  };
 
   const birthplaceLabelId = React.useId();
 
@@ -223,7 +195,7 @@ export default function SavedDataDetail() {
               value={selectedCityId}
               onChange={(event) => {
                 const cityId = Number(event.target.value);
-                const city = cities.find((city) => city.id === cityId);
+                const city = cityList.find((city) => city.id === cityId);
                 setSelectedCityId(cityId);
                 if (city) {
                   setLat(city.lat);
@@ -232,7 +204,7 @@ export default function SavedDataDetail() {
               }}
               MenuProps={{ disableScrollLock: true }}
             >
-              {cities.map((city) => (
+              {cityList.map((city) => (
                 <MenuItem key={city.id} value={city.id}>
                   {city.name}
                 </MenuItem>
@@ -249,7 +221,7 @@ export default function SavedDataDetail() {
               onChange={(e) => {
                 setCustomCoordinates(e.target.checked);
                 if (!e.target.checked) {
-                  const city = cities.find(
+                  const city = cityList.find(
                     (city) => city.id === selectedCityId
                   );
                   if (city) {

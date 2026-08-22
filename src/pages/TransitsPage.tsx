@@ -10,7 +10,8 @@ import AspectTable from "src/components/tables/AspectTable";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useTitle } from "src/hooks/useTitle";
 import { getTransits } from "src/api/getTransits";
-import { getSavedData, setRefererOfEditPage } from "src/utils/localStorage";
+import { useGetSavedDataQuery } from "src/store/savedDataSlice";
+import { setRefererOfEditPage } from "src/utils/localStorage";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
 
@@ -20,30 +21,38 @@ export default function TransitsPage({
   showAsTable?: boolean;
 }) {
   useTitle();
-  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-
-  const savedDataList = getSavedData();
+  const { data: savedDataList, isSuccess } = useGetSavedDataQuery();
 
   React.useEffect(() => {
-    if (savedDataList.length === 0) {
+    if (isSuccess && savedDataList.length === 0) {
       setRefererOfEditPage("/");
       navigate("/saved-data/0");
     }
-  }, [navigate, savedDataList.length]);
+  }, [navigate, isSuccess, savedDataList?.length]);
 
-  const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState<
-    number | undefined
-  >(savedDataList.length > 0 ? 0 : undefined);
+  if (!isSuccess || savedDataList.length === 0) {
+    return null;
+  }
 
+  return (
+    <TransitsView savedDataList={savedDataList} showAsTable={showAsTable} />
+  );
+}
+
+interface TransitsViewProps {
+  savedDataList: SavedDate[];
+  showAsTable: boolean;
+}
+
+function TransitsView({ savedDataList, showAsTable }: TransitsViewProps) {
+  const { t, i18n } = useTranslation();
+
+  const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState(0);
   const [data, setData] = React.useState<AspectWithPositions[]>([]);
-  const [baseDate, setBaseDate] = React.useState<SavedDate | undefined>(
-    savedDataList[0]
-  );
-  const [, setPerson] = React.useState<string | undefined>(
-    savedDataList[0]?.name
-  );
   const [transitDate, setTransitDate] = React.useState(new Date());
+
+  const baseDate: SavedDate | undefined = savedDataList[selectedBaseDateIndex];
 
   function callGetTransits(baseDate: SavedDate | undefined, transitDate: Date) {
     if (baseDate && transitDate) {
@@ -124,11 +133,7 @@ export default function TransitsPage({
             <RecordSelect
               records={savedDataList}
               value={selectedBaseDateIndex}
-              onChange={(index) => {
-                setSelectedBaseDateIndex(index);
-                setBaseDate(savedDataList[index]);
-                setPerson(savedDataList[index]?.name);
-              }}
+              onChange={(index) => setSelectedBaseDateIndex(index)}
             />
           </div>
 

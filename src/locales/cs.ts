@@ -95,6 +95,7 @@ const cs = {
         "V tuto chvíli je předpokládané místo narození v časovém pásmu SEČ/SELČ (střední Evropa). V budoucnu plánujeme odstranit toto omezení.",
       localTimeNote:
         "Čas zadávejte místní v ČR (letní nebo zimní, jaký byl aktuální v době narození).",
+      errorSaving: "Chyba při ukládání záznamu"
     },
     notFound: {
       message: "Stránka nenalezena",

@@ -11,13 +11,15 @@ import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import {
-  getBaseDateJson,
   getNextNameNumber,
   getRefererOfEditPage,
-  setBaseDateJson,
   setlastNameNumber,
 } from "src/utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  useGetSavedDataQuery,
+  useSaveBaseDateMutation,
+} from "src/store/savedDataSlice";
 import { fromUTC } from "src/utils/timeZones";
 import { SavedDate } from "src/types";
 import { cityList, defaultCity } from "src/constants";
@@ -32,13 +34,32 @@ type FormDataValues = {
 };
 
 export default function SavedDataDetail() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
   const { index } = useParams();
   const numericIndex = Number(index);
-  const baseDateJson = getBaseDateJson(numericIndex);
+  const { data: savedData, isSuccess } = useGetSavedDataQuery();
 
+  // Wait for store
+  if (!isSuccess) {
+    return null;
+  }
 
+  return (
+    <SavedDataForm
+      index={numericIndex}
+      baseDateJson={savedData[numericIndex]}
+    />
+  );
+}
+
+interface SavedDataFormProps {
+  index: number;
+  baseDateJson: SavedDate | undefined;
+}
+
+function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [saveBaseDate, { isError: isSaveError }] = useSaveBaseDateMutation();
 
   const birthplaceLabelId = React.useId();
 
@@ -52,7 +73,7 @@ export default function SavedDataDetail() {
     baseDateJson?.customCoordinates ?? false
   );
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries()) as FormDataValues;
@@ -71,7 +92,7 @@ export default function SavedDataDetail() {
     }
     // convert baseDate to UTC - the API currently needs UTC time
     // TODO: use proper time zone based on geolocation
-    const baseDateJson: SavedDate = {
+    const newBaseDate: SavedDate = {
       name: data.name || `[Datum ${getNextNameNumber()}]`,
       year: baseDate.getUTCFullYear(),
       month: baseDate.getUTCMonth() + 1,
@@ -85,8 +106,12 @@ export default function SavedDataDetail() {
     if (!data.name) {
       setlastNameNumber(getNextNameNumber());
     }
-    setBaseDateJson(numericIndex, baseDateJson);
-    navigate(getRefererOfEditPage());
+    try {
+      await saveBaseDate({ index, baseDate: newBaseDate }).unwrap();
+      navigate(getRefererOfEditPage());
+    } catch {
+      // Stay on the form, error is rendered based on isSaveError value
+    }
   }
 
   let heading = t("savedDataDetail.newRecord");
@@ -103,7 +128,7 @@ export default function SavedDataDetail() {
       <h1 style={{ color: "slateblue", textAlign: "center" }}>{heading}</h1>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => void handleSubmit(e)}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -273,6 +298,12 @@ export default function SavedDataDetail() {
               }}
             />
           </Stack>
+        )}
+
+        {isSaveError && (
+          <Box sx={{ color: "error.main" }}>
+            {t("savedDataDetail.errorSaving")}
+          </Box>
         )}
 
         <Stack direction="row" spacing={1.5} sx={{ justifyContent: "center" }}>

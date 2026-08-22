@@ -2,19 +2,21 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import {
-  deleteBaseDate,
-  getSavedData,
-  setRefererOfEditPage,
-} from "src/utils/localStorage";
+import { setRefererOfEditPage } from "src/utils/localStorage";
 import { useNavigate } from "react-router-dom";
-import { useForceUpdate } from "src/hooks/useForceUpdate";
+import {
+  useDeleteBaseDateMutation,
+  useGetSavedDataQuery,
+} from "src/store/savedDataSlice";
 import { fromUTC } from "src/utils/timeZones";
 
 export default function SavedDataList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const savedDataList = getSavedData().map((item) => {
+  const { data: savedData = [] } = useGetSavedDataQuery();
+  const [deleteBaseDate] = useDeleteBaseDateMutation();
+
+  const savedDataList = savedData.map((item) => {
     const baseDate = fromUTC(item);
     return {
       name: item?.name,
@@ -25,8 +27,6 @@ export default function SavedDataList() {
       minutes: baseDate?.getMinutes().toString().padStart(2, "0"),
     };
   });
-
-  const forceUpdate = useForceUpdate();
 
   const itemStyle: React.CSSProperties = {
     border: "1px solid slateblue",
@@ -86,8 +86,7 @@ export default function SavedDataList() {
                     size="small"
                     color="error"
                     onClick={() => {
-                      deleteBaseDate(index);
-                      forceUpdate();
+                      void deleteBaseDate(index);
                     }}
                   >
                     {t("savedData.delete")}

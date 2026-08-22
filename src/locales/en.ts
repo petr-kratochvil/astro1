@@ -70,6 +70,7 @@ const en = {
         "For now the birthplace is assumed to be in the CET/CEST time zone (Central Europe). We plan to lift this limitation.",
       localTimeNote:
         "Enter the local CET/CEST time (whichever was in effect at the time of birth).",
+      errorSaving: "Error saving record",
     },
     notFound: {
       message: "Page not found",

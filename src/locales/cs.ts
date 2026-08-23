@@ -40,6 +40,7 @@ const cs = {
     common: {
       selectRecord: "Vyberte záznam",
       errorLoading: "Data se nepodařilo načíst",
+      errorLoadingRecords: "Nepodařilo se načíst úložiště záznamů",
     },
     currentPlanets: {
       title: "Aktuální planety",

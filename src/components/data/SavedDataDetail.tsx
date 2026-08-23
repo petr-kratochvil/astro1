@@ -31,11 +31,14 @@ type FormDataValues = {
 };
 
 export default function SavedDataDetail() {
+  const { t } = useTranslation();
   const { index } = useParams();
   const numericIndex = Number(index);
-  const { data: savedDate, isSuccess } = useGetSavedDataDetailQuery(numericIndex);
+  const { data: savedDate, isSuccess, isError } = useGetSavedDataDetailQuery(numericIndex);
 
-  // Wait for store
+  if (isError) {
+    return <ErrorMessage message={t("common.errorLoadingRecords")} />;
+  }
   if (!isSuccess) {
     return null;
   }

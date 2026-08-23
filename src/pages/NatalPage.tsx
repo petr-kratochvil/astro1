@@ -26,24 +26,28 @@ function NatalPage() {
     index: selectedBaseDateIndex,
     data: savedDataList,
     setIndex: setSelectedBaseDateIndex,
-    isSuccess,
+    isSuccess: isRecordsSuccess,
+    isError: isRecordsError,
   } = useSelectedBaseDate();
-  const recordsLoaded = isSuccess && savedDataList.length > 0;
+  const recordsLoaded = isRecordsSuccess && savedDataList.length > 0;
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   React.useEffect(() => {
-    if (isSuccess && savedDataList.length === 0) {
+    if (isRecordsSuccess && savedDataList.length === 0) {
       dispatch(setRefererOfEditPage("/natal-planets"));
       navigate("/saved-data/0");
     }
-  }, [navigate, dispatch, isSuccess, savedDataList?.length]);
+  }, [navigate, dispatch, isRecordsSuccess, savedDataList?.length]);
 
-  const { data = [], isError } = useGetNatalPositionQuery(
+  const { data = [], isError: isNatalPositionError } = useGetNatalPositionQuery(
     selectedBaseDateIndex,
     { skip: !recordsLoaded }
   );
 
+  if (isRecordsError) {
+    return <ErrorMessage message={t("common.errorLoadingRecords")} />;
+  }
   if (!recordsLoaded) {
     return null;
   }
@@ -65,8 +69,8 @@ function NatalPage() {
         />
       </div>
 
-      <ErrorMessage isError={isError} message={t("common.errorLoading")} />
-      {!isError && (
+      <ErrorMessage isError={isNatalPositionError} message={t("common.errorLoading")} />
+      {!isNatalPositionError && (
         <div
           style={{
             display: "flex",

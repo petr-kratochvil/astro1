@@ -2,20 +2,24 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import {
-  deleteBaseDate,
-  getSavedData,
-  setRefererOfEditPage,
-} from "src/utils/localStorage";
+import { useAppDispatch } from "src/store/hooks";
+import { setRefererOfEditPage } from "src/store/uiSlice";
 import { useNavigate } from "react-router-dom";
-import { useForceUpdate } from "src/hooks/useForceUpdate";
-import { fromUTC } from "src/utils/timeZones";
+import {
+  useDeleteBaseDateMutation,
+  useGetSavedDataQuery,
+} from "src/store/savedDataSlice";
+import { apiUTCToDate } from "src/utils/timeZones";
 
 export default function SavedDataList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const savedDataList = getSavedData().map((item) => {
-    const baseDate = fromUTC(item);
+  const dispatch = useAppDispatch();
+  const { data: savedData = [] } = useGetSavedDataQuery();
+  const [deleteBaseDate] = useDeleteBaseDateMutation();
+
+  const savedDataList = savedData.map((item) => {
+    const baseDate = apiUTCToDate(item);
     return {
       name: item?.name,
       day: baseDate?.getDate(),
@@ -25,8 +29,6 @@ export default function SavedDataList() {
       minutes: baseDate?.getMinutes().toString().padStart(2, "0"),
     };
   });
-
-  const forceUpdate = useForceUpdate();
 
   const itemStyle: React.CSSProperties = {
     border: "1px solid slateblue",
@@ -49,7 +51,7 @@ export default function SavedDataList() {
           variant="contained"
           sx={{ m: "20px" }}
           onClick={() => {
-            setRefererOfEditPage("/saved-data");
+            dispatch(setRefererOfEditPage("/saved-data"));
             navigate(`${savedDataList.length}`);
           }}
         >
@@ -75,7 +77,7 @@ export default function SavedDataList() {
                     variant="outlined"
                     size="small"
                     onClick={() => {
-                      setRefererOfEditPage("/saved-data");
+                      dispatch(setRefererOfEditPage("/saved-data"));
                       navigate(`${index}`);
                     }}
                   >
@@ -86,8 +88,7 @@ export default function SavedDataList() {
                     size="small"
                     color="error"
                     onClick={() => {
-                      deleteBaseDate(index);
-                      forceUpdate();
+                      void deleteBaseDate(index);
                     }}
                   >
                     {t("savedData.delete")}

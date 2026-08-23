@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
+import { Provider } from "react-redux";
 
 import "./index.css";
 import "./i18n";
 import theme from "./theme";
+import { store } from "./store";
 import RootPage from "./pages/RootPage";
 import TransitsPage from "./pages/TransitsPage";
 import PlanetsPage from "./pages/CurrentPlanetsPage";
@@ -59,8 +61,10 @@ if (!container) {
 const root = ReactDOM.createRoot(container);
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );

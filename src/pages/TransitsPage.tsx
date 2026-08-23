@@ -4,82 +4,84 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
-import { AspectWithPositions, SavedDate } from "src/types";
 import TransitsBoxes from "src/components/transits/TrasitsBoxes";
 import AspectTable from "src/components/tables/AspectTable";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useTitle } from "src/hooks/useTitle";
-import { getTransits } from "src/api/getTransits";
-import { getSavedData, setRefererOfEditPage } from "src/utils/localStorage";
+import { useGetTransitsQuery } from "src/store/ephemeridesSlice";
+import { useAppDispatch } from "src/store/hooks";
+import { setRefererOfEditPage } from "src/store/uiSlice";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
+import { dateToApiUTC } from "src/utils/timeZones";
+import ErrorMessage from "src/components/ui/ErrorMessage";
+import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
+import { useTransitDate } from "src/hooks/useTransitDate";
+
+const buttonsMenuStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  flexWrap: "wrap",
+};
 
 export default function TransitsPage({
   showAsTable = false,
 }: {
   showAsTable?: boolean;
 }) {
-  useTitle();
   const { t, i18n } = useTranslation();
+  useTitle();
+  const {
+    index: selectedBaseDateIndex,
+    data: savedDataList,
+    setIndex: setSelectedBaseDateIndex,
+    isSuccess: isRecordsSuccess,
+    isError: isRecordsError,
+  } = useSelectedBaseDate();
+  const recordsLoaded = isRecordsSuccess && savedDataList.length > 0;
+
   const navigate = useNavigate();
-
-  const savedDataList = getSavedData();
-
+  const dispatch = useAppDispatch();
   React.useEffect(() => {
-    if (savedDataList.length === 0) {
-      setRefererOfEditPage("/");
+    if (isRecordsSuccess && savedDataList.length === 0) {
+      dispatch(setRefererOfEditPage("/"));
       navigate("/saved-data/0");
     }
-  }, [navigate, savedDataList.length]);
+  }, [navigate, dispatch, isRecordsSuccess, savedDataList?.length]);
 
-  const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState<
-    number | undefined
-  >(savedDataList.length > 0 ? 0 : undefined);
+  const { date: transitDate, setDate, addDays, addMonths } = useTransitDate();
 
-  const [data, setData] = React.useState<AspectWithPositions[]>([]);
-  const [baseDate, setBaseDate] = React.useState<SavedDate | undefined>(
-    savedDataList[0]
-  );
-  const [, setPerson] = React.useState<string | undefined>(
-    savedDataList[0]?.name
-  );
-  const [transitDate, setTransitDate] = React.useState(new Date());
-
-  function callGetTransits(baseDate: SavedDate | undefined, transitDate: Date) {
-    if (baseDate && transitDate) {
-      const { lat, lon } = baseDate;
-      getTransits(
-        baseDate,
-        transitDate,
-        lat && lon ? { lat, lon } : undefined
-      ).then((data) => setData(data));
-    }
-  }
-
-  function addDays(date: Date, days: number): Date {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-  }
-
-  function addMonths(date: Date, months: number): Date {
-    const result = new Date(date);
-    result.setMonth(result.getMonth() + months);
-    return result;
-  }
-
-  React.useEffect(
-    () => callGetTransits(baseDate, transitDate),
-    [baseDate, transitDate]
+  // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
+  const { data = [], isError: isTransitsError } = useGetTransitsQuery(
+    {
+      index: selectedBaseDateIndex,
+      transitDate: dateToApiUTC(transitDate),
+    },
+    { skip: !recordsLoaded }
   );
 
   function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
       case "ArrowLeft":
-        setTransitDate(addDays(transitDate, -1));
+        addDays(-1);
         break;
       case "ArrowRight":
-        setTransitDate(addDays(transitDate, +1));
+        addDays(+1);
+        break;
+      default:
+        break;
+    }
+  }
+
+  function handleSwipe(param: { direction: number }) {
+    switch (param.direction) {
+      case 2:
+        addDays(+1);
+        break;
+      case 4:
+        addDays(-1);
         break;
       default:
         break;
@@ -94,25 +96,11 @@ export default function TransitsPage({
     };
   });
 
-  const buttonsMenuStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    flexWrap: "wrap",
-  };
-
-  function handleSwipe(param: { direction: number }) {
-    switch (param.direction) {
-      case 2:
-        setTransitDate((prevDate) => addDays(prevDate, +1));
-        break;
-      case 4:
-        setTransitDate((prevDate) => addDays(prevDate, -1));
-        break;
-      default:
-        break;
-    }
+  if (isRecordsError) {
+    return <ErrorMessage message={t("common.errorLoadingRecords")} />;
+  }
+  if (!recordsLoaded) {
+    return null;
   }
 
   return (
@@ -124,11 +112,7 @@ export default function TransitsPage({
             <RecordSelect
               records={savedDataList}
               value={selectedBaseDateIndex}
-              onChange={(index) => {
-                setSelectedBaseDateIndex(index);
-                setBaseDate(savedDataList[index]);
-                setPerson(savedDataList[index]?.name);
-              }}
+              onChange={(index) => setSelectedBaseDateIndex(index)}
             />
           </div>
 
@@ -136,7 +120,7 @@ export default function TransitsPage({
           <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
             <Button
               variant="outlined"
-              onClick={() => setTransitDate(addDays(transitDate, -1))}
+              onClick={() => addDays(-1)}
             >
               ◁◁
             </Button>
@@ -151,7 +135,7 @@ export default function TransitsPage({
             </div>
             <Button
               variant="outlined"
-              onClick={() => setTransitDate(addDays(transitDate, +1))}
+              onClick={() => addDays(+1)}
             >
               ▷▷
             </Button>
@@ -161,52 +145,55 @@ export default function TransitsPage({
           <div style={buttonsMenuStyle} className="timeShiftButtons">
             <ButtonGroup variant="outlined">
               <Button
-                onClick={() => setTransitDate(addMonths(transitDate, -12))}
+                onClick={() => addMonths(-12)}
               >
                 ◁&nbsp;{t("transits.year")}
               </Button>
               <Button
-                onClick={() => setTransitDate(addMonths(transitDate, -1))}
+                onClick={() => addMonths(-1)}
               >
                 ◁&nbsp;{t("transits.month")}
               </Button>
-              <Button onClick={() => setTransitDate(new Date())}>
+              <Button onClick={() => setDate(new Date())}>
                 &nbsp;&nbsp;{t("transits.today")}&nbsp;&nbsp;
               </Button>
               <Button
-                onClick={() => setTransitDate(addMonths(transitDate, +1))}
+                onClick={() => addMonths(+1)}
               >
                 {t("transits.month")}&nbsp;▷
               </Button>
               <Button
-                onClick={() => setTransitDate(addMonths(transitDate, +12))}
+                onClick={() => addMonths(+12)}
               >
                 {t("transits.year")}&nbsp;▷
               </Button>
             </ButtonGroup>
           </div>
         </div>
-        {showAsTable ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              marginTop: "20px",
-              flexWrap: "wrap",
-            }}
-            className="smallFont"
-          >
-            <AspectTable
-              aspectChart={data}
-              title=""
-              name1={t("transits.transiting")}
-              name2={t("transits.natal")}
-              style={{ useSignSymbols: true, useSignText: false }}
-            />
-          </div>
-        ) : (
-          <TransitsBoxes data={data} />
-        )}
+
+        <ErrorMessage isError={isTransitsError} message={t("common.errorLoading")} />
+        {!isTransitsError &&
+          (showAsTable ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                marginTop: "20px",
+                flexWrap: "wrap",
+              }}
+              className="smallFont"
+            >
+              <AspectTable
+                aspectChart={data}
+                title=""
+                name1={t("transits.transiting")}
+                name2={t("transits.natal")}
+                style={{ useSignSymbols: true, useSignText: false }}
+              />
+            </div>
+          ) : (
+            <TransitsBoxes data={data} />
+          ))}
       </div>
     </Hammer>
   );

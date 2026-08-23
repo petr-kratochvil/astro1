@@ -1,6 +1,16 @@
 import { JsonDate } from "src/types";
 
-export function fromUTC(baseDateJson?: JsonDate): Date | undefined {
+// Use minute granularity for the API, so the result is stable in the RTK cache
+export function dateToApiUTC(date: Date): JsonDate {
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+    day: date.getUTCDate(),
+    hour: date.getUTCHours() + date.getUTCMinutes() / 60,
+  };
+}
+
+export function apiUTCToDate(baseDateJson?: JsonDate): Date | undefined {
   if (!baseDateJson) {
     return undefined;
   }
@@ -21,4 +31,16 @@ export function fromUTC(baseDateJson?: JsonDate): Date | undefined {
     return baseDate;
   }
   return undefined;
+}
+
+export function dateAddDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+export function dateAddMonths(date: Date, months: number): Date {
+  const result = new Date(date);
+  result.setMonth(result.getMonth() + months);
+  return result;
 }

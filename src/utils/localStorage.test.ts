@@ -3,10 +3,6 @@ import {
   getUserObject,
   setUserObject,
   getSavedData,
-  getNextNameNumber,
-  setlastNameNumber,
-  getRefererOfEditPage,
-  setRefererOfEditPage,
   setBaseDateJson,
   getBaseDateJson,
   deleteBaseDate,
@@ -37,14 +33,14 @@ describe("getUserObject / setUserObject", () => {
 
   it("round-trips a stored object", () => {
     const alice = makeSavedDate("Alice");
-    setUserObject({ lastNameNumber: 4, savedData: [alice] });
-    expect(getUserObject()).toEqual({ lastNameNumber: 4, savedData: [alice] });
+    setUserObject({ language: "cs", savedData: [alice] });
+    expect(getUserObject()).toEqual({ language: "cs", savedData: [alice] });
   });
 
   it("replaces the previously stored object rather than merging", () => {
-    setUserObject({ lastNameNumber: 4, savedData: [makeSavedDate("Alice")] });
-    setUserObject({ lastNameNumber: 3 });
-    expect(getUserObject()).toEqual({ lastNameNumber: 3 });
+    setUserObject({ language: "cs", savedData: [makeSavedDate("Alice")] });
+    setUserObject({ language: "en" });
+    expect(getUserObject()).toEqual({ language: "en" });
   });
 
   it("falls back to an empty object on malformed JSON", () => {
@@ -78,17 +74,6 @@ describe("saved data", () => {
   });
 });
 
-describe("lastNameNumber", () => {
-  it("defaults to 1", () => {
-    expect(getNextNameNumber()).toBe(1);
-  });
-
-  it("increments from the stored value", () => {
-    setlastNameNumber(5);
-    expect(getNextNameNumber()).toBe(6);
-  });
-});
-
 describe("language", () => {
   it("is undefined until the user picks one", () => {
     expect(getLanguage()).toBeUndefined();
@@ -107,19 +92,8 @@ describe("language", () => {
   });
 
   it("keeps the rest of the user object intact", () => {
-    setlastNameNumber(3);
+    setBaseDateJson(0, makeSavedDate("Alice"));
     setLanguage("cs");
-    expect(getNextNameNumber()).toBe(4);
-  });
-});
-
-describe("refererOfEditPage", () => {
-  it("defaults to /saved-data", () => {
-    expect(getRefererOfEditPage()).toBe("/saved-data");
-  });
-
-  it("round-trips a stored value", () => {
-    setRefererOfEditPage("/natal-planets");
-    expect(getRefererOfEditPage()).toBe("/natal-planets");
+    expect(getSavedData().map((d) => d.name)).toEqual(["Alice"]);
   });
 });

@@ -10,17 +10,16 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import {
-  getBaseDateJson,
-  getNextNameNumber,
-  getRefererOfEditPage,
-  setBaseDateJson,
-  setlastNameNumber,
-} from "src/utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
-import { fromUTC } from "src/utils/timeZones";
+import { useAppSelector } from "src/store/hooks";
+import {
+  useGetSavedDataDetailQuery,
+  useSaveBaseDateMutation,
+} from "src/store/savedDataSlice";
+import { dateToApiUTC, apiUTCToDate } from "src/utils/timeZones";
 import { SavedDate } from "src/types";
 import { cityList, defaultCity } from "src/constants";
+import ErrorMessage from "../ui/ErrorMessage";
 
 type FormDataValues = {
   name: string;
@@ -33,12 +32,35 @@ type FormDataValues = {
 
 export default function SavedDataDetail() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { index } = useParams();
   const numericIndex = Number(index);
-  const baseDateJson = getBaseDateJson(numericIndex);
+  const { data: savedDate, isSuccess, isError } = useGetSavedDataDetailQuery(numericIndex);
 
+  if (isError) {
+    return <ErrorMessage message={t("common.errorLoadingRecords")} />;
+  }
+  if (!isSuccess) {
+    return null;
+  }
 
+  return (
+    <SavedDataForm
+      index={numericIndex}
+      baseDateJson={savedDate}
+    />
+  );
+}
+
+interface SavedDataFormProps {
+  index: number;
+  baseDateJson: SavedDate | undefined;
+}
+
+function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [saveBaseDate, { isError: isSaveError }] = useSaveBaseDateMutation();
+  const refererOfEditPage = useAppSelector((s) => s.ui.refererOfEditPage);
 
   const birthplaceLabelId = React.useId();
 
@@ -52,7 +74,7 @@ export default function SavedDataDetail() {
     baseDateJson?.customCoordinates ?? false
   );
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries()) as FormDataValues;
@@ -71,22 +93,20 @@ export default function SavedDataDetail() {
     }
     // convert baseDate to UTC - the API currently needs UTC time
     // TODO: use proper time zone based on geolocation
-    const baseDateJson: SavedDate = {
-      name: data.name || `[Datum ${getNextNameNumber()}]`,
-      year: baseDate.getUTCFullYear(),
-      month: baseDate.getUTCMonth() + 1,
-      day: baseDate.getUTCDate(),
-      hour: baseDate.getUTCHours() + baseDate.getUTCMinutes() / 60,
+    const newBaseDate: SavedDate = {
+      ...dateToApiUTC(baseDate),
+      name: data.name,
       customCoordinates: !!customCoordinates,
       cityId: customCoordinates ? undefined : selectedCityId,
       lat,
       lon,
     };
-    if (!data.name) {
-      setlastNameNumber(getNextNameNumber());
+    try {
+      await saveBaseDate({ index, baseDate: newBaseDate }).unwrap();
+      navigate(refererOfEditPage);
+    } catch {
+      // Stay on the form, error is rendered based on isSaveError value
     }
-    setBaseDateJson(numericIndex, baseDateJson);
-    navigate(getRefererOfEditPage());
   }
 
   let heading = t("savedDataDetail.newRecord");
@@ -95,7 +115,7 @@ export default function SavedDataDetail() {
   // baseDateJson is in UTC
   if (baseDateJson) {
     heading = t("savedDataDetail.editRecord");
-    baseDate = fromUTC(baseDateJson);
+    baseDate = apiUTCToDate(baseDateJson);
   }
 
   return (
@@ -103,7 +123,7 @@ export default function SavedDataDetail() {
       <h1 style={{ color: "slateblue", textAlign: "center" }}>{heading}</h1>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => void handleSubmit(e)}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -275,10 +295,12 @@ export default function SavedDataDetail() {
           </Stack>
         )}
 
+        <ErrorMessage isError={isSaveError} message={t("savedDataDetail.errorSaving")} />
+
         <Stack direction="row" spacing={1.5} sx={{ justifyContent: "center" }}>
           <Button
             variant="outlined"
-            onClick={() => navigate(getRefererOfEditPage())}
+            onClick={() => navigate(refererOfEditPage)}
           >
             {t("savedDataDetail.cancel")}
           </Button>

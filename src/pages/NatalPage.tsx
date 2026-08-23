@@ -5,19 +5,31 @@ import { useTitle } from "src/hooks/useTitle";
 import ChartTable from "src/components/tables/ChartTable";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useGetNatalPositionQuery } from "src/store/ephemeridesSlice";
-import { useGetSavedDataQuery } from "src/store/savedDataSlice";
 import { useNavigate } from "react-router-dom";
 import { setRefererOfEditPage } from "src/utils/localStorage";
-import { SavedDate } from "src/types";
 import ErrorMessage from "src/components/ui/ErrorMessage";
+import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
+
+const currentChartStyle = {
+  degreesFirst: true,
+  useSignSymbols: true,
+  showMinutes: true,
+  showSeconds: true,
+  useSignText: false,
+};
 
 function NatalPage() {
   const { t } = useTranslation();
   useTitle(t("title.planets"));
+  const {
+    index: selectedBaseDateIndex,
+    data: savedDataList,
+    setIndex: setSelectedBaseDateIndex,
+    isSuccess,
+  } = useSelectedBaseDate();
+  const recordsLoaded = isSuccess && savedDataList.length > 0;
 
   const navigate = useNavigate();
-  const { data: savedDataList, isSuccess } = useGetSavedDataQuery();
-
   React.useEffect(() => {
     if (isSuccess && savedDataList.length === 0) {
       setRefererOfEditPage("/natal-planets");
@@ -25,28 +37,14 @@ function NatalPage() {
     }
   }, [navigate, isSuccess, savedDataList?.length]);
 
-  if (!isSuccess || savedDataList.length === 0) {
-    return null;
-  }
-
-  return <NatalView savedDataList={savedDataList} />;
-}
-
-function NatalView({ savedDataList }: { savedDataList: SavedDate[] }) {
-  const { t } = useTranslation();
-  const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState(0);
-
   const { data = [], isError } = useGetNatalPositionQuery(
-    selectedBaseDateIndex
+    selectedBaseDateIndex,
+    { skip: !recordsLoaded }
   );
 
-  const currentChartStyle = {
-    degreesFirst: true,
-    useSignSymbols: true,
-    showMinutes: true,
-    showSeconds: true,
-    useSignText: false,
-  };
+  if (!recordsLoaded) {
+    return null;
+  }
 
   return (
     <>

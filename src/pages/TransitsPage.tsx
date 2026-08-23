@@ -4,28 +4,54 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
-import { SavedDate } from "src/types";
 import TransitsBoxes from "src/components/transits/TrasitsBoxes";
 import AspectTable from "src/components/tables/AspectTable";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useTitle } from "src/hooks/useTitle";
 import { useGetTransitsQuery } from "src/store/ephemeridesSlice";
-import { useGetSavedDataQuery } from "src/store/savedDataSlice";
 import { setRefererOfEditPage } from "src/utils/localStorage";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
 import { dateToApiUTC } from "src/utils/timeZones";
 import ErrorMessage from "src/components/ui/ErrorMessage";
+import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
+
+const buttonsMenuStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  flexWrap: "wrap",
+};
+
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function addMonths(date: Date, months: number): Date {
+  const result = new Date(date);
+  result.setMonth(result.getMonth() + months);
+  return result;
+}
 
 export default function TransitsPage({
   showAsTable = false,
 }: {
   showAsTable?: boolean;
 }) {
+  const { t, i18n } = useTranslation();
   useTitle();
-  const navigate = useNavigate();
-  const { data: savedDataList, isSuccess } = useGetSavedDataQuery();
+  const {
+    index: selectedBaseDateIndex,
+    data: savedDataList,
+    setIndex: setSelectedBaseDateIndex,
+    isSuccess,
+  } = useSelectedBaseDate();
+  const recordsLoaded = isSuccess && savedDataList.length > 0;
 
+  const navigate = useNavigate();
   React.useEffect(() => {
     if (isSuccess && savedDataList.length === 0) {
       setRefererOfEditPage("/");
@@ -33,43 +59,16 @@ export default function TransitsPage({
     }
   }, [navigate, isSuccess, savedDataList?.length]);
 
-  if (!isSuccess || savedDataList.length === 0) {
-    return null;
-  }
-
-  return (
-    <TransitsView savedDataList={savedDataList} showAsTable={showAsTable} />
-  );
-}
-
-interface TransitsViewProps {
-  savedDataList: SavedDate[];
-  showAsTable: boolean;
-}
-
-function TransitsView({ savedDataList, showAsTable }: TransitsViewProps) {
-  const { t, i18n } = useTranslation();
-
-  const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState(0);
   const [transitDate, setTransitDate] = React.useState(new Date());
 
   // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
-  const { data = [], isError } = useGetTransitsQuery({
-    index: selectedBaseDateIndex,
-    transitDate: dateToApiUTC(transitDate),
-  });
-
-  function addDays(date: Date, days: number): Date {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-  }
-
-  function addMonths(date: Date, months: number): Date {
-    const result = new Date(date);
-    result.setMonth(result.getMonth() + months);
-    return result;
-  }
+  const { data = [], isError } = useGetTransitsQuery(
+    {
+      index: selectedBaseDateIndex,
+      transitDate: dateToApiUTC(transitDate),
+    },
+    { skip: !recordsLoaded }
+  );
 
   function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
@@ -84,22 +83,6 @@ function TransitsView({ savedDataList, showAsTable }: TransitsViewProps) {
     }
   }
 
-  React.useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  });
-
-  const buttonsMenuStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    flexWrap: "wrap",
-  };
-
   function handleSwipe(param: { direction: number }) {
     switch (param.direction) {
       case 2:
@@ -111,6 +94,18 @@ function TransitsView({ savedDataList, showAsTable }: TransitsViewProps) {
       default:
         break;
     }
+  }
+
+  React.useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  if (!recordsLoaded) {
+    return null;
   }
 
   return (

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useTitle } from "src/hooks/useTitle";
 import ChartTable from "src/components/tables/ChartTable";
-import { useGetPositionQuery } from "src/store/ephemeridesSlice";
+import { useGetPositionQuery } from "src/store/slices/ephemeridesSlice";
 import { dateToApiUTC } from "src/utils/timeZones";
 import ErrorMessage from "src/components/ui/ErrorMessage";
 

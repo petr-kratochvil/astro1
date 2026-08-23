@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { useTitle } from "src/hooks/useTitle";
 import ChartTable from "src/components/tables/ChartTable";
 import RecordSelect from "src/components/ui/RecordSelect";
-import { useGetNatalPositionQuery } from "src/store/ephemeridesSlice";
+import { useGetNatalPositionQuery } from "src/store/slices/ephemeridesSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "src/store/hooks";
-import { setRefererOfEditPage } from "src/store/uiSlice";
+import { setRefererOfEditPage } from "src/store/slices/uiSlice";
 import ErrorMessage from "src/components/ui/ErrorMessage";
 import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
 

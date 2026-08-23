@@ -11,7 +11,7 @@ import {
   SAVED_DATE_LIST_ID,
   SAVED_DATE_TAG,
   toFetchError,
-} from "src/store/apiSlice";
+} from "src/store/slices/apiSlice";
 
 // Placeholder name for quick unnamed records, derived from the actual store contents
 const AUTO_NAME_PATTERN = /^\[Datum (\d+)\]$/;

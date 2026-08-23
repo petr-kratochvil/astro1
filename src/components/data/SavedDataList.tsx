@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { useAppDispatch } from "src/store/hooks";
-import { setRefererOfEditPage } from "src/store/uiSlice";
+import { setRefererOfEditPage } from "src/store/slices/uiSlice";
 import { useNavigate } from "react-router-dom";
 import {
   useDeleteBaseDateMutation,
   useGetSavedDataQuery,
-} from "src/store/savedDataSlice";
+} from "src/store/slices/savedDataSlice";
 import { apiUTCToDate } from "src/utils/timeZones";
 
 export default function SavedDataList() {

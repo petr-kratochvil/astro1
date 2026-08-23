@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { useGetSavedDataQuery } from "src/store/savedDataSlice";
-import { selectBaseDate } from "src/store/uiSlice";
+import { useGetSavedDataQuery } from "src/store/slices/savedDataSlice";
+import { selectBaseDate } from "src/store/slices/uiSlice";
 
 export function useSelectedBaseDate() {
   const dispatch = useAppDispatch();

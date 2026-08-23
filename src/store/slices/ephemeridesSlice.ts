@@ -4,7 +4,11 @@ import {
   JsonDate,
   SavedDate,
 } from "src/types";
-import { apiSlice, savedDateTag, toFetchError } from "src/store/apiSlice";
+import {
+  apiSlice,
+  savedDateTag,
+  toFetchError,
+} from "src/store/slices/apiSlice";
 import { savedDataSlice } from "./savedDataSlice";
 import { BaseQueryApi } from "@reduxjs/toolkit/query";
 

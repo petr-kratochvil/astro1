@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { setTransitDateTimestamp } from "src/store/uiSlice";
+import { setTransitDateTimestamp } from "src/store/slices/uiSlice";
 import { dateAddDays, dateAddMonths } from "src/utils/timeZones";
 
 export function useTransitDate() {

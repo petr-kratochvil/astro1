@@ -15,7 +15,7 @@ import { useAppSelector } from "src/store/hooks";
 import {
   useGetSavedDataDetailQuery,
   useSaveBaseDateMutation,
-} from "src/store/savedDataSlice";
+} from "src/store/slices/savedDataSlice";
 import { dateToApiUTC, apiUTCToDate } from "src/utils/timeZones";
 import { SavedDate } from "src/types";
 import { cityList, defaultCity } from "src/constants";

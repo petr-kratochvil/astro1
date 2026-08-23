@@ -15,6 +15,7 @@ import { getLocale } from "src/utils/language";
 import { dateToApiUTC } from "src/utils/timeZones";
 import ErrorMessage from "src/components/ui/ErrorMessage";
 import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
+import { useTransitDate } from "src/hooks/useTransitDate";
 
 const buttonsMenuStyle: React.CSSProperties = {
   display: "flex",
@@ -23,18 +24,6 @@ const buttonsMenuStyle: React.CSSProperties = {
   alignItems: "center",
   flexWrap: "wrap",
 };
-
-function addDays(date: Date, days: number): Date {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-}
-
-function addMonths(date: Date, months: number): Date {
-  const result = new Date(date);
-  result.setMonth(result.getMonth() + months);
-  return result;
-}
 
 export default function TransitsPage({
   showAsTable = false,
@@ -59,7 +48,7 @@ export default function TransitsPage({
     }
   }, [navigate, isSuccess, savedDataList?.length]);
 
-  const [transitDate, setTransitDate] = React.useState(new Date());
+  const {date: transitDate, setDate, addDays, addMonths} = useTransitDate();
 
   // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
   const { data = [], isError } = useGetTransitsQuery(
@@ -73,10 +62,10 @@ export default function TransitsPage({
   function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
       case "ArrowLeft":
-        setTransitDate(addDays(transitDate, -1));
+        addDays(-1);
         break;
       case "ArrowRight":
-        setTransitDate(addDays(transitDate, +1));
+        addDays(+1);
         break;
       default:
         break;
@@ -86,10 +75,10 @@ export default function TransitsPage({
   function handleSwipe(param: { direction: number }) {
     switch (param.direction) {
       case 2:
-        setTransitDate((prevDate) => addDays(prevDate, +1));
+        addDays(+1);
         break;
       case 4:
-        setTransitDate((prevDate) => addDays(prevDate, -1));
+        addDays(-1);
         break;
       default:
         break;
@@ -125,7 +114,7 @@ export default function TransitsPage({
           <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
             <Button
               variant="outlined"
-              onClick={() => setTransitDate(addDays(transitDate, -1))}
+              onClick={() => addDays(-1)}
             >
               ◁◁
             </Button>
@@ -140,7 +129,7 @@ export default function TransitsPage({
             </div>
             <Button
               variant="outlined"
-              onClick={() => setTransitDate(addDays(transitDate, +1))}
+              onClick={() => addDays(+1)}
             >
               ▷▷
             </Button>
@@ -150,25 +139,25 @@ export default function TransitsPage({
           <div style={buttonsMenuStyle} className="timeShiftButtons">
             <ButtonGroup variant="outlined">
               <Button
-                onClick={() => setTransitDate(addMonths(transitDate, -12))}
+                onClick={() => addMonths(-12)}
               >
                 ◁&nbsp;{t("transits.year")}
               </Button>
               <Button
-                onClick={() => setTransitDate(addMonths(transitDate, -1))}
+                onClick={() => addMonths(-1)}
               >
                 ◁&nbsp;{t("transits.month")}
               </Button>
-              <Button onClick={() => setTransitDate(new Date())}>
+              <Button onClick={() => setDate(new Date())}>
                 &nbsp;&nbsp;{t("transits.today")}&nbsp;&nbsp;
               </Button>
               <Button
-                onClick={() => setTransitDate(addMonths(transitDate, +1))}
+                onClick={() => addMonths(+1)}
               >
                 {t("transits.month")}&nbsp;▷
               </Button>
               <Button
-                onClick={() => setTransitDate(addMonths(transitDate, +12))}
+                onClick={() => addMonths(+12)}
               >
                 {t("transits.year")}&nbsp;▷
               </Button>

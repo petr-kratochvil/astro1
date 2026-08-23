@@ -4,11 +4,14 @@ import { savedDataSlice } from "./savedDataSlice";
 export const uiSlice = createSlice({
   name: "ui",
   // selectedBaseDateIndex - selected record used for transits or natal chart
-  initialState: { selectedBaseDateIndex: 0 },
+  initialState: { selectedBaseDateIndex: 0, transitDateTimestamp: new Date().getTime() },
   reducers: {
     selectBaseDate(state, action: PayloadAction<number>) {
       state.selectedBaseDateIndex = action.payload;
     },
+    setTransitDateTimestamp(state, action: PayloadAction<number>) {
+      state.transitDateTimestamp = action.payload;
+    }
   },
   extraReducers: (builder) => {
     // Records shifted position - fall back to the first record.
@@ -21,4 +24,4 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { selectBaseDate } = uiSlice.actions;
+export const { selectBaseDate, setTransitDateTimestamp } = uiSlice.actions;

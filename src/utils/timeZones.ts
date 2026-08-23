@@ -32,3 +32,15 @@ export function apiUTCToDate(baseDateJson?: JsonDate): Date | undefined {
   }
   return undefined;
 }
+
+export function dateAddDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+export function dateAddMonths(date: Date, months: number): Date {
+  const result = new Date(date);
+  result.setMonth(result.getMonth() + months);
+  return result;
+}

@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React from "react";
 
 interface ErrorMessageProps {
-  isError: boolean;
+  isError?: boolean;
   message: string;
 }
 

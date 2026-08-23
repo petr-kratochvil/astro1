@@ -36,22 +36,23 @@ export default function TransitsPage({
     index: selectedBaseDateIndex,
     data: savedDataList,
     setIndex: setSelectedBaseDateIndex,
-    isSuccess,
+    isSuccess: isRecordsSuccess,
+    isError: isRecordsError,
   } = useSelectedBaseDate();
-  const recordsLoaded = isSuccess && savedDataList.length > 0;
+  const recordsLoaded = isRecordsSuccess && savedDataList.length > 0;
 
   const navigate = useNavigate();
   React.useEffect(() => {
-    if (isSuccess && savedDataList.length === 0) {
+    if (isRecordsSuccess && savedDataList.length === 0) {
       setRefererOfEditPage("/");
       navigate("/saved-data/0");
     }
-  }, [navigate, isSuccess, savedDataList?.length]);
+  }, [navigate, isRecordsSuccess, savedDataList?.length]);
 
   const {date: transitDate, setDate, addDays, addMonths} = useTransitDate();
 
   // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
-  const { data = [], isError } = useGetTransitsQuery(
+  const { data = [], isError: isTransitsError } = useGetTransitsQuery(
     {
       index: selectedBaseDateIndex,
       transitDate: dateToApiUTC(transitDate),
@@ -93,6 +94,9 @@ export default function TransitsPage({
     };
   });
 
+  if (isRecordsError) {
+    return <ErrorMessage message={t("common.errorLoadingRecords")} />;
+  }
   if (!recordsLoaded) {
     return null;
   }
@@ -165,8 +169,8 @@ export default function TransitsPage({
           </div>
         </div>
 
-        <ErrorMessage isError={isError} message={t("common.errorLoading")} />
-        {!isError &&
+        <ErrorMessage isError={isTransitsError} message={t("common.errorLoading")} />
+        {!isTransitsError &&
           (showAsTable ? (
             <div
               style={{

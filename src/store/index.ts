@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { savedDataSlice } from "src/store/savedDataSlice";
+import { apiSlice } from "src/store/apiSlice";
 
 export const store = configureStore({
   reducer: {
-    [savedDataSlice.reducerPath]: savedDataSlice.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(savedDataSlice.middleware),
+    getDefaultMiddleware().concat(apiSlice.middleware),
 });

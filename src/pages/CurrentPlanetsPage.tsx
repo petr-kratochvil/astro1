@@ -1,12 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { useTitle } from "src/hooks/useTitle";
 import ChartTable from "src/components/tables/ChartTable";
-import { useCurrentPosition } from "src/api/usePosition";
+import { useGetPositionQuery } from "src/store/ephemeridesSlice";
+import { dateToApiUTC } from "src/utils/timeZones";
+import ErrorMessage from "src/components/ui/ErrorMessage";
 
 function CurrentPlanetsPage() {
   const { t } = useTranslation();
   useTitle(t("title.planets"));
-  const data = useCurrentPosition();
+
+  // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
+  const { data = [], isError } = useGetPositionQuery(dateToApiUTC(new Date()));
 
   const currentChartStyle = {
     degreesFirst: true,
@@ -18,20 +22,23 @@ function CurrentPlanetsPage() {
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          marginTop: "40px",
-          flexWrap: "wrap",
-        }}
-      >
-        <ChartTable
-          chart={data}
-          title={t("currentPlanets.title")}
-          style={currentChartStyle}
-        />
-      </div>
+      <ErrorMessage isError={isError} message={t("common.errorLoading")} />
+      {!isError && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            marginTop: "40px",
+            flexWrap: "wrap",
+          }}
+        >
+          <ChartTable
+            chart={data}
+            title={t("currentPlanets.title")}
+            style={currentChartStyle}
+          />
+        </div>
+      )}
     </>
   );
 }

@@ -4,16 +4,18 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
-import { AspectWithPositions, SavedDate } from "src/types";
+import { SavedDate } from "src/types";
 import TransitsBoxes from "src/components/transits/TrasitsBoxes";
 import AspectTable from "src/components/tables/AspectTable";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useTitle } from "src/hooks/useTitle";
-import { getTransits } from "src/api/getTransits";
+import { useGetTransitsQuery } from "src/store/ephemeridesSlice";
 import { useGetSavedDataQuery } from "src/store/savedDataSlice";
 import { setRefererOfEditPage } from "src/utils/localStorage";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
+import { dateToApiUTC } from "src/utils/timeZones";
+import ErrorMessage from "src/components/ui/ErrorMessage";
 
 export default function TransitsPage({
   showAsTable = false,
@@ -49,21 +51,13 @@ function TransitsView({ savedDataList, showAsTable }: TransitsViewProps) {
   const { t, i18n } = useTranslation();
 
   const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState(0);
-  const [data, setData] = React.useState<AspectWithPositions[]>([]);
   const [transitDate, setTransitDate] = React.useState(new Date());
 
-  const baseDate: SavedDate | undefined = savedDataList[selectedBaseDateIndex];
-
-  function callGetTransits(baseDate: SavedDate | undefined, transitDate: Date) {
-    if (baseDate && transitDate) {
-      const { lat, lon } = baseDate;
-      getTransits(
-        baseDate,
-        transitDate,
-        lat && lon ? { lat, lon } : undefined
-      ).then((data) => setData(data));
-    }
-  }
+  // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
+  const { data = [], isError } = useGetTransitsQuery({
+    index: selectedBaseDateIndex,
+    transitDate: dateToApiUTC(transitDate),
+  });
 
   function addDays(date: Date, days: number): Date {
     const result = new Date(date);
@@ -76,11 +70,6 @@ function TransitsView({ savedDataList, showAsTable }: TransitsViewProps) {
     result.setMonth(result.getMonth() + months);
     return result;
   }
-
-  React.useEffect(
-    () => callGetTransits(baseDate, transitDate),
-    [baseDate, transitDate]
-  );
 
   function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
@@ -191,27 +180,30 @@ function TransitsView({ savedDataList, showAsTable }: TransitsViewProps) {
             </ButtonGroup>
           </div>
         </div>
-        {showAsTable ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              marginTop: "20px",
-              flexWrap: "wrap",
-            }}
-            className="smallFont"
-          >
-            <AspectTable
-              aspectChart={data}
-              title=""
-              name1={t("transits.transiting")}
-              name2={t("transits.natal")}
-              style={{ useSignSymbols: true, useSignText: false }}
-            />
-          </div>
-        ) : (
-          <TransitsBoxes data={data} />
-        )}
+
+        <ErrorMessage isError={isError} message={t("common.errorLoading")} />
+        {!isError &&
+          (showAsTable ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                marginTop: "20px",
+                flexWrap: "wrap",
+              }}
+              className="smallFont"
+            >
+              <AspectTable
+                aspectChart={data}
+                title=""
+                name1={t("transits.transiting")}
+                name2={t("transits.natal")}
+                style={{ useSignSymbols: true, useSignText: false }}
+              />
+            </div>
+          ) : (
+            <TransitsBoxes data={data} />
+          ))}
       </div>
     </Hammer>
   );

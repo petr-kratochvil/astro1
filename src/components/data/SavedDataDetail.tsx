@@ -17,12 +17,13 @@ import {
 } from "src/utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  useGetSavedDataQuery,
+  useGetSavedDataDetailQuery,
   useSaveBaseDateMutation,
 } from "src/store/savedDataSlice";
-import { fromUTC } from "src/utils/timeZones";
+import { dateToApiUTC, apiUTCToDate } from "src/utils/timeZones";
 import { SavedDate } from "src/types";
 import { cityList, defaultCity } from "src/constants";
+import ErrorMessage from "../ui/ErrorMessage";
 
 type FormDataValues = {
   name: string;
@@ -36,7 +37,7 @@ type FormDataValues = {
 export default function SavedDataDetail() {
   const { index } = useParams();
   const numericIndex = Number(index);
-  const { data: savedData, isSuccess } = useGetSavedDataQuery();
+  const { data: savedDate, isSuccess } = useGetSavedDataDetailQuery(numericIndex);
 
   // Wait for store
   if (!isSuccess) {
@@ -46,7 +47,7 @@ export default function SavedDataDetail() {
   return (
     <SavedDataForm
       index={numericIndex}
-      baseDateJson={savedData[numericIndex]}
+      baseDateJson={savedDate}
     />
   );
 }
@@ -93,11 +94,8 @@ function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
     // convert baseDate to UTC - the API currently needs UTC time
     // TODO: use proper time zone based on geolocation
     const newBaseDate: SavedDate = {
+      ...dateToApiUTC(baseDate),
       name: data.name || `[Datum ${getNextNameNumber()}]`,
-      year: baseDate.getUTCFullYear(),
-      month: baseDate.getUTCMonth() + 1,
-      day: baseDate.getUTCDate(),
-      hour: baseDate.getUTCHours() + baseDate.getUTCMinutes() / 60,
       customCoordinates: !!customCoordinates,
       cityId: customCoordinates ? undefined : selectedCityId,
       lat,
@@ -120,7 +118,7 @@ function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
   // baseDateJson is in UTC
   if (baseDateJson) {
     heading = t("savedDataDetail.editRecord");
-    baseDate = fromUTC(baseDateJson);
+    baseDate = apiUTCToDate(baseDateJson);
   }
 
   return (
@@ -300,11 +298,7 @@ function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
           </Stack>
         )}
 
-        {isSaveError && (
-          <Box sx={{ color: "error.main" }}>
-            {t("savedDataDetail.errorSaving")}
-          </Box>
-        )}
+        <ErrorMessage isError={isSaveError} message={t("savedDataDetail.errorSaving")} />
 
         <Stack direction="row" spacing={1.5} sx={{ justifyContent: "center" }}>
           <Button

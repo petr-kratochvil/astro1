@@ -8,7 +8,7 @@ import {
   useDeleteBaseDateMutation,
   useGetSavedDataQuery,
 } from "src/store/savedDataSlice";
-import { fromUTC } from "src/utils/timeZones";
+import { apiUTCToDate } from "src/utils/timeZones";
 
 export default function SavedDataList() {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ export default function SavedDataList() {
   const [deleteBaseDate] = useDeleteBaseDateMutation();
 
   const savedDataList = savedData.map((item) => {
-    const baseDate = fromUTC(item);
+    const baseDate = apiUTCToDate(item);
     return {
       name: item?.name,
       day: baseDate?.getDate(),

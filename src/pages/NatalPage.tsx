@@ -4,14 +4,41 @@ import { useTranslation } from "react-i18next";
 import { useTitle } from "src/hooks/useTitle";
 import ChartTable from "src/components/tables/ChartTable";
 import RecordSelect from "src/components/ui/RecordSelect";
-import { usePosition } from "src/api/usePosition";
+import { useGetNatalPositionQuery } from "src/store/ephemeridesSlice";
+import { useGetSavedDataQuery } from "src/store/savedDataSlice";
 import { useNavigate } from "react-router-dom";
-import { getSavedData, setRefererOfEditPage } from "src/utils/localStorage";
+import { setRefererOfEditPage } from "src/utils/localStorage";
 import { SavedDate } from "src/types";
+import ErrorMessage from "src/components/ui/ErrorMessage";
 
 function NatalPage() {
   const { t } = useTranslation();
   useTitle(t("title.planets"));
+
+  const navigate = useNavigate();
+  const { data: savedDataList, isSuccess } = useGetSavedDataQuery();
+
+  React.useEffect(() => {
+    if (isSuccess && savedDataList.length === 0) {
+      setRefererOfEditPage("/natal-planets");
+      navigate("/saved-data/0");
+    }
+  }, [navigate, isSuccess, savedDataList?.length]);
+
+  if (!isSuccess || savedDataList.length === 0) {
+    return null;
+  }
+
+  return <NatalView savedDataList={savedDataList} />;
+}
+
+function NatalView({ savedDataList }: { savedDataList: SavedDate[] }) {
+  const { t } = useTranslation();
+  const [selectedBaseDateIndex, setSelectedBaseDateIndex] = React.useState(0);
+
+  const { data = [], isError } = useGetNatalPositionQuery(
+    selectedBaseDateIndex
+  );
 
   const currentChartStyle = {
     degreesFirst: true,
@@ -20,26 +47,6 @@ function NatalPage() {
     showSeconds: true,
     useSignText: false,
   };
-
-  const navigate = useNavigate();
-  const savedDataList = getSavedData();
-
-  React.useEffect(() => {
-    if (savedDataList.length === 0) {
-      setRefererOfEditPage("/natal-planets");
-      navigate("/saved-data/0");
-    }
-  }, [navigate, savedDataList.length]);
-
-  const [selectedBaseDate, setSelectedBaseDate] = React.useState<
-    number | undefined
-  >(savedDataList.length > 0 ? 0 : undefined);
-
-  const [baseDateJson, setBaseDateJson] = React.useState<SavedDate | undefined>(
-    savedDataList.length > 0 ? savedDataList[0] : undefined
-  );
-
-  const data = usePosition(baseDateJson);
 
   return (
     <>
@@ -53,27 +60,28 @@ function NatalPage() {
       >
         <RecordSelect
           records={savedDataList}
-          value={selectedBaseDate}
-          onChange={(index) => {
-            setSelectedBaseDate(index);
-            setBaseDateJson(savedDataList[index]);
+          value={selectedBaseDateIndex}
+          onChange={(index) => setSelectedBaseDateIndex(index)}
+        />
+      </div>
+
+      <ErrorMessage isError={isError} message={t("common.errorLoading")} />
+      {!isError && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            marginTop: "20px",
+            flexWrap: "wrap",
           }}
-        />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          marginTop: "20px",
-          flexWrap: "wrap",
-        }}
-      >
-        <ChartTable
-          chart={data}
-          title={t("natalPlanets.title")}
-          style={currentChartStyle}
-        />
-      </div>
+        >
+          <ChartTable
+            chart={data}
+            title={t("natalPlanets.title")}
+            style={currentChartStyle}
+          />
+        </div>
+      )}
     </>
   );
 }

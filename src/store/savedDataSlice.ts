@@ -1,27 +1,21 @@
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { SavedDate } from "src/types";
 import {
   deleteBaseDate,
+  getBaseDateJson,
   getSavedData,
   setBaseDateJson,
 } from "src/utils/localStorage";
-
-// Tag type
-export const SAVED_DATE_TAG = "SAVED_DATE_TAG";
-// Tag ID for the list
-export const SAVED_DATE_LIST_ID = "SAVED_DATE_LIST_ID";
-
-// Convert error object to string
-function toErrorString(error: unknown): string {
-  return error instanceof Error ? error.name : String(error);
-}
+import {
+  apiSlice,
+  savedDateTag,
+  SAVED_DATE_LIST_ID,
+  SAVED_DATE_TAG,
+  toFetchError,
+} from "src/store/apiSlice";
 
 // The SavedDate data come from localStorage (not API)
-// - so we use fakeBaseQuery and queryFn
-export const savedDataSlice = createApi({
-  reducerPath: "savedDataSlice",
-  baseQuery: fakeBaseQuery<string>(),
-  tagTypes: [SAVED_DATE_TAG],
+// - so we use queryFn instead of the slice base query
+export const savedDataSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getSavedData: builder.query<SavedDate[], void>({
       queryFn: () => {
@@ -29,14 +23,28 @@ export const savedDataSlice = createApi({
           return { data: getSavedData() };
         } catch (error) {
           console.error(error);
-          return { error: toErrorString(error) };
+          return { error: toFetchError(error) };
         }
       },
       // One tag per record plus the list tag
       providesTags: (result) => [
-        ...(result ?? []).map(
-          (_, index) => ({ type: SAVED_DATE_TAG, id: index }) as const
-        ),
+        ...(result ?? []).map((_, index) => savedDateTag(index)),
+        { type: SAVED_DATE_TAG, id: SAVED_DATE_LIST_ID },
+      ],
+    }),
+
+    getSavedDataDetail: builder.query<SavedDate | undefined, number>({
+      queryFn: (index) => {
+        try {
+          return { data: getBaseDateJson(index)};
+        } catch (error) {
+          console.error(error);
+          return { error: toFetchError(error) };
+        }
+      },
+      // One tag per record plus the list tag
+      providesTags: (_result, _error, arg) => [
+        savedDateTag(arg),
         { type: SAVED_DATE_TAG, id: SAVED_DATE_LIST_ID },
       ],
     }),
@@ -51,12 +59,13 @@ export const savedDataSlice = createApi({
           return { data: undefined };
         } catch (error) {
           console.error(error);
-          return { error: toErrorString(error) };
+          return { error: toFetchError(error) };
         }
       },
-      // Invalidate the edited record and the list
+      // Invalidate the edited record and the list.
+      // The record tag also reaches the ephemerides queries computed from it.
       invalidatesTags: (_result, _error, { index }) => [
-        { type: SAVED_DATE_TAG, id: index },
+        savedDateTag(index),
         { type: SAVED_DATE_TAG, id: SAVED_DATE_LIST_ID },
       ],
     }),
@@ -68,7 +77,7 @@ export const savedDataSlice = createApi({
           return { data: undefined };
         } catch (error) {
           console.error(error);
-          return { error: toErrorString(error) };
+          return { error: toFetchError(error) };
         }
       },
       // Invalidate the whole record type (details + list)
@@ -80,6 +89,7 @@ export const savedDataSlice = createApi({
 
 export const {
   useGetSavedDataQuery,
+  useGetSavedDataDetailQuery,
   useSaveBaseDateMutation,
   useDeleteBaseDateMutation,
 } = savedDataSlice;

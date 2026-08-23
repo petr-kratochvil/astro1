@@ -19,6 +19,7 @@ const en = {
     },
     common: {
       selectRecord: "Select record",
+      errorLoading: "Data could not be loaded",
     },
     currentPlanets: {
       title: "Current planets",

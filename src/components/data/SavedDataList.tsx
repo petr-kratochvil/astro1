@@ -2,7 +2,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import { setRefererOfEditPage } from "src/utils/localStorage";
+import { useAppDispatch } from "src/store/hooks";
+import { setRefererOfEditPage } from "src/store/uiSlice";
 import { useNavigate } from "react-router-dom";
 import {
   useDeleteBaseDateMutation,
@@ -13,6 +14,7 @@ import { apiUTCToDate } from "src/utils/timeZones";
 export default function SavedDataList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { data: savedData = [] } = useGetSavedDataQuery();
   const [deleteBaseDate] = useDeleteBaseDateMutation();
 
@@ -49,7 +51,7 @@ export default function SavedDataList() {
           variant="contained"
           sx={{ m: "20px" }}
           onClick={() => {
-            setRefererOfEditPage("/saved-data");
+            dispatch(setRefererOfEditPage("/saved-data"));
             navigate(`${savedDataList.length}`);
           }}
         >
@@ -75,7 +77,7 @@ export default function SavedDataList() {
                     variant="outlined"
                     size="small"
                     onClick={() => {
-                      setRefererOfEditPage("/saved-data");
+                      dispatch(setRefererOfEditPage("/saved-data"));
                       navigate(`${index}`);
                     }}
                   >

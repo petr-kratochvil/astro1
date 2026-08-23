@@ -6,7 +6,8 @@ import ChartTable from "src/components/tables/ChartTable";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useGetNatalPositionQuery } from "src/store/ephemeridesSlice";
 import { useNavigate } from "react-router-dom";
-import { setRefererOfEditPage } from "src/utils/localStorage";
+import { useAppDispatch } from "src/store/hooks";
+import { setRefererOfEditPage } from "src/store/uiSlice";
 import ErrorMessage from "src/components/ui/ErrorMessage";
 import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
 
@@ -30,12 +31,13 @@ function NatalPage() {
   const recordsLoaded = isSuccess && savedDataList.length > 0;
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   React.useEffect(() => {
     if (isSuccess && savedDataList.length === 0) {
-      setRefererOfEditPage("/natal-planets");
+      dispatch(setRefererOfEditPage("/natal-planets"));
       navigate("/saved-data/0");
     }
-  }, [navigate, isSuccess, savedDataList?.length]);
+  }, [navigate, dispatch, isSuccess, savedDataList?.length]);
 
   const { data = [], isError } = useGetNatalPositionQuery(
     selectedBaseDateIndex,

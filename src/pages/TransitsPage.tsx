@@ -9,7 +9,8 @@ import AspectTable from "src/components/tables/AspectTable";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useTitle } from "src/hooks/useTitle";
 import { useGetTransitsQuery } from "src/store/ephemeridesSlice";
-import { setRefererOfEditPage } from "src/utils/localStorage";
+import { useAppDispatch } from "src/store/hooks";
+import { setRefererOfEditPage } from "src/store/uiSlice";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
 import { dateToApiUTC } from "src/utils/timeZones";
@@ -41,14 +42,15 @@ export default function TransitsPage({
   const recordsLoaded = isSuccess && savedDataList.length > 0;
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   React.useEffect(() => {
     if (isSuccess && savedDataList.length === 0) {
-      setRefererOfEditPage("/");
+      dispatch(setRefererOfEditPage("/"));
       navigate("/saved-data/0");
     }
-  }, [navigate, isSuccess, savedDataList?.length]);
+  }, [navigate, dispatch, isSuccess, savedDataList?.length]);
 
-  const {date: transitDate, setDate, addDays, addMonths} = useTransitDate();
+  const { date: transitDate, setDate, addDays, addMonths } = useTransitDate();
 
   // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
   const { data = [], isError } = useGetTransitsQuery(

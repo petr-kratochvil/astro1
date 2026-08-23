@@ -10,12 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import {
-  getNextNameNumber,
-  getRefererOfEditPage,
-  setlastNameNumber,
-} from "src/utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppSelector } from "src/store/hooks";
 import {
   useGetSavedDataDetailQuery,
   useSaveBaseDateMutation,
@@ -61,6 +57,7 @@ function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [saveBaseDate, { isError: isSaveError }] = useSaveBaseDateMutation();
+  const refererOfEditPage = useAppSelector((s) => s.ui.refererOfEditPage);
 
   const birthplaceLabelId = React.useId();
 
@@ -95,18 +92,15 @@ function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
     // TODO: use proper time zone based on geolocation
     const newBaseDate: SavedDate = {
       ...dateToApiUTC(baseDate),
-      name: data.name || `[Datum ${getNextNameNumber()}]`,
+      name: data.name,
       customCoordinates: !!customCoordinates,
       cityId: customCoordinates ? undefined : selectedCityId,
       lat,
       lon,
     };
-    if (!data.name) {
-      setlastNameNumber(getNextNameNumber());
-    }
     try {
       await saveBaseDate({ index, baseDate: newBaseDate }).unwrap();
-      navigate(getRefererOfEditPage());
+      navigate(refererOfEditPage);
     } catch {
       // Stay on the form, error is rendered based on isSaveError value
     }
@@ -303,7 +297,7 @@ function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
         <Stack direction="row" spacing={1.5} sx={{ justifyContent: "center" }}>
           <Button
             variant="outlined"
-            onClick={() => navigate(getRefererOfEditPage())}
+            onClick={() => navigate(refererOfEditPage)}
           >
             {t("savedDataDetail.cancel")}
           </Button>

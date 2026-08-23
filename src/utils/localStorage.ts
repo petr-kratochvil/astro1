@@ -6,8 +6,6 @@ const defaultUserObject: UserObject = {};
 
 interface UserObject {
   savedData?: (SavedDate | null | undefined)[];
-  lastNameNumber?: number;
-  refererOfEditPage?: string;
   language?: Language;
 }
 
@@ -20,9 +18,9 @@ function isSavedDate(x: unknown): x is SavedDate {
 }
 
 export function getUserObject(): UserObject {
+  const raw = localStorage.getItem(USER_OBJECT_KEY);
+  if (!raw) return { ...defaultUserObject };
   try {
-    const raw = localStorage.getItem(USER_OBJECT_KEY);
-    if (!raw) return { ...defaultUserObject };
     const parsed: unknown = JSON.parse(raw);
     return isUserObject(parsed) ? parsed : { ...defaultUserObject };
   } catch {
@@ -36,24 +34,6 @@ export function setUserObject(userObject: UserObject): void {
 
 export function getSavedData(): SavedDate[] {
   return (getUserObject().savedData || []).filter(isSavedDate);
-}
-
-export function getNextNameNumber(): number {
-  return (getUserObject().lastNameNumber || 0) + 1;
-}
-
-export function setlastNameNumber(nameNumber: number): void {
-  const userObject = getUserObject();
-  setUserObject({ ...userObject, lastNameNumber: nameNumber });
-}
-
-export function getRefererOfEditPage(): string {
-  return getUserObject().refererOfEditPage || "/saved-data";
-}
-
-export function setRefererOfEditPage(page: string): void {
-  const userObject = getUserObject();
-  setUserObject({ ...userObject, refererOfEditPage: page });
 }
 
 export function getLanguage(): Language | undefined {

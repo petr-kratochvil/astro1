@@ -13,6 +13,17 @@ import {
   toFetchError,
 } from "src/store/apiSlice";
 
+// Placeholder name for quick unnamed records, derived from the actual store contents
+const AUTO_NAME_PATTERN = /^\[Datum (\d+)\]$/;
+
+export function nextAutoName(records: SavedDate[]): string {
+  const highest = records.reduce((max, record) => {
+    const match = AUTO_NAME_PATTERN.exec(record.name ?? "");
+    return match ? Math.max(max, Number(match[1])) : max;
+  }, 0);
+  return `[Datum ${highest + 1}]`;
+}
+
 // The SavedDate data come from localStorage (not API)
 // - so we use queryFn instead of the slice base query
 export const savedDataSlice = apiSlice.injectEndpoints({
@@ -55,7 +66,11 @@ export const savedDataSlice = apiSlice.injectEndpoints({
     >({
       queryFn: ({ index, baseDate }) => {
         try {
-          setBaseDateJson(index, baseDate);
+          // Automatic naming of unnamed records
+          const named = baseDate.name
+            ? baseDate
+            : { ...baseDate, name: nextAutoName(getSavedData()) };
+          setBaseDateJson(index, named);
           return { data: undefined };
         } catch (error) {
           console.error(error);

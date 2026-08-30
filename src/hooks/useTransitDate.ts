@@ -27,7 +27,7 @@ export function useTransitDate() {
   };
 
   return {
-    date: new Date(transitDateTimestamp),
+    timestamp: transitDateTimestamp,
     setDate,
     addDays,
     addMonths,

@@ -8,15 +8,14 @@ import TransitsBoxes from "src/components/transits/TrasitsBoxes";
 import AspectTable from "src/components/tables/AspectTable";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useTitle } from "src/hooks/useTitle";
-import { useGetTransitsQuery } from "src/store/slices/ephemeridesSlice";
 import { useAppDispatch } from "src/store/hooks";
 import { setRefererOfEditPage } from "src/store/slices/uiSlice";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
-import { dateToApiUTC } from "src/utils/timeZones";
 import ErrorMessage from "src/components/ui/ErrorMessage";
 import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
 import { useTransitDate } from "src/hooks/useTransitDate";
+import { useStreamingTransits } from "src/hooks/useStreamingTransits";
 
 const buttonsMenuStyle: React.CSSProperties = {
   display: "flex",
@@ -51,16 +50,15 @@ export default function TransitsPage({
     }
   }, [navigate, dispatch, isRecordsSuccess, savedDataList?.length]);
 
-  const { date: transitDate, setDate, addDays, addMonths } = useTransitDate();
+  const { timestamp: transitTimestamp, setDate, addDays, addMonths } = useTransitDate();
 
-  // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
-  const { data = [], isError: isTransitsError } = useGetTransitsQuery(
-    {
-      index: selectedBaseDateIndex,
-      transitDate: dateToApiUTC(transitDate),
-    },
-    { skip: !recordsLoaded }
-  );
+  // The date label always shows the requested day, the page shows the last
+  // response that arrived (if they differ, the loading indicator is on)
+  const { data = [], isError: isTransitsError } = useStreamingTransits({
+    baseDateIndex: selectedBaseDateIndex,
+    transitTimestamp,
+    skip: !recordsLoaded,
+  });
 
   function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
@@ -131,7 +129,7 @@ export default function TransitsPage({
                 textAlign: "center",
               }}
             >
-              {formatDateWithWeekday(transitDate, getLocale(i18n.language))}
+              {formatDateWithWeekday(new Date(transitTimestamp), getLocale(i18n.language))}
             </div>
             <Button
               variant="outlined"

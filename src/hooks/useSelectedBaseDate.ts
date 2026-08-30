@@ -1,11 +1,13 @@
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import { useGetSavedDataQuery } from "src/store/slices/savedDataSlice";
 import { selectBaseDate } from "src/store/slices/uiSlice";
+import { useBusy } from "src/hooks/useBusy";
 
 export function useSelectedBaseDate() {
   const dispatch = useAppDispatch();
   const stored = useAppSelector((s) => s.ui.selectedBaseDateIndex);
-  const { data = [], isSuccess, isError } = useGetSavedDataQuery();
+  const { data = [], isSuccess, isError, isFetching } = useGetSavedDataQuery();
+  useBusy(isFetching);
 
   // Defensive: if index is out of bound, use 0 default
   const index = stored < data.length ? stored : 0;

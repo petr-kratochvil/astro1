@@ -23,6 +23,13 @@
   gap: 0px;
 }
 
+.App-header-loading {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+}
+
 .App-header-button {
   display: flex;
   align-items: center;

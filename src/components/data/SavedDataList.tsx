@@ -10,13 +10,16 @@ import {
   useGetSavedDataQuery,
 } from "src/store/slices/savedDataSlice";
 import { apiUTCToDate } from "src/utils/timeZones";
+import { useBusy } from "src/hooks/useBusy";
 
 export default function SavedDataList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data: savedData = [] } = useGetSavedDataQuery();
-  const [deleteBaseDate] = useDeleteBaseDateMutation();
+  const { data: savedData = [], isFetching } = useGetSavedDataQuery();
+  const [deleteBaseDate, { isLoading: isDeleting }] =
+    useDeleteBaseDateMutation();
+  useBusy(isFetching || isDeleting);
 
   const savedDataList = savedData.map((item) => {
     const baseDate = apiUTCToDate(item);

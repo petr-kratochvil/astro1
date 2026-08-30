@@ -20,6 +20,7 @@ import { dateToApiUTC, apiUTCToDate } from "src/utils/timeZones";
 import { SavedDate } from "src/types";
 import { cityList, defaultCity } from "src/constants";
 import ErrorMessage from "../ui/ErrorMessage";
+import { useBusy } from "src/hooks/useBusy";
 
 type FormDataValues = {
   name: string;
@@ -34,7 +35,13 @@ export default function SavedDataDetail() {
   const { t } = useTranslation();
   const { index } = useParams();
   const numericIndex = Number(index);
-  const { data: savedDate, isSuccess, isError } = useGetSavedDataDetailQuery(numericIndex);
+  const {
+    data: savedDate,
+    isSuccess,
+    isError,
+    isFetching,
+  } = useGetSavedDataDetailQuery(numericIndex);
+  useBusy(isFetching);
 
   if (isError) {
     return <ErrorMessage message={t("common.errorLoadingRecords")} />;
@@ -43,12 +50,7 @@ export default function SavedDataDetail() {
     return null;
   }
 
-  return (
-    <SavedDataForm
-      index={numericIndex}
-      baseDateJson={savedDate}
-    />
-  );
+  return <SavedDataForm index={numericIndex} baseDateJson={savedDate} />;
 }
 
 interface SavedDataFormProps {
@@ -59,7 +61,9 @@ interface SavedDataFormProps {
 function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [saveBaseDate, { isError: isSaveError }] = useSaveBaseDateMutation();
+  const [saveBaseDate, { isError: isSaveError, isLoading: isSaving }] =
+    useSaveBaseDateMutation();
+  useBusy(isSaving);
   const refererOfEditPage = useAppSelector((s) => s.ui.refererOfEditPage);
 
   const birthplaceLabelId = React.useId();

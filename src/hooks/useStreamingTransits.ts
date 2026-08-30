@@ -7,6 +7,7 @@ import {
 } from "src/store/slices/ephemeridesSlice";
 import { dateAddDays, dateToApiUTC } from "src/utils/timeZones";
 import { JsonDate } from "src/types";
+import { useBusy } from "./useBusy";
 
 // Transits for the requested day, with continuous updates in case the user switches
 // days fast (by clicking, swiping or using arrow keys).
@@ -101,6 +102,8 @@ export function useStreamingTransits({
     !skip &&
     (!displayed ||
       transitsRequestCode(displayed) !== transitsRequestCode(requested));
+
+  useBusy(isCatchingUp);
 
   // Prefetch of the neighbouring days
   React.useEffect(() => {

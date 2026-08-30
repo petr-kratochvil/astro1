@@ -10,6 +10,7 @@ import { useAppDispatch } from "src/store/hooks";
 import { setRefererOfEditPage } from "src/store/slices/uiSlice";
 import ErrorMessage from "src/components/ui/ErrorMessage";
 import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
+import { useBusy } from "src/hooks/useBusy";
 
 const currentChartStyle = {
   degreesFirst: true,
@@ -40,10 +41,12 @@ function NatalPage() {
     }
   }, [navigate, dispatch, isRecordsSuccess, savedDataList?.length]);
 
-  const { data = [], isError: isNatalPositionError } = useGetNatalPositionQuery(
-    selectedBaseDateIndex,
-    { skip: !recordsLoaded }
-  );
+  const {
+    data = [],
+    isError: isNatalPositionError,
+    isFetching: isNatalPositionFetching,
+  } = useGetNatalPositionQuery(selectedBaseDateIndex, { skip: !recordsLoaded });
+  useBusy(isNatalPositionFetching);
 
   if (isRecordsError) {
     return <ErrorMessage message={t("common.errorLoadingRecords")} />;

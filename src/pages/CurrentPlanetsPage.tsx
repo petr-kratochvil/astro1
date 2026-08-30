@@ -4,13 +4,19 @@ import ChartTable from "src/components/tables/ChartTable";
 import { useGetPositionQuery } from "src/store/slices/ephemeridesSlice";
 import { dateToApiUTC } from "src/utils/timeZones";
 import ErrorMessage from "src/components/ui/ErrorMessage";
+import { useBusy } from "src/hooks/useBusy";
 
 function CurrentPlanetsPage() {
   const { t } = useTranslation();
   useTitle(t("title.planets"));
 
   // dateToApiUTC truncates to a minute granularity, so the cache key does not change every render
-  const { data = [], isError } = useGetPositionQuery(dateToApiUTC(new Date()));
+  const {
+    data = [],
+    isError,
+    isFetching,
+  } = useGetPositionQuery(dateToApiUTC(new Date()));
+  useBusy(isFetching);
 
   const currentChartStyle = {
     degreesFirst: true,

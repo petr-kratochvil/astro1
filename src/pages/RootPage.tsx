@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import HeaderButton from "src/components/ui/HeaderButton";
 import LanguageSelect from "src/components/ui/LanguageSelect";
+import LoadingIndicator from "src/components/ui/LoadingIndicator";
 
 import "src/App.css";
 
@@ -23,6 +24,7 @@ export default function RootPage() {
       <div className="App-layout">
         <div style={{ display: "flex", flexDirection: "column" }}>
           <header className="App App-header">
+            <LoadingIndicator />
             <div>Astro Transits</div>
             <div className="App-header-actions">
               <LanguageSelect />

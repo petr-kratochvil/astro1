@@ -25,6 +25,17 @@ const buttonsMenuStyle: React.CSSProperties = {
   flexWrap: "wrap",
 };
 
+const KEY_REPEAT_INTERVAL_MS = 40;
+
+function allowKeyAdvance(lastKeyTimeRef: React.MutableRefObject<number>) {
+  const now = performance.now();
+  if (now - lastKeyTimeRef.current < KEY_REPEAT_INTERVAL_MS) {
+    return false;
+  }
+  lastKeyTimeRef.current = now;
+  return true;
+}
+
 export default function TransitsPage({
   showAsTable = false,
 }: {
@@ -65,16 +76,30 @@ export default function TransitsPage({
     skip: !recordsLoaded,
   });
 
+  const lastKeyTimeRef = React.useRef(0);
+
   function handleKeyDown(event: KeyboardEvent) {
-    switch (event.key) {
-      case "ArrowLeft":
-        addDays(-1);
-        break;
-      case "ArrowRight":
-        addDays(+1);
-        break;
-      default:
-        break;
+    if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
+      if (event.repeat && !allowKeyAdvance(lastKeyTimeRef)) {
+        return;
+      }
+      if (event.ctrlKey || event.altKey) {
+        addMonths(event.key === "ArrowLeft" ? -1 : +1);
+      } else {
+        addDays(event.key === "ArrowLeft" ? -1 : +1);
+      }
+    }
+  }
+
+  function controlsContainerHandleKeyDown(
+    event: React.KeyboardEvent<HTMLDivElement>
+  ) {
+    if (
+      event.key === "Enter" &&
+      event.repeat &&
+      !allowKeyAdvance(lastKeyTimeRef)
+    ) {
+      event.preventDefault();
     }
   }
 
@@ -109,7 +134,12 @@ export default function TransitsPage({
   return (
     <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
       <div>
-        <div className="controls-container">
+        {/* A handler to throttle key repeat (the element itself stays non-interactive) */}
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <div
+          className="controls-container"
+          onKeyDown={controlsContainerHandleKeyDown}
+        >
           {/* 1) RecordSelect */}
           <div style={{ display: "flex", justifyContent: "center" }}>
             <RecordSelect

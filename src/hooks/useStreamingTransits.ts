@@ -8,6 +8,7 @@ import {
 import { dateAddDays, dateToApiUTC } from "src/utils/timeZones";
 import { JsonDate } from "src/types";
 import { useBusy } from "./useBusy";
+import { useIsMounted } from "./useIsMounted";
 
 // Transits for the requested day, with continuous updates in case the user switches
 // days fast (by clicking, swiping or using arrow keys).
@@ -22,8 +23,6 @@ import { useBusy } from "./useBusy";
 //
 // Requests are never aborted, they can be used from cache when the user goes back the same days
 
-// How long to wait after the view has caught up (settled on a date) before prefetching the neighbouring
-// days. (not to compete with other requests)
 const PREFETCH_DELAY_MS = 300;
 
 type TransitsRequest = { index: number; transitDate: JsonDate };
@@ -40,20 +39,13 @@ export function useStreamingTransits({
   transitTimestamp: number;
   skip?: boolean;
 }) {
+  const isMounted = useIsMounted();
   const dispatch = useAppDispatch();
   const prefetchTransits = ephemeridesSlice.usePrefetch("getTransits");
-
-  const isMounted = React.useRef(true);
-  React.useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
   const requestCounter = React.useRef(0);
   const lastArrivedRequestId = React.useRef(0);
 
+  // requested transits (what date is shown in the label)
   const requested: TransitsRequest = React.useMemo(
     () => ({
       index: baseDateIndex,
@@ -62,11 +54,11 @@ export function useStreamingTransits({
     [baseDateIndex, transitTimestamp]
   );
 
+  // displayed trasits (the newest fulfilled request)
   const [displayed, setDisplayed] = React.useState<
     TransitsRequest | undefined
   >();
 
-  // Create new data request
   React.useEffect(() => {
     if (skip) {
       return;
@@ -82,7 +74,7 @@ export function useStreamingTransits({
 
     const requestArrived = () => {
       // if newer data have already arrived, don't overwrite them
-      if (!isMounted.current || lastRequestId <= lastArrivedRequestId.current) {
+      if (!isMounted() || lastRequestId <= lastArrivedRequestId.current) {
         return;
       }
       lastArrivedRequestId.current = lastRequestId;
@@ -95,7 +87,7 @@ export function useStreamingTransits({
       // on error, we still must regard the request as arrived (it advances the component subscription)
       .catch(() => {})
       .finally(requestArrived);
-  }, [dispatch, skip, requested]);
+  }, [isMounted, dispatch, skip, requested]);
 
   const result = useGetTransitsQuery(displayed ?? skipToken);
   const isCatchingUp =

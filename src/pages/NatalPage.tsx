@@ -72,7 +72,10 @@ function NatalPage() {
         />
       </div>
 
-      <ErrorMessage isError={isNatalPositionError} message={t("common.errorLoading")} />
+      <ErrorMessage
+        isError={isNatalPositionError}
+        message={t("common.errorLoading")}
+      />
       {!isNatalPositionError && (
         <div
           style={{

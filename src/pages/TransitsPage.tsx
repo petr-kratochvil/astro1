@@ -50,7 +50,12 @@ export default function TransitsPage({
     }
   }, [navigate, dispatch, isRecordsSuccess, savedDataList?.length]);
 
-  const { timestamp: transitTimestamp, setDate, addDays, addMonths } = useTransitDate();
+  const {
+    timestamp: transitTimestamp,
+    setDate,
+    addDays,
+    addMonths,
+  } = useTransitDate();
 
   // The date label always shows the requested day, the page shows the last
   // response that arrived (if they differ, the loading indicator is on)
@@ -116,10 +121,7 @@ export default function TransitsPage({
 
           {/* 2) Day switch buttons + formatted date */}
           <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
-            <Button
-              variant="outlined"
-              onClick={() => addDays(-1)}
-            >
+            <Button variant="outlined" onClick={() => addDays(-1)}>
               ◁◁
             </Button>
             <div
@@ -129,12 +131,12 @@ export default function TransitsPage({
                 textAlign: "center",
               }}
             >
-              {formatDateWithWeekday(new Date(transitTimestamp), getLocale(i18n.language))}
+              {formatDateWithWeekday(
+                new Date(transitTimestamp),
+                getLocale(i18n.language)
+              )}
             </div>
-            <Button
-              variant="outlined"
-              onClick={() => addDays(+1)}
-            >
+            <Button variant="outlined" onClick={() => addDays(+1)}>
               ▷▷
             </Button>
           </div>
@@ -142,34 +144,29 @@ export default function TransitsPage({
           {/* 3) Five date switching buttons */}
           <div style={buttonsMenuStyle} className="timeShiftButtons">
             <ButtonGroup variant="outlined">
-              <Button
-                onClick={() => addMonths(-12)}
-              >
+              <Button onClick={() => addMonths(-12)}>
                 ◁&nbsp;{t("transits.year")}
               </Button>
-              <Button
-                onClick={() => addMonths(-1)}
-              >
+              <Button onClick={() => addMonths(-1)}>
                 ◁&nbsp;{t("transits.month")}
               </Button>
               <Button onClick={() => setDate(new Date())}>
                 &nbsp;&nbsp;{t("transits.today")}&nbsp;&nbsp;
               </Button>
-              <Button
-                onClick={() => addMonths(+1)}
-              >
+              <Button onClick={() => addMonths(+1)}>
                 {t("transits.month")}&nbsp;▷
               </Button>
-              <Button
-                onClick={() => addMonths(+12)}
-              >
+              <Button onClick={() => addMonths(+12)}>
                 {t("transits.year")}&nbsp;▷
               </Button>
             </ButtonGroup>
           </div>
         </div>
 
-        <ErrorMessage isError={isTransitsError} message={t("common.errorLoading")} />
+        <ErrorMessage
+          isError={isTransitsError}
+          message={t("common.errorLoading")}
+        />
         {!isTransitsError &&
           (showAsTable ? (
             <div

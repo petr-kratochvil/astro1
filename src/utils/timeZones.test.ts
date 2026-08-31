@@ -36,12 +36,16 @@ describe("apiUTCToDate", () => {
         day: 1,
         hour: 12.508333,
       };
-      expect(apiUTCToDate(baseDate)?.toISOString()).toBe("2024-01-01T12:30:00.000Z");
+      expect(apiUTCToDate(baseDate)?.toISOString()).toBe(
+        "2024-01-01T12:30:00.000Z"
+      );
     });
 
     it("carries into the next day when the minutes round up to 60", () => {
       const baseDate: JsonDate = { year: 2024, month: 1, day: 1, hour: 23.999 };
-      expect(apiUTCToDate(baseDate)?.toISOString()).toBe("2024-01-02T00:00:00.000Z");
+      expect(apiUTCToDate(baseDate)?.toISOString()).toBe(
+        "2024-01-02T00:00:00.000Z"
+      );
     });
   });
 
@@ -58,7 +62,9 @@ describe("apiUTCToDate", () => {
 
     it("handles a historical year before 1900", () => {
       const baseDate: JsonDate = { year: 1582, month: 10, day: 15, hour: 12 };
-      expect(apiUTCToDate(baseDate)?.toISOString()).toBe("1582-10-15T12:00:00.000Z");
+      expect(apiUTCToDate(baseDate)?.toISOString()).toBe(
+        "1582-10-15T12:00:00.000Z"
+      );
     });
   });
 
@@ -73,7 +79,9 @@ describe("apiUTCToDate", () => {
 
     it("interprets the fields as UTC, not as local time", () => {
       const baseDate: JsonDate = { year: 2024, month: 3, day: 15, hour: 12 };
-      expect(apiUTCToDate(baseDate)?.toISOString()).toBe("2024-03-15T12:00:00.000Z");
+      expect(apiUTCToDate(baseDate)?.toISOString()).toBe(
+        "2024-03-15T12:00:00.000Z"
+      );
     });
 
     it("renders in local time, shifting across the date boundary", () => {

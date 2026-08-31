@@ -23,7 +23,10 @@ function filterAspects(aspects: AspectWithPositions[]): AspectWithPositions[] {
   );
 }
 
-async function fetchBaseDate(index: number, api: BaseQueryApi): Promise<SavedDate> {
+async function fetchBaseDate(
+  index: number,
+  api: BaseQueryApi
+): Promise<SavedDate> {
   const baseDate = await api
     .dispatch(
       savedDataSlice.endpoints.getSavedDataDetail.initiate(index, {
@@ -31,10 +34,10 @@ async function fetchBaseDate(index: number, api: BaseQueryApi): Promise<SavedDat
       })
     )
     .unwrap();
-    if (!baseDate) {
-      throw new Error(`No saved record at index ${index}`);
-    }
-    return baseDate;
+  if (!baseDate) {
+    throw new Error(`No saved record at index ${index}`);
+  }
+  return baseDate;
 }
 
 export const ephemeridesSlice = apiSlice.injectEndpoints({

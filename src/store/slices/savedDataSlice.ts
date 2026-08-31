@@ -47,7 +47,7 @@ export const savedDataSlice = apiSlice.injectEndpoints({
     getSavedDataDetail: builder.query<SavedDate | undefined, number>({
       queryFn: (index) => {
         try {
-          return { data: getBaseDateJson(index)};
+          return { data: getBaseDateJson(index) };
         } catch (error) {
           console.error(error);
           return { error: toFetchError(error) };

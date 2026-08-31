@@ -299,7 +299,10 @@ function SavedDataForm({ index, baseDateJson }: SavedDataFormProps) {
           </Stack>
         )}
 
-        <ErrorMessage isError={isSaveError} message={t("savedDataDetail.errorSaving")} />
+        <ErrorMessage
+          isError={isSaveError}
+          message={t("savedDataDetail.errorSaving")}
+        />
 
         <Stack direction="row" spacing={1.5} sx={{ justifyContent: "center" }}>
           <Button

@@ -34,6 +34,25 @@ export interface CelestialObjectPosition extends CelestialObject {
   retrograde?: boolean;
 }
 
+// mirrors `Station` from ephemerides/src/types.ts - a moment when a planet turns
+// retrograde (`retrograde: true`) or direct again, and where it stands at the time
+export interface Station {
+  position: number;
+  sign: SignIndex;
+  degrees: number;
+  minutes: number;
+  seconds: number;
+  retrograde: boolean;
+  date: JsonDate;
+}
+
+// mirrors `BodyStations` from ephemerides/src/types.ts
+export interface BodyStations extends CelestialObject {
+  type: "body";
+  previous: Station | null;
+  next: Station | null;
+}
+
 // mirrors ephemerides/src/types.ts AspectWithPositions<CelestialObjectPosition>
 export interface AspectWithPositions {
   name: AspectName;

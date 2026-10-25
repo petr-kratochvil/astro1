@@ -7,7 +7,7 @@ import {
   signSymbols,
 } from "src/constants";
 import { TFunction } from "i18next";
-import { AspectWithPositions, CelestialObjectPosition } from "src/types";
+import { AspectWithPositions, CelestialObject } from "src/types";
 import { translateCelestialObject, translateSignName } from "./translations";
 
 export interface FormattingStyle {
@@ -35,14 +35,16 @@ export const formatSign = (
   return text + space + symbol;
 };
 
+// Takes a generic CelestialObject, so that it also works for objects carrying
+// something else than a position - a station, for instance
 export const formatPlanet = (
-  pos: CelestialObjectPosition,
+  object: CelestialObject,
   style: FormattingStyle,
   t: TFunction
 ): string => {
-  const name = translateCelestialObject(pos, t);
+  const name = translateCelestialObject(object, t);
   return style.usePlanetSymbols
-    ? ((planetSymbols as Record<string, string>)[pos.name] ?? name)
+    ? ((planetSymbols as Record<string, string>)[object.name] ?? name)
     : name;
 };
 

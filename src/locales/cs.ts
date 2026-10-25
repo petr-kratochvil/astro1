@@ -31,10 +31,12 @@ const cs = {
       transitsTable: "Tranzity - tabulka",
       currentPlanets: "Aktuální planety",
       natalPlanets: "Nativní planety",
+      stations: "Stacionární body",
       savedData: "Uložené záznamy",
     },
     title: {
       planets: "Planety",
+      stations: "Stacionární body",
       notFound: "Stránka nenalezena",
     },
     common: {
@@ -47,6 +49,10 @@ const cs = {
     },
     natalPlanets: {
       title: "Nativní planety",
+    },
+    stations: {
+      previous: "Předchozí stacionární bod",
+      next: "Příští stacionární bod",
     },
     transits: {
       transiting: "Tranzitující",

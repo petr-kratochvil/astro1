@@ -11,10 +11,12 @@ const en = {
       transitsTable: "Transits - table",
       currentPlanets: "Current planets",
       natalPlanets: "Natal planets",
+      stations: "Current Stations",
       savedData: "Saved records",
     },
     title: {
       planets: "Planets",
+      stations: "Stations",
       notFound: "Page not found",
     },
     common: {
@@ -27,6 +29,10 @@ const en = {
     },
     natalPlanets: {
       title: "Natal planets",
+    },
+    stations: {
+      previous: "Last station",
+      next: "Next station",
     },
     transits: {
       transiting: "Transiting",

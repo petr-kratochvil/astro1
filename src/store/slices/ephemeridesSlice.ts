@@ -1,5 +1,6 @@
 import {
   AspectWithPositions,
+  BodyStations,
   CelestialObjectPosition,
   JsonDate,
   SavedDate,
@@ -105,6 +106,15 @@ export const ephemeridesSlice = apiSlice.injectEndpoints({
         body: jsonDate,
       }),
     }),
+
+    // Cached, not invalidatable
+    getStations: builder.query<BodyStations[], JsonDate>({
+      query: (jsonDate) => ({
+        url: "/stations",
+        method: "POST",
+        body: jsonDate,
+      }),
+    }),
   }),
 });
 
@@ -112,4 +122,5 @@ export const {
   useGetTransitsQuery,
   useGetNatalPositionQuery,
   useGetPositionQuery,
+  useGetStationsQuery,
 } = ephemeridesSlice;

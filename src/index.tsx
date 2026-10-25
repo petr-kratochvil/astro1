@@ -15,6 +15,7 @@ import PageNotFound from "./pages/PageNotFound";
 import SavedDataDetail from "./components/data/SavedDataDetail";
 import SavedDataList from "./components/data/SavedDataList";
 import NatalPage from "./pages/NatalPage";
+import StationsPage from "./pages/StationsPage";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/natal-planets",
         element: <NatalPage />,
+      },
+      {
+        path: "/stations",
+        element: <StationsPage />,
       },
       {
         path: "/saved-data",

@@ -75,13 +75,18 @@ export default function RootPage() {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
+            <Link className="Router-link" to={"/natal-planets"}>
+              {t("menu.natalPlanets")}
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
             <Link className="Router-link" to={"/current-planets"}>
               {t("menu.currentPlanets")}
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <Link className="Router-link" to={"/natal-planets"}>
-              {t("menu.natalPlanets")}
+            <Link className="Router-link" to={"/stations"}>
+              {t("menu.stations")}
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>

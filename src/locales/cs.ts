@@ -28,7 +28,7 @@ const cs = {
     },
     menu: {
       transits: "Tranzity",
-      transitsTable: "Tranzity - tabulka",
+      transitsTable: "Tranzity (tabulka)",
       currentPlanets: "Aktuální planety",
       natalPlanets: "Nativní planety",
       stations: "Stacionární body",

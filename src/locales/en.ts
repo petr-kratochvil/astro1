@@ -8,11 +8,11 @@ const en = {
     },
     menu: {
       transits: "Transits",
-      transitsTable: "Transits - table",
-      currentPlanets: "Current planets",
-      natalPlanets: "Natal planets",
+      transitsTable: "Transits (table)",
+      currentPlanets: "Current Planets",
+      natalPlanets: "Natal Planets",
       stations: "Current Stations",
-      savedData: "Saved records",
+      savedData: "Saved Records",
     },
     title: {
       planets: "Planets",

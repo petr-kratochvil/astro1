@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Global "waiting for data" state
 // Components decide whether they are waiting, rather then using state.api.queries
-// This is useful in TransitsPage, where older requests still are fetched and cached,
-// but the loading indicator should not regard them as blockers
+// This is useful in useStreamingTransits, where older requests still are fetched
+// and cached, but the loading indicator should not regard them as blockers
 export const loadingSlice = createSlice({
   name: "loading",
   initialState: { busyCount: 0 },

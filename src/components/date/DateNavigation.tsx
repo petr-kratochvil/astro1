@@ -2,20 +2,12 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import { useNavigate } from "react-router-dom";
 import Hammer from "react-hammerjs-18";
-import TransitsBoxes from "src/components/transits/TrasitsBoxes";
-import AspectTable from "src/components/tables/AspectTable";
 import RecordSelect from "src/components/ui/RecordSelect";
-import { useTitle } from "src/hooks/useTitle";
-import { useAppDispatch } from "src/store/hooks";
-import { setRefererOfEditPage } from "src/store/slices/uiSlice";
+import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
+import { useSelectedDate } from "src/hooks/useSelectedDate";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
-import ErrorMessage from "src/components/ui/ErrorMessage";
-import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
-import { useTransitDate } from "src/hooks/useTransitDate";
-import { useStreamingTransits } from "src/hooks/useStreamingTransits";
 
 const buttonsMenuStyle: React.CSSProperties = {
   display: "flex",
@@ -27,6 +19,10 @@ const buttonsMenuStyle: React.CSSProperties = {
 
 const KEY_REPEAT_INTERVAL_MS = 40;
 
+// Hammer's DIRECTION_LEFT / DIRECTION_RIGHT
+const SWIPE_LEFT = 2;
+const SWIPE_RIGHT = 4;
+
 function allowKeyAdvance(lastKeyTimeRef: React.MutableRefObject<number>) {
   const now = performance.now();
   if (now - lastKeyTimeRef.current < KEY_REPEAT_INTERVAL_MS) {
@@ -36,49 +32,48 @@ function allowKeyAdvance(lastKeyTimeRef: React.MutableRefObject<number>) {
   return true;
 }
 
-export default function TransitsPage({
-  showAsTable = false,
-}: {
-  showAsTable?: boolean;
-}) {
-  const { t, i18n } = useTranslation();
-  useTitle();
+// Own component, so that the saved records are only read on a page actually
+// showing the selector (a conditional subtree instead of a conditional hook)
+function RecordSelectSlot() {
   const {
     index: selectedBaseDateIndex,
     data: savedDataList,
     setIndex: setSelectedBaseDateIndex,
-    isSuccess: isRecordsSuccess,
-    isError: isRecordsError,
   } = useSelectedBaseDate();
-  const recordsLoaded = isRecordsSuccess && savedDataList.length > 0;
 
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  React.useEffect(() => {
-    if (isRecordsSuccess && savedDataList.length === 0) {
-      dispatch(setRefererOfEditPage("/"));
-      navigate("/saved-data/0");
-    }
-  }, [navigate, dispatch, isRecordsSuccess, savedDataList?.length]);
+  return (
+    <RecordSelect
+      records={savedDataList}
+      value={selectedBaseDateIndex}
+      onChange={(index) => setSelectedBaseDateIndex(index)}
+    />
+  );
+}
 
+// The date switching controls (shared by every page working with the selected
+// date), wrapped around the page content: the swipe gesture and the arrow keys
+// move the date as well, so they belong to the same component.
+//
+// The selected date itself lives in the store, so it is kept while navigating
+// between the pages using this component.
+export default function DateNavigation({
+  showRecordSelect = true,
+  children,
+}: {
+  showRecordSelect?: boolean;
+  children: React.ReactNode;
+}) {
+  const { t, i18n } = useTranslation();
   const {
-    timestamp: transitTimestamp,
+    timestamp: selectedTimestamp,
     setDate,
     addDays,
     addMonths,
-  } = useTransitDate();
-
-  // The date label always shows the requested day, the page shows the last
-  // response that arrived (if they differ, the loading indicator is on)
-  const { data = [], isError: isTransitsError } = useStreamingTransits({
-    baseDateIndex: selectedBaseDateIndex,
-    transitTimestamp,
-    skip: !recordsLoaded,
-  });
+  } = useSelectedDate();
 
   const lastKeyTimeRef = React.useRef(0);
 
-  function handleKeyDown(event: KeyboardEvent) {
+  function navigateByKey(event: KeyboardEvent) {
     if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
       if (event.repeat && !allowKeyAdvance(lastKeyTimeRef)) {
         return;
@@ -90,6 +85,22 @@ export default function TransitsPage({
       }
     }
   }
+
+  // The handler closes over the current date, but the document listener is
+  // subscribed only once - so the listener reads the handler through a ref.
+  const navigateByKeyRef = React.useRef(navigateByKey);
+  React.useEffect(() => {
+    navigateByKeyRef.current = navigateByKey;
+  });
+
+  React.useEffect(() => {
+    const listener = (event: KeyboardEvent) => navigateByKeyRef.current(event);
+    document.addEventListener("keydown", listener);
+
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   function controlsContainerHandleKeyDown(
     event: React.KeyboardEvent<HTMLDivElement>
@@ -105,10 +116,10 @@ export default function TransitsPage({
 
   function handleSwipe(param: { direction: number }) {
     switch (param.direction) {
-      case 2:
+      case SWIPE_LEFT:
         addDays(+1);
         break;
-      case 4:
+      case SWIPE_RIGHT:
         addDays(-1);
         break;
       default:
@@ -116,23 +127,8 @@ export default function TransitsPage({
     }
   }
 
-  React.useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  });
-
-  if (isRecordsError) {
-    return <ErrorMessage message={t("common.errorLoadingRecords")} />;
-  }
-  if (!recordsLoaded) {
-    return null;
-  }
-
   return (
-    <Hammer onSwipe={handleSwipe} id="transitsBoxesArea">
+    <Hammer onSwipe={handleSwipe}>
       <div>
         {/* A handler to throttle key repeat (the element itself stays non-interactive) */}
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
@@ -141,16 +137,20 @@ export default function TransitsPage({
           onKeyDown={controlsContainerHandleKeyDown}
         >
           {/* 1) RecordSelect */}
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <RecordSelect
-              records={savedDataList}
-              value={selectedBaseDateIndex}
-              onChange={(index) => setSelectedBaseDateIndex(index)}
-            />
-          </div>
+          {showRecordSelect && (
+            <div
+              className="controls-left"
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <RecordSelectSlot />
+            </div>
+          )}
 
           {/* 2) Day switch buttons + formatted date */}
-          <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
+          <div
+            className="controls-center"
+            style={{ ...buttonsMenuStyle, gap: "12px" }}
+          >
             <Button variant="outlined" onClick={() => addDays(-1)}>
               ◁◁
             </Button>
@@ -162,7 +162,7 @@ export default function TransitsPage({
               }}
             >
               {formatDateWithWeekday(
-                new Date(transitTimestamp),
+                new Date(selectedTimestamp),
                 getLocale(i18n.language)
               )}
             </div>
@@ -172,7 +172,10 @@ export default function TransitsPage({
           </div>
 
           {/* 3) Five date switching buttons */}
-          <div style={buttonsMenuStyle} className="timeShiftButtons">
+          <div
+            style={buttonsMenuStyle}
+            className="controls-right timeShiftButtons"
+          >
             <ButtonGroup variant="outlined">
               <Button onClick={() => addMonths(-12)}>
                 ◁&nbsp;{t("transits.year")}
@@ -193,32 +196,7 @@ export default function TransitsPage({
           </div>
         </div>
 
-        <ErrorMessage
-          isError={isTransitsError}
-          message={t("common.errorLoading")}
-        />
-        {!isTransitsError &&
-          (showAsTable ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-evenly",
-                marginTop: "20px",
-                flexWrap: "wrap",
-              }}
-              className="smallFont"
-            >
-              <AspectTable
-                aspectChart={data}
-                title=""
-                name1={t("transits.transiting")}
-                name2={t("transits.natal")}
-                style={{ useSignSymbols: true, useSignText: false }}
-              />
-            </div>
-          ) : (
-            <TransitsBoxes data={data} />
-          ))}
+        {children}
       </div>
     </Hammer>
   );

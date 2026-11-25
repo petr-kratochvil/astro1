@@ -143,15 +143,20 @@
   margin: 15px 15px 15px 15px;
 }
 
-.controls-container > :nth-child(2) {
-  justify-self: center;
-}
-
-.controls-container > :nth-child(1) {
+/* The columns are assigned explicitly, so that the date stays centred
+   even on a page rendering the controls without the record selector */
+.controls-left {
+  grid-column: 1;
   justify-self: left;
 }
 
-.controls-container > :nth-child(3) {
+.controls-center {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.controls-right {
+  grid-column: 3;
   justify-self: right;
 }
 
@@ -159,11 +164,11 @@
   .controls-container {
     grid-template-columns: 1fr;
   }
-  .controls-container > :nth-child(1) {
-    justify-self: center;
-  }
 
-  .controls-container > :nth-child(3) {
+  .controls-left,
+  .controls-center,
+  .controls-right {
+    grid-column: 1;
     justify-self: center;
   }
 }

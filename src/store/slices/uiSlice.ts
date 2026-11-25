@@ -6,19 +6,19 @@ export const DEFAULT_EDIT_REFERER = "/saved-data";
 export const uiSlice = createSlice({
   name: "ui",
   // selectedBaseDateIndex - selected record used for transits or natal chart
-  // transitDateTimestamp - user selected transit date (on TransitsPage.tsx)
+  // selectedDateTimestamp - date picked in DateNavigation, shared by every page using it
   // refererOfEditPage - where to navigate after closing record edit form
   initialState: {
     selectedBaseDateIndex: 0,
-    transitDateTimestamp: new Date().getTime(),
+    selectedDateTimestamp: new Date().getTime(),
     refererOfEditPage: DEFAULT_EDIT_REFERER,
   },
   reducers: {
     selectBaseDate(state, action: PayloadAction<number>) {
       state.selectedBaseDateIndex = action.payload;
     },
-    setTransitDateTimestamp(state, action: PayloadAction<number>) {
-      state.transitDateTimestamp = action.payload;
+    setSelectedDateTimestamp(state, action: PayloadAction<number>) {
+      state.selectedDateTimestamp = action.payload;
     },
     setRefererOfEditPage(state, action: PayloadAction<string>) {
       state.refererOfEditPage = action.payload;
@@ -35,5 +35,8 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { selectBaseDate, setTransitDateTimestamp, setRefererOfEditPage } =
-  uiSlice.actions;
+export const {
+  selectBaseDate,
+  setSelectedDateTimestamp,
+  setRefererOfEditPage,
+} = uiSlice.actions;

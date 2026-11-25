@@ -10,6 +10,11 @@ export function dateToApiUTC(date: Date): JsonDate {
   };
 }
 
+// Comparable (and loggable) identity of a date sent to the API
+export function jsonDateCode({ year, month, day, hour }: JsonDate): string {
+  return `${year}:${month}:${day}:${hour}`;
+}
+
 export function apiUTCToDate(baseDateJson?: JsonDate): Date | undefined {
   if (!baseDateJson) {
     return undefined;

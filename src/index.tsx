@@ -9,7 +9,8 @@ import "./i18n";
 import theme from "./theme";
 import { store } from "./store";
 import RootPage from "./pages/RootPage";
-import TransitsPage from "./pages/TransitsPage";
+import TransitsBoxesPage from "./pages/TransitsBoxesPage";
+import TransitsTablePage from "./pages/TransitsTablePage";
 import PlanetsPage from "./pages/CurrentPlanetsPage";
 import PageNotFound from "./pages/PageNotFound";
 import SavedDataDetail from "./components/data/SavedDataDetail";
@@ -45,11 +46,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/",
-        element: <TransitsPage />,
+        element: <TransitsBoxesPage />,
       },
       {
         path: "/transits-table",
-        element: <TransitsPage showAsTable />,
+        element: <TransitsTablePage />,
       },
       {
         path: "*",

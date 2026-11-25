@@ -31,6 +31,9 @@ export function toFetchError(error: unknown): FetchBaseQueryError {
   };
 }
 
+// The base query of the whole app - needed to type the endpoints generically
+export type AppBaseQuery = ReturnType<typeof fetchBaseQuery>;
+
 // A single API slice for the whole app, to enable sharing tags between "slices"
 export const apiSlice = createApi({
   reducerPath: "api",

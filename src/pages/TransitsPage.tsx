@@ -9,7 +9,7 @@ import { useAppDispatch } from "src/store/hooks";
 import { setRefererOfEditPage } from "src/store/slices/uiSlice";
 import ErrorMessage from "src/components/ui/ErrorMessage";
 import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
-import { useTransitDate } from "src/hooks/useTransitDate";
+import { useSelectedDate } from "src/hooks/useSelectedDate";
 import { useStreamingTransits } from "src/hooks/useStreamingTransits";
 
 export default function TransitsPage({
@@ -36,7 +36,7 @@ export default function TransitsPage({
     }
   }, [navigate, dispatch, isRecordsSuccess, savedDataList?.length]);
 
-  const { timestamp: transitTimestamp } = useTransitDate();
+  const { timestamp: transitTimestamp } = useSelectedDate();
 
   // The date label always shows the requested day, the page shows the last
   // response that arrived (if they differ, the loading indicator is on)

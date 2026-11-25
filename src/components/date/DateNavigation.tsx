@@ -5,7 +5,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Hammer from "react-hammerjs-18";
 import RecordSelect from "src/components/ui/RecordSelect";
 import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
-import { useTransitDate } from "src/hooks/useTransitDate";
+import { useSelectedDate } from "src/hooks/useSelectedDate";
 import { formatDateWithWeekday } from "src/utils/formatting";
 import { getLocale } from "src/utils/language";
 
@@ -69,7 +69,7 @@ export default function DateNavigation({
     setDate,
     addDays,
     addMonths,
-  } = useTransitDate();
+  } = useSelectedDate();
 
   const lastKeyTimeRef = React.useRef(0);
 

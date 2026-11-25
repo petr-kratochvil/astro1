@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import i18n from "src/i18n";
 import { createAppStore } from "src/store";
-import { setTransitDateTimestamp } from "src/store/slices/uiSlice";
+import { setSelectedDateTimestamp } from "src/store/slices/uiSlice";
 import { setBaseDateJson } from "src/utils/localStorage";
 import DateNavigation from "./DateNavigation";
 
@@ -34,9 +34,9 @@ function renderDateNavigation({ showRecordSelect = true } = {}) {
     </Provider>
   );
   return {
-    selectedDate: () => localDateKey(store.getState().ui.transitDateTimestamp),
+    selectedDate: () => localDateKey(store.getState().ui.selectedDateTimestamp),
     setSelectedDate: (date: Date) =>
-      store.dispatch(setTransitDateTimestamp(date.getTime())),
+      store.dispatch(setSelectedDateTimestamp(date.getTime())),
   };
 }
 

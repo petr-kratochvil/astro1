@@ -1,21 +1,27 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import TransitsBoxes from "src/components/transits/TrasitsBoxes";
-import AspectTable from "src/components/tables/AspectTable";
 import DateNavigation from "src/components/date/DateNavigation";
-import { useTitle } from "src/hooks/useTitle";
-import { useAppDispatch } from "src/store/hooks";
-import { setRefererOfEditPage } from "src/store/slices/uiSlice";
 import ErrorMessage from "src/components/ui/ErrorMessage";
 import { useSelectedBaseDate } from "src/hooks/useSelectedBaseDate";
 import { useSelectedDate } from "src/hooks/useSelectedDate";
 import { useStreamingTransits } from "src/hooks/useStreamingTransits";
+import { useTitle } from "src/hooks/useTitle";
+import { useAppDispatch } from "src/store/hooks";
+import { setRefererOfEditPage } from "src/store/slices/uiSlice";
+import { AspectWithPositions } from "src/types";
 
-export default function TransitsPage({
-  showAsTable = false,
+// Everything the transit pages have in common: the base record, the date
+// controls and the transits computed for them - only the view of the resulting
+// aspects differs, so the aspects are handed over to `children`.
+//
+// `editReferer` is the page to return to when a record is edited from here.
+export default function TransitsPageFrame({
+  editReferer,
+  children,
 }: {
-  showAsTable?: boolean;
+  editReferer: string;
+  children: (aspects: AspectWithPositions[]) => React.ReactNode;
 }) {
   const { t } = useTranslation();
   useTitle();
@@ -31,10 +37,16 @@ export default function TransitsPage({
   const dispatch = useAppDispatch();
   React.useEffect(() => {
     if (isRecordsSuccess && savedDataList.length === 0) {
-      dispatch(setRefererOfEditPage("/"));
+      dispatch(setRefererOfEditPage(editReferer));
       navigate("/saved-data/0");
     }
-  }, [navigate, dispatch, isRecordsSuccess, savedDataList?.length]);
+  }, [
+    navigate,
+    dispatch,
+    editReferer,
+    isRecordsSuccess,
+    savedDataList?.length,
+  ]);
 
   const { timestamp: transitTimestamp } = useSelectedDate();
 
@@ -59,28 +71,7 @@ export default function TransitsPage({
         isError={isTransitsError}
         message={t("common.errorLoading")}
       />
-      {!isTransitsError &&
-        (showAsTable ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              marginTop: "20px",
-              flexWrap: "wrap",
-            }}
-            className="smallFont"
-          >
-            <AspectTable
-              aspectChart={data}
-              title=""
-              name1={t("transits.transiting")}
-              name2={t("transits.natal")}
-              style={{ useSignSymbols: true, useSignText: false }}
-            />
-          </div>
-        ) : (
-          <TransitsBoxes data={data} />
-        ))}
+      {!isTransitsError && children(data)}
     </DateNavigation>
   );
 }

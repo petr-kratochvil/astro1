@@ -13,7 +13,10 @@ import {
 import { savedDataSlice } from "./savedDataSlice";
 import { BaseQueryApi } from "@reduxjs/toolkit/query";
 
+// Endpoints the user steps through day by day are kept longer than the RTK
+// default, so that going back and forth over the same days is served from cache
 const TRANSITS_CACHE_SECONDS = 300;
+const POSITION_CACHE_SECONDS = 300;
 
 function filterAspects(aspects: AspectWithPositions[]): AspectWithPositions[] {
   return aspects.filter(
@@ -105,6 +108,7 @@ export const ephemeridesSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: jsonDate,
       }),
+      keepUnusedDataFor: POSITION_CACHE_SECONDS,
     }),
 
     // Cached, not invalidatable

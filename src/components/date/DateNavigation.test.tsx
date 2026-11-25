@@ -24,11 +24,11 @@ function buttonByLabel(label: string) {
   });
 }
 
-function renderDateNavigation() {
+function renderDateNavigation({ showRecordSelect = true } = {}) {
   const store = createAppStore();
   render(
     <Provider store={store}>
-      <DateNavigation>
+      <DateNavigation showRecordSelect={showRecordSelect}>
         <div>page content</div>
       </DateNavigation>
     </Provider>
@@ -66,6 +66,33 @@ describe("DateNavigation", () => {
     renderDateNavigation();
 
     expect(screen.getByText("page content")).toBeInTheDocument();
+  });
+
+  it("shows the record selector by default", () => {
+    renderDateNavigation();
+
+    expect(
+      screen.getByRole("combobox", { name: "Select record" })
+    ).toBeInTheDocument();
+  });
+
+  it("omits the record selector when asked to, keeping the date centred", async () => {
+    const user = userEvent.setup();
+    const { selectedDate, setSelectedDate } = renderDateNavigation({
+      showRecordSelect: false,
+    });
+    setSelectedDate(new Date(2024, 2, 15, 12));
+
+    expect(
+      screen.queryByRole("combobox", { name: "Select record" })
+    ).not.toBeInTheDocument();
+    // The date keeps its own grid column, it does not move to the empty one
+    expect(document.querySelector(".controls-left")).toBeNull();
+    expect(document.querySelector(".controls-center")).toBeInTheDocument();
+
+    // The controls still work without the selector
+    await user.click(buttonByLabel("▷▷"));
+    expect(selectedDate()).toBe("2024-3-16");
   });
 
   it("shows the selected day and keeps the label in sync", async () => {

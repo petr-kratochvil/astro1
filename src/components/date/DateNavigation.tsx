@@ -32,6 +32,24 @@ function allowKeyAdvance(lastKeyTimeRef: React.MutableRefObject<number>) {
   return true;
 }
 
+// Own component, so that the saved records are only read on a page actually
+// showing the selector (a conditional subtree instead of a conditional hook)
+function RecordSelectSlot() {
+  const {
+    index: selectedBaseDateIndex,
+    data: savedDataList,
+    setIndex: setSelectedBaseDateIndex,
+  } = useSelectedBaseDate();
+
+  return (
+    <RecordSelect
+      records={savedDataList}
+      value={selectedBaseDateIndex}
+      onChange={(index) => setSelectedBaseDateIndex(index)}
+    />
+  );
+}
+
 // The date switching controls (shared by every page working with the selected
 // date), wrapped around the page content: the swipe gesture and the arrow keys
 // move the date as well, so they belong to the same component.
@@ -39,16 +57,13 @@ function allowKeyAdvance(lastKeyTimeRef: React.MutableRefObject<number>) {
 // The selected date itself lives in the store, so it is kept while navigating
 // between the pages using this component.
 export default function DateNavigation({
+  showRecordSelect = true,
   children,
 }: {
+  showRecordSelect?: boolean;
   children: React.ReactNode;
 }) {
   const { t, i18n } = useTranslation();
-  const {
-    index: selectedBaseDateIndex,
-    data: savedDataList,
-    setIndex: setSelectedBaseDateIndex,
-  } = useSelectedBaseDate();
   const {
     timestamp: selectedTimestamp,
     setDate,
@@ -122,16 +137,20 @@ export default function DateNavigation({
           onKeyDown={controlsContainerHandleKeyDown}
         >
           {/* 1) RecordSelect */}
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <RecordSelect
-              records={savedDataList}
-              value={selectedBaseDateIndex}
-              onChange={(index) => setSelectedBaseDateIndex(index)}
-            />
-          </div>
+          {showRecordSelect && (
+            <div
+              className="controls-left"
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <RecordSelectSlot />
+            </div>
+          )}
 
           {/* 2) Day switch buttons + formatted date */}
-          <div style={{ ...buttonsMenuStyle, gap: "12px" }}>
+          <div
+            className="controls-center"
+            style={{ ...buttonsMenuStyle, gap: "12px" }}
+          >
             <Button variant="outlined" onClick={() => addDays(-1)}>
               ◁◁
             </Button>
@@ -153,7 +172,10 @@ export default function DateNavigation({
           </div>
 
           {/* 3) Five date switching buttons */}
-          <div style={buttonsMenuStyle} className="timeShiftButtons">
+          <div
+            style={buttonsMenuStyle}
+            className="controls-right timeShiftButtons"
+          >
             <ButtonGroup variant="outlined">
               <Button onClick={() => addMonths(-12)}>
                 ◁&nbsp;{t("transits.year")}

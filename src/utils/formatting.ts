@@ -85,14 +85,48 @@ export const aspectColor = (aspect: AspectWithPositions): string => {
   return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
 };
 
-export const formatDateWithWeekday = (date: Date, locale: string): string => {
+// Which clock a moment is read off. Transit dates are calendar dates the API works
+// with in UTC; a station, on the other hand, is an instant, and is shown the way the
+// saved records are - on the reader's own clock.
+export type DisplayTimeZone = "UTC" | "local";
+
+// Intl reads an absent timeZone as the one the browser is in
+const intlTimeZone = (timeZone: DisplayTimeZone) =>
+  timeZone === "UTC" ? "UTC" : undefined;
+
+export const formatDateWithWeekday = (
+  date: Date,
+  locale: string,
+  timeZone: DisplayTimeZone = "UTC"
+): string => {
   const weekday = new Intl.DateTimeFormat(locale, {
     weekday: "short",
-    timeZone: "UTC",
+    timeZone: intlTimeZone(timeZone),
   }).format(date);
   const day = new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
-    timeZone: "UTC",
+    timeZone: intlTimeZone(timeZone),
   }).format(date);
   return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${day}`;
 };
+
+export const formatTimeOfDay = (
+  date: Date,
+  locale: string,
+  timeZone: DisplayTimeZone = "UTC"
+): string =>
+  new Intl.DateTimeFormat(locale, {
+    timeStyle: "short",
+    // Always a 24 hour clock, whatever the locale would pick on its own
+    hourCycle: "h23",
+    timeZone: intlTimeZone(timeZone),
+  }).format(date);
+
+// "Fri, 13 Nov 2026 16:53" in English, "Pá, 13. 11. 2026 16:53" in Czech - each
+// half keeps the form its own locale uses
+export const formatDateTimeWithWeekday = (
+  date: Date,
+  locale: string,
+  timeZone: DisplayTimeZone = "UTC"
+): string =>
+  `${formatDateWithWeekday(date, locale, timeZone)}, ${formatTimeOfDay(date, locale, timeZone)}`;

@@ -4,6 +4,9 @@ import StationsTable from "./StationsTable";
 import i18n from "src/i18n";
 import { BodyStations } from "src/types";
 
+// The suite runs in Europe/Prague (see vite.config.js), and these two stations sit
+// on either side of the switch to winter time: 07:11 UTC in October reads as 09:11,
+// 15:53 UTC in November as 16:53.
 const mercury: BodyStations = {
   type: "body",
   name: "Mercury",
@@ -58,7 +61,7 @@ describe("StationsTable", () => {
 
     expect(screen.getByText("Last station")).toBeInTheDocument();
     const row = within(rowOf("Mercury"));
-    expect(row.getByText("Sat, 24 Oct 2026")).toBeInTheDocument();
+    expect(row.getByText("Sat, 24 Oct 2026, 09:11")).toBeInTheDocument();
     expect(row.getByText("20°")).toBeInTheDocument();
     expect(row.getByText("♏")).toBeInTheDocument();
     // the planet turns retrograde at this station
@@ -75,7 +78,7 @@ describe("StationsTable", () => {
     );
 
     const row = within(rowOf("Mercury"));
-    expect(row.getByText("Fri, 13 Nov 2026")).toBeInTheDocument();
+    expect(row.getByText("Fri, 13 Nov 2026, 16:53")).toBeInTheDocument();
     expect(row.getByText("5°")).toBeInTheDocument();
     // the planet turns direct again at this station, which is left unmarked
     expect(row.queryByText("r")).not.toBeInTheDocument();
@@ -94,7 +97,7 @@ describe("StationsTable", () => {
     expect(screen.queryByText("Pluto")).not.toBeInTheDocument();
   });
 
-  it("translates the planet name", async () => {
+  it("translates the planet name and the date into Czech", async () => {
     await i18n.changeLanguage("cs");
     render(
       <StationsTable
@@ -104,6 +107,7 @@ describe("StationsTable", () => {
       />
     );
 
-    expect(screen.getByText("Merkur")).toBeInTheDocument();
+    const row = within(rowOf("Merkur"));
+    expect(row.getByText("So, 24. 10. 2026, 9:11")).toBeInTheDocument();
   });
 });

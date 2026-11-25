@@ -15,5 +15,8 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
     css: false,
+    // Anything shown in local time would otherwise assert differently depending
+    // on where the suite runs
+    env: { TZ: "Europe/Prague" },
   },
 });

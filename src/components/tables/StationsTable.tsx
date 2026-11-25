@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import BasicTable, { Column } from "./BasicTable";
 import { BodyStations, Station } from "src/types";
 import {
-  formatDateWithWeekday,
+  formatDateTimeWithWeekday,
   formatPlanet,
   formatSign,
   FormattingStyle,
@@ -51,9 +51,14 @@ export default function StationsTable({
     return station ? [{ planet, station }] : [];
   });
 
-  const date = ({ station }: StationRow) => {
+  // A station is an instant rather than a calendar date, so it is read off the
+  // reader's own clock - date and time alike, which for a station falling close to
+  // midnight would otherwise disagree
+  const dateAndTime = ({ station }: StationRow) => {
     const stationDate = apiUTCToDate(station.date);
-    return stationDate ? formatDateWithWeekday(stationDate, locale) : "";
+    return stationDate
+      ? formatDateTimeWithWeekday(stationDate, locale, "local")
+      : "";
   };
   const sign = ({ station }: StationRow) =>
     formatSign(station.sign, usedStyle, t);
@@ -61,7 +66,7 @@ export default function StationsTable({
 
   const columns: Column<StationRow>[] = [
     ({ planet }) => formatPlanet(planet, usedStyle, t),
-    date,
+    dateAndTime,
     usedStyle.degreesFirst ? degrees : sign,
     usedStyle.degreesFirst ? sign : degrees,
   ];
